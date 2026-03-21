@@ -1,0 +1,37 @@
+{
+  "testUsers": {
+    "admin": {
+      "username": "Admin",
+      "password": "admin123"
+    },
+    "invalidUser": {
+      "username": "invalid@example.com",
+      "password": "wrongpassword123"
+    }
+  },
+  "employees": {
+    "validEmployee": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "employeeId": "EMP001",
+      "email": "john.doe@example.com"
+    },
+    "minimalEmployee": {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "employeeId": "EMP002"
+    }
+  },
+  "leaveData": {
+    "leaveTypes": [
+      {
+        "id": 1,
+        "name": "Annual Leave"
+      },
+      {
+        "id": 2,
+        "name": "Sick Leave"
+      }
+    ]
+  }
+}
