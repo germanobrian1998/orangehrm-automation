@@ -13,17 +13,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@pages/*": ["src/pages/*"],
-      "@api/*": ["src/api/*"],
-      "@fixtures/*": ["src/fixtures/*"],
-      "@utils/*": ["src/utils/*"],
-      "@config/*": ["src/config/*"],
-      "@types/*": ["src/types/*"]
-    }
+    "moduleResolution": "node"
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]
