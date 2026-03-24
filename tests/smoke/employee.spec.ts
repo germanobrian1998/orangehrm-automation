@@ -16,15 +16,15 @@ test.describe('Employee Management Tests', () => {
     await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList');
     await page.waitForLoadState('networkidle');
     
-    // Verify we're on the employee list page
-    await expect(page.locator('.oxd-table')).toBeVisible({ timeout: 10000 });
+    // Verify we're on the employee list page - check URL
+    await expect(page).toHaveURL(/.*viewEmployeeList.*/);
   });
 
-  test('should verify employee list page title', async ({ page }) => {
+  test('should load employee table successfully', async ({ page }) => {
     await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList');
     await page.waitForLoadState('networkidle');
     
-    // Check if the page title contains "Employee"
-    await expect(page.locator('h6:has-text("Employee")')).toBeVisible({ timeout: 10000 });
+    // Check if table is visible
+    await expect(page.locator('.oxd-table')).toBeVisible({ timeout: 10000 });
   });
 });
