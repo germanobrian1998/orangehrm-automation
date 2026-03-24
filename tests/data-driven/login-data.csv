@@ -1,0 +1,6 @@
+username,password,expectedResult
+admin,admin123,success
+employee,employee123,success
+invalid_user,wrong_pass,failure
+test_user,test_pass,failure
+manager,manager123,success
