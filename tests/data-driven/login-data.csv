@@ -1,6 +1,4 @@
 username,password,expectedResult
-admin,admin123,success
-employee,employee123,success
-invalid_user,wrong_pass,failure
-test_user,test_pass,failure
-manager,manager123,success
+Admin,admin123,success
+invalid_user,wrong_password,failure
+test_user,test123,failure

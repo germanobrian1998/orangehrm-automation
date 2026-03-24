@@ -11,16 +11,26 @@ test.describe('Employee Management Tests', () => {
   });
 
   test('should navigate to employee list', async ({ page }) => {
-    await page.click('a:has-text("PIM")');
-    await page.click('a:has-text("Employee List")');
+    // Click PIM menu
+    await page.click('a[href="#"] >> text=PIM');
+    await page.waitForLoadState('networkidle');
     
-    await expect(page.locator('table')).toBeVisible();
+    // Click Employee List
+    await page.click('a >> text=Employee List');
+    await page.waitForLoadState('networkidle');
+    
+    // Check if we're on the page with records
+    await expect(page.locator('.oxd-table')).toBeVisible();
   });
 
   test('should search employee', async ({ page }) => {
-    await page.click('a:has-text("PIM")');
-    await page.click('a:has-text("Employee List")');
+    await page.click('a[href="#"] >> text=PIM');
+    await page.waitForLoadState('networkidle');
     
-    await expect(page.locator('table')).toBeVisible();
+    await page.click('a >> text=Employee List');
+    await page.waitForLoadState('networkidle');
+    
+    // Verify table is visible
+    await expect(page.locator('.oxd-table')).toBeVisible();
   });
 });

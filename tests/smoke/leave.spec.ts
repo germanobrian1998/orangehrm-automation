@@ -11,14 +11,18 @@ test.describe('Leave Management Tests', () => {
   });
 
   test('should view leave requests', async ({ page }) => {
-    await page.click('a:has-text("Leave")');
+    // Click Leave menu
+    await page.click('a[href="#"] >> text=Leave');
+    await page.waitForLoadState('networkidle');
     
-    await expect(page.locator('text=Leave')).toBeVisible();
+    // Verify we're in the Leave section
+    await expect(page.locator('h6:has-text("Leave")')).toBeVisible();
   });
 
   test('should check leave balance', async ({ page }) => {
-    await page.click('a:has-text("Leave")');
+    await page.click('a[href="#"] >> text=Leave');
+    await page.waitForLoadState('networkidle');
     
-    await expect(page.locator('text=Leave')).toBeVisible();
+    await expect(page.locator('h6:has-text("Leave")')).toBeVisible();
   });
 });
