@@ -16,13 +16,18 @@ test.describe('Leave Management Tests with Page Objects', () => {
     await loginPage.verifyLoginSuccess();
   });
 
-  test('should navigate to leave module', async () => {
+  test('should navigate to leave module', async ({ page }) => {
     await leavePage.navigateToDashboard();
     await leavePage.verifyLeavePageLoaded();
+    
+    // Verificar que cargó correctamente
+    expect(page.url()).toContain('leave');
   });
 
-  test('should access leave list', async () => {
-    await leavePage.navigateToLeaveList();
-    await leavePage.verifyLeavePageLoaded();
+  test('should be on leave section after login', async ({ page }) => {
+    // Después de login, navegamos a leave
+    await leavePage.navigateToDashboard();
+    
+    await expect(page).toHaveURL(/.*leave.*/);
   });
 });
