@@ -1,18 +1,23 @@
 import { test, expect } from '@playwright/test';
 
-const browsers = ['chromium', 'firefox', 'webkit'];
+test.describe('Cross-Browser Login Tests', () => {
+  test('should login successfully in all browsers', async ({ page }) => {
+    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    
+    await page.fill('input[name="username"]', 'Admin');
+    await page.fill('input[name="password"]', 'admin123');
+    await page.click('button[type="submit"]');
+    
+    await expect(page).toHaveURL(/.*dashboard.*/);
+  });
 
-browsers.forEach(browserType => {
-    test.describe(`Cross-browser testing with ${browserType}`, () => {
-        test('Login test', async ({ browser }) => {
-            const context = await browser.newContext();
-            const page = await context.newPage();
-            await page.goto('https://example.com/login');
-            await page.fill('input[name="username"]', 'your_username_here');
-            await page.fill('input[name="password"]', 'your_password_here');
-            await page.click('button[type="submit"]');
-            await expect(page).toHaveURL('https://example.com/dashboard');
-            await context.close();
-        });
-    });
+  test('should display error message on invalid login', async ({ page }) => {
+    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    
+    await page.fill('input[name="username"]', 'invalid');
+    await page.fill('input[name="password"]', 'invalid');
+    await page.click('button[type="submit"]');
+    
+    await expect(page.locator('.oxd-alert')).toBeVisible();
+  });
 });

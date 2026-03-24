@@ -1,24 +1,25 @@
 import { test, expect } from '@playwright/test';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// Function to read CSV file
-function readCSV(filePath) {
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return data.split('\n').slice(1).map(row => row.split(','));
-}
+const csvPath = path.join(__dirname, 'login-data.csv');
+const csvData = fs.readFileSync(csvPath, 'utf-8');
+const [, ...rows] = csvData.trim().split('\n');
 
-// Load login data from CSV
-const loginData = readCSV(path.join(__dirname, 'login-data.csv'));
+rows.forEach((row) => {
+  const [username, password, expectedResult] = row.split(',').map(v => v.trim());
 
-// Data-driven login test
-loginData.forEach(([username, password]) => {
-    test(`${username} should be able to login`, async ({ page }) => {
-        await page.goto('http://your-app-url.com/login');
-        await page.fill('#username', username);
-        await page.fill('#password', password);
-        await page.click('button[type="submit"]');
-        // Add your assertions here
-        expect(await page.title()).toContain('Dashboard');
-    });
+  test(`Login with ${username} should ${expectedResult}`, async ({ page }) => {
+    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    
+    await page.fill('input[name="username"]', username);
+    await page.fill('input[name="password"]', password);
+    await page.click('button[type="submit"]');
+    
+    if (expectedResult === 'success') {
+      await expect(page).toHaveURL(/.*dashboard.*/);
+    } else {
+      await expect(page.locator('.oxd-alert')).toBeVisible();
+    }
+  });
 });
