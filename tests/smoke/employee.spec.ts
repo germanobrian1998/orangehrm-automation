@@ -1,30 +1,36 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/pages/LoginPage';
+import { EmployeePage } from '../../src/pages/EmployeePage';
 
-test.describe('Employee Management Tests', () => {
+test.describe('Employee Management Tests with Page Objects', () => {
+  let loginPage: LoginPage;
+  let employeePage: EmployeePage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
-    await page.fill('input[name="username"]', 'Admin');
-    await page.fill('input[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
+    loginPage = new LoginPage(page);
+    employeePage = new EmployeePage(page);
     
-    await expect(page).toHaveURL(/.*dashboard.*/);
-    await page.waitForTimeout(2000);
+    // Login first
+    await loginPage.navigateToLogin();
+    await loginPage.login('Admin', 'admin123');
+    await loginPage.verifyLoginSuccess();
   });
 
-  test('should navigate to employee list', async ({ page }) => {
-    // Navigate directly to employee list
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList');
-    await page.waitForLoadState('networkidle');
-    
-    // Verify we're on the employee list page - check URL
-    await expect(page).toHaveURL(/.*viewEmployeeList.*/);
+  test('should navigate to employee list', async () => {
+    await employeePage.navigateToEmployeeList();
+    const isTableVisible = await employeePage.verifyEmployeeTableVisible();
+    expect(isTableVisible).toBe(true);
   });
 
-  test('should load employee table successfully', async ({ page }) => {
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewEmployeeList');
-    await page.waitForLoadState('networkidle');
-    
-    // Check if table is visible
-    await expect(page.locator('.oxd-table')).toBeVisible({ timeout: 10000 });
+  test('should display employee records', async () => {
+    await employeePage.navigateToEmployeeList();
+    const count = await employeePage.getEmployeeCount();
+    expect(count).toBeGreaterThan(0);
+  });
+
+  test('should verify employee page title', async () => {
+    await employeePage.navigateToEmployeeList();
+    const titleValid = await employeePage.verifyPageTitle();
+    expect(titleValid).toBe(true);
   });
 });

@@ -1,30 +1,26 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/pages/LoginPage';
 
-test.describe('Login Tests', () => {
+test.describe('Login Tests with Page Objects', () => {
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    loginPage = new LoginPage(page);
+    await loginPage.navigateToLogin();
   });
 
-  test('should login with valid credentials', async ({ page }) => {
-    await page.fill('input[name="username"]', 'Admin');
-    await page.fill('input[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
-    
-    await expect(page).toHaveURL(/.*dashboard.*/);
+  test('should login with valid credentials', async () => {
+    await loginPage.login('Admin', 'admin123');
+    await loginPage.verifyLoginSuccess();
   });
 
-  test('should display error with invalid credentials', async ({ page }) => {
-    await page.fill('input[name="username"]', 'invalid');
-    await page.fill('input[name="password"]', 'wrongpass');
-    await page.click('button[type="submit"]');
-    
-    await expect(page.locator('.oxd-alert')).toBeVisible();
+  test('should display error with invalid credentials', async () => {
+    await loginPage.login('invalid', 'wrongpass');
+    await loginPage.verifyLoginError();
   });
 
-  test('should display validation for empty fields', async ({ page }) => {
-    await page.click('button[type="submit"]');
-    
-    const errorMessages = page.locator('.oxd-input-field-error-message');
-    await expect(errorMessages.first()).toBeVisible();
+  test('should display validation for empty fields', async () => {
+    await loginPage.clickButton('button[type="submit"]');
+    await loginPage.verifyValidationError();
   });
 });

@@ -1,26 +1,28 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/pages/LoginPage';
+import { LeavePage } from '../../src/pages/LeavePage';
 
-test.describe('Leave Management Tests', () => {
+test.describe('Leave Management Tests with Page Objects', () => {
+  let loginPage: LoginPage;
+  let leavePage: LeavePage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
-    await page.fill('input[name="username"]', 'Admin');
-    await page.fill('input[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
+    loginPage = new LoginPage(page);
+    leavePage = new LeavePage(page);
     
-    await expect(page).toHaveURL(/.*dashboard.*/);
-    await page.waitForTimeout(2000);
+    // Login first
+    await loginPage.navigateToLogin();
+    await loginPage.login('Admin', 'admin123');
+    await loginPage.verifyLoginSuccess();
   });
 
-  test('should navigate to dashboard successfully', async ({ page }) => {
-    // Verify we're on the dashboard
-    await expect(page).toHaveURL(/.*dashboard.*/);
+  test('should navigate to leave module', async () => {
+    await leavePage.navigateToDashboard();
+    await leavePage.verifyLeavePageLoaded();
   });
 
-  test('should check leave dashboard accessibility', async ({ page }) => {
-    // Navigate to leave module
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/leave/viewLeaveModule');
-    
-    // Verify navigation was successful (no error page)
-    await expect(page).not.toHaveURL(/.*error.*/);
+  test('should access leave list', async () => {
+    await leavePage.navigateToLeaveList();
+    await leavePage.verifyLeavePageLoaded();
   });
 });
