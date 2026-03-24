@@ -10,7 +10,7 @@ rows.forEach((row) => {
   const [username, password, expectedResult] = row.split(',').map(v => v.trim());
 
   test(`Login with ${username} should ${expectedResult}`, async ({ page }) => {
-    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
     
     await page.fill('input[name="username"]', username);
     await page.fill('input[name="password"]', password);

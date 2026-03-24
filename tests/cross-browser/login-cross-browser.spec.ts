@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Cross-Browser Login Tests', () => {
   test('should login successfully in all browsers', async ({ page }) => {
-    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
     
     await page.fill('input[name="username"]', 'Admin');
     await page.fill('input[name="password"]', 'admin123');
@@ -12,7 +12,7 @@ test.describe('Cross-Browser Login Tests', () => {
   });
 
   test('should display error message on invalid login', async ({ page }) => {
-    await page.goto('http://localhost:9323/web/index.php/auth/login');
+    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
     
     await page.fill('input[name="username"]', 'invalid');
     await page.fill('input[name="password"]', 'invalid');
