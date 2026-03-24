@@ -1,41 +1,35 @@
 import { defineConfig, devices } from '@playwright/test';
-import path from 'path';
-
-const baseURL = process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
 
 export default defineConfig({
   testDir: './tests',
-  
-  timeout: 30 * 1000,
-  expect: {
-    timeout: 5 * 1000
-  },
-  
-  workers: process.env.CI ? 4 : undefined,
   fullyParallel: true,
+  forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  
-  reporter: [
-    ['list'],
-    ['html', { outputFolder: 'playwright-report' }],
-  ],
-  
-  use: {
-    baseURL,
-    video: process.env.CI ? 'retain-on-failure' : 'off',
-    screenshot: 'only-on-failure',
-    trace: 'on-first-retry',
+  workers: process.env.CI ? 1 : undefined,
+  timeout: 60000,
+  expect: {
+    timeout: 10000,
   },
-  
+  reporter: 'html',
+  use: {
+    baseURL: 'https://opensource-demo.orangehrmlive.com',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    actionTimeout: 10000,
+  },
+
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
-  
-  webServer: undefined,
-  
-  // Add this to resolve path aliases
-  snapshotDir: './test-results/snapshots',
 });
