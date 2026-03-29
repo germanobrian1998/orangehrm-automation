@@ -11,7 +11,9 @@ Thank you for your interest in contributing! This guide explains how to get set 
 - [Commit Messages](#commit-messages)
 - [Code Standards](#code-standards)
 - [Writing Tests](#writing-tests)
+- [AAA Pattern](#aaa-pattern)
 - [Pull Request Process](#pull-request-process)
+- [PR Checklist](#pr-checklist)
 - [Code of Conduct](#code-of-conduct)
 - [Reporting Issues](#reporting-issues)
 
@@ -212,6 +214,43 @@ npm run test:smoke   # runs tests tagged @smoke
 
 ---
 
+## AAA Pattern
+
+Structure every test using **Arrange → Act → Assert** to keep tests readable and easy to debug.
+
+```
+Arrange  – set up the preconditions (navigate, prepare data, initialise objects)
+Act      – perform the action under test
+Assert   – verify the expected outcome
+```
+
+```typescript
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/pages/LoginPage';
+
+test.describe('Login Tests', () => {
+  test('should show error message for invalid credentials @smoke', async ({ page }) => {
+    // ── Arrange ───────────────────────────────────────────────────────────────
+    const loginPage = new LoginPage(page);
+    await loginPage.navigateToLogin();
+
+    // ── Act ───────────────────────────────────────────────────────────────────
+    await loginPage.login('invalid_user', 'wrong_password');
+
+    // ── Assert ────────────────────────────────────────────────────────────────
+    await loginPage.verifyLoginError();
+  });
+});
+```
+
+**Tips:**
+
+- Keep each section visually separated with a blank line (or a comment as above)
+- One Act per test — if you find yourself acting and asserting in a loop, split into multiple tests
+- Assertions belong in the Assert section only; avoid asserting inside Arrange or Act steps
+
+---
+
 ## Pull Request Process
 
 1. Ensure all lint, type-check, and smoke tests pass locally.
@@ -221,6 +260,32 @@ npm run test:smoke   # runs tests tagged @smoke
 5. Address all review comments before merging.
 
 PRs that introduce flaky tests, break the build, or lack a description will not be merged.
+
+---
+
+## PR Checklist
+
+Before opening a pull request, verify **every item** below:
+
+**Code quality**
+- [ ] `npm run lint` passes with no errors
+- [ ] `npm run build` (TypeScript type-check) passes
+- [ ] `npm run format:check` passes (or run `npm run format` to auto-fix)
+
+**Tests**
+- [ ] `npm run test:smoke` passes locally
+- [ ] New tests follow the [AAA Pattern](#aaa-pattern)
+- [ ] New tests use Page Objects — no raw selectors in test files
+- [ ] All selectors are defined in the relevant page class
+- [ ] Tests are tagged correctly (`@smoke` where appropriate)
+- [ ] No hardcoded credentials — use `src/config/environment.ts`
+
+**Pull request**
+- [ ] Branch name follows the [Branch Naming](#branch-naming) convention
+- [ ] Commit messages follow [Conventional Commits](#commit-messages)
+- [ ] PR description explains **what** changed and **why**
+- [ ] Related issues are linked with `Closes #<issue-number>`
+- [ ] No unrelated files or build artefacts are included in the diff
 
 ---
 
