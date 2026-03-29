@@ -11,7 +11,11 @@ export default defineConfig({
   expect: {
     timeout: 10000,
   },
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    ['allure-playwright', { resultsDir: './allure-results' }],
+  ],
   use: {
     baseURL: 'https://opensource-demo.orangehrmlive.com',
     trace: 'on-first-retry',
