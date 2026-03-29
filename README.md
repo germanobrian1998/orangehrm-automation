@@ -1,11 +1,12 @@
 # 🎯 OrangeHRM QA Automation Suite
 
+[![Tests Passing](https://img.shields.io/badge/tests-57%2F57-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Regression Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml)
 [![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![TypeScript Strict](https://img.shields.io/badge/TypeScript-strict%20mode-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.40+-green?logo=playwright)](https://playwright.dev/)
-[![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)](./DOCKER.md)
+[![Docker Ready](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](./DOCKER.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 A **production-ready QA automation framework** for [OrangeHRM](https://opensource-demo.orangehrmlive.com) using Playwright, TypeScript, and GitHub Actions CI/CD.
