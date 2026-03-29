@@ -11,6 +11,19 @@ A **production-ready QA automation framework** for OrangeHRM using Playwright, T
 npm ci
 npx playwright install chromium
 npm run test:smoke
+
+## 🐳 Docker
+
+```bash
+# Build image and run all tests
+docker build -t orangehrm-automation .
+docker run --rm orangehrm-automation
+
+# Or with Docker Compose
+docker compose run --rm smoke
+```
+
+See [DOCKER.md](DOCKER.md) for full details.
 📚 Documentation
 Full Setup Guide
 Architecture Decisions
