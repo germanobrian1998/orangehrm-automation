@@ -21,7 +21,9 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 - [Running Tests](#-running-tests)
 - [Docker](#-docker)
 - [CI/CD Pipeline](#-cicd-pipeline)
+- [Tech Stack](#️-tech-stack)
 - [Documentation](#-documentation)
+- [Troubleshooting](#️-troubleshooting)
 - [Contributing](#-contributing)
 
 ---
@@ -201,6 +203,73 @@ Artifacts (HTML reports, screenshots) are uploaded for every run and retained fo
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute to this project |
 | [DOCKER.md](DOCKER.md) | Docker setup and usage |
 | [CI-CD.md](CI-CD.md) | CI/CD pipeline details |
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| [TypeScript](https://www.typescriptlang.org/) | 5.x | Type-safe test authoring |
+| [Playwright](https://playwright.dev/) | 1.40+ | Browser automation & API testing |
+| [Node.js](https://nodejs.org/) | 18+ | Runtime environment |
+| [ESLint](https://eslint.org/) | 8.x | Code linting |
+| [Prettier](https://prettier.io/) | 3.x | Code formatting |
+| [Docker](https://www.docker.com/) | — | Containerised test execution |
+| [GitHub Actions](https://github.com/features/actions) | — | CI/CD pipeline |
+
+---
+
+## 🔧 Troubleshooting
+
+### Tests fail with "browser not found"
+
+```bash
+# Install all browsers and system dependencies
+npx playwright install --with-deps
+```
+
+### Tests time out on slow networks
+
+Increase the global timeout in `playwright.config.ts`:
+
+```typescript
+export default defineConfig({
+  timeout: 90000,        // test timeout (ms)
+  expect: { timeout: 15000 }, // assertion timeout (ms)
+});
+```
+
+### `npm ci` fails with peer dependency errors
+
+Ensure you are using **Node.js 18 or later**:
+
+```bash
+node --version   # should be v18.x or higher
+npm --version    # should be 9.x or higher
+```
+
+### Smoke tests pass locally but fail in CI
+
+CI runs with a single worker (`workers: 1`) to avoid network contention. If tests still fail, check the uploaded HTML report artifact in the GitHub Actions run for screenshots and traces.
+
+### Docker build fails
+
+Make sure Docker Desktop is running and you have pulled the base image:
+
+```bash
+docker pull mcr.microsoft.com/playwright:v1.40.0-jammy
+docker build -t orangehrm-automation .
+```
+
+### ESLint errors block the build
+
+Run auto-fix before committing:
+
+```bash
+npm run lint:fix
+npm run format
+```
 
 ---
 

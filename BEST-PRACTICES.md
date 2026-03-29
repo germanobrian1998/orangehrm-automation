@@ -8,6 +8,7 @@ This document describes the patterns and conventions used in this project. Follo
 
 - [Page Object Model](#page-object-model)
 - [Selectors](#selectors)
+- [AAA Pattern](#aaa-pattern)
 - [Async Handling](#async-handling)
 - [Assertions](#assertions)
 - [Test Data Management](#test-data-management)
@@ -89,6 +90,47 @@ Choose selectors that are stable across application updates.
 // ❌ Avoid — breaks on any DOM reordering
 'div:nth-child(2) > .container > button'
 ```
+
+---
+
+## AAA Pattern
+
+Every test should be divided into three clearly separated phases:
+
+| Phase | Purpose |
+|---|---|
+| **Arrange** | Set up preconditions: navigate, prepare data, create page objects |
+| **Act** | Perform the single action under test |
+| **Assert** | Verify the expected result with Playwright's web-first assertions |
+
+```typescript
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/pages/LoginPage';
+import { EmployeePage } from '../../src/pages/EmployeePage';
+
+test.describe('Employee Management', () => {
+  test('should display employee list after login @smoke', async ({ page }) => {
+    // ── Arrange ───────────────────────────────────────────────────────────────
+    const loginPage = new LoginPage(page);
+    const employeePage = new EmployeePage(page);
+    await loginPage.navigateToLogin();
+    await loginPage.login('Admin', 'admin123');
+
+    // ── Act ───────────────────────────────────────────────────────────────────
+    await employeePage.navigateToEmployeeList();
+
+    // ── Assert ────────────────────────────────────────────────────────────────
+    await employeePage.verifyEmployeeTableVisible();
+  });
+});
+```
+
+**Rules:**
+
+- Keep each phase visually separated — a blank line or a short comment is enough
+- One action per test; if you need to test two independent actions, write two tests
+- Never assert inside the Arrange phase; if setup can fail, it belongs in a `beforeEach` with its own error message
+- Keep Act as short as possible — a single method call from a page object is ideal
 
 ---
 
@@ -333,4 +375,72 @@ import { logger } from '../utils/logger';
 
 logger.info('Navigating to login page');
 logger.error('Login failed', { username, statusCode });
+```
+
+---
+
+## Code Quality Standards
+
+### TypeScript
+
+- Use explicit types for all function parameters and return values; avoid `any`
+- Enable strict mode in `tsconfig.json` (`"strict": true`)
+- Prefer `async/await` over `.then()` chains
+- Export page objects and utilities via `index.ts` barrel files
+
+```typescript
+// ✅ Explicit types, async/await
+async getEmployeeCount(): Promise<number> {
+  return await this.page.locator('.oxd-table-row').count();
+}
+
+// ❌ Implicit return type, any parameter
+async getCount(selector) {
+  return this.page.locator(selector).count();
+}
+```
+
+### Naming Conventions
+
+| Entity | Convention | Example |
+|---|---|---|
+| Test files | `kebab-case.spec.ts` | `leave-request.spec.ts` |
+| Page classes | `PascalCase` | `LeaveRequestPage` |
+| Page files | `kebab-case.page.ts` | `leave-request.page.ts` |
+| Test suites | Sentence describing the feature | `'Leave Request Submission'` |
+| Test cases | Sentence starting with `should` | `'should submit a leave request'` |
+| Private selectors | `camelCase` with descriptive suffix | `submitButton`, `errorAlert` |
+
+### Keep Tests Independent
+
+- Each test must be able to run in isolation — no shared mutable state between tests
+- Use `test.beforeEach` for setup; use `test.afterEach` only when cleanup is strictly required
+- Avoid storing results from one test and using them in another
+
+```typescript
+// ✅ Self-contained test
+test('should navigate to employee list', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const employeePage = new EmployeePage(page);
+  await loginPage.navigateToLogin();
+  await loginPage.login('Admin', 'admin123');
+  await employeePage.navigateToEmployeeList();
+  await employeePage.verifyEmployeeTableVisible();
+});
+
+// ❌ Depends on another test having run first
+test('should see employee added in previous test', async ({ page }) => {
+  // Fails if the previous test didn't run or the order changed
+});
+```
+
+### Linting & Formatting
+
+Run these commands before every commit:
+
+```bash
+npm run lint        # Check for ESLint errors
+npm run lint:fix    # Auto-fix fixable ESLint errors
+npm run format      # Format all files with Prettier
+npm run build       # TypeScript type-check (no emit)
 ```
