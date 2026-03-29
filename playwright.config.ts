@@ -37,5 +37,15 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'performance',
+      testDir: './tests/performance',
+      timeout: 120000,
+      use: {
+        ...devices['Desktop Chrome'],
+        // Capture performance metrics on every run
+        trace: 'on',
+      },
+    },
   ],
 });
