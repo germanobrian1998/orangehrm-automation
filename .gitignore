@@ -25,6 +25,10 @@ allure-report/
 # Build
 dist/
 out/
+tests/**/*.js
+tests/**/*.js.map
+tests/**/*.d.ts
+tests/**/*.d.ts.map
 
 # Logs
 logs/

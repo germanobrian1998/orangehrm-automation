@@ -368,13 +368,59 @@ npm run test:ui
 
 ### Logging
 
-Use the project logger for structured output:
+The project uses **Winston** with daily-rotating file transports for structured, persistent logs.
+
+#### Log levels
+
+| Level   | When to use                                            |
+|---------|--------------------------------------------------------|
+| `debug` | Granular details useful only during active debugging   |
+| `info`  | Normal test flow: navigation, clicks, assertions       |
+| `warn`  | Non-fatal anomalies (e.g., optional element missing)   |
+| `error` | Caught exceptions or failed assertions                 |
+
+#### Creating a logger
 
 ```typescript
-import { logger } from '../utils/logger';
+import { createLogger } from '../utils/logger';
 
-logger.info('Navigating to login page');
-logger.error('Login failed', { username, statusCode });
+const logger = createLogger('LoginPage'); // context tag appears in every line
+```
+
+#### Logging test events
+
+```typescript
+// Navigate
+logger.step(1, 'Navigating to login page');
+
+// General info
+logger.info('Login form submitted', { username });
+
+// Assertions
+const isVisible = await page.locator('.dashboard').isVisible();
+logger.assertion(isVisible, 'Dashboard is visible after login');
+
+// Errors
+try {
+  await loginPage.login(username, password);
+} catch (error) {
+  logger.error('Login action threw an unexpected error', error);
+  throw error;
+}
+```
+
+#### Log output
+
+- **Console**: colorized, human-readable output during test execution.
+- **`logs/combined-YYYY-MM-DD.log`**: all levels in JSON format.
+- **`logs/error-YYYY-MM-DD.log`**: errors only in JSON format.
+
+Log files rotate daily, are compressed after rotation, and are removed after 14 days. The `logs/` directory is git-ignored.
+
+Set the `LOG_LEVEL` environment variable to override the minimum level (default: `debug`).
+
+```bash
+LOG_LEVEL=info npm test   # suppress debug messages in CI
 ```
 
 ---
