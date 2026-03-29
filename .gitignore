@@ -36,4 +36,5 @@ npm-debug.log*
 Thumbs.db
 
 # Docker
-.dockerignore
+docker-data/
+.docker/
