@@ -100,6 +100,37 @@ After each run, the following are uploaded to GitHub Actions:
 - Pull request reviews required before merging.
 - Stale approvals dismissed when new commits are pushed.
 
+## Allure Reporting
+
+The project uses [Allure](https://allurereport.org/) for advanced test reporting. Allure results are generated automatically during every test run via the `allure-playwright` reporter.
+
+### Generating the Allure Report Locally
+
+```bash
+# 1. Run the tests (results are written to ./allure-results)
+npm test
+
+# 2. Install the Allure CLI (once, requires Java 11+)
+npm install -g allure-commandline
+
+# 3. Generate and open the HTML report
+allure serve ./allure-results
+```
+
+### Report Features
+
+| Feature | Description |
+|---------|-------------|
+| Test history | Tracks pass/fail trends across runs |
+| Screenshots | Captured automatically on test failure |
+| Videos | Attached when `video: 'retain-on-failure'` is set |
+| Traces | Playwright traces linked per test |
+| Categories | Automatic grouping of failures by error type |
+
+### CI Integration
+
+In GitHub Actions, `allure-results/` is uploaded as an artifact after each workflow run so reports can be reviewed without running tests locally. To view the report, download the `allure-results` artifact and run `allure serve`.
+
 ## Local vs CI Differences
 
 | Setting | Local | CI |
@@ -107,4 +138,4 @@ After each run, the following are uploaded to GitHub Actions:
 | Workers | CPU cores | 2 |
 | Retries | 0 | 2 |
 | `forbidOnly` | false | true |
-| Reporters | list + html | list + html |
+| Reporters | list + html + allure | list + html + allure |
