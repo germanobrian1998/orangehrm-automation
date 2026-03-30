@@ -1,0 +1,22 @@
+{
+  "name": "@qa-framework/shared-utils",
+  "version": "1.0.0",
+  "description": "Shared test utilities, helpers and data fixtures used across all packages",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "echo \"No tests in shared-utils\"",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.0.0"
+  }
+}

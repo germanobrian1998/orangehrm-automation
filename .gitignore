@@ -42,3 +42,9 @@ Thumbs.db
 # Docker
 docker-data/
 .docker/
+
+# Monorepo - package build artifacts
+packages/*/dist/
+packages/*/node_modules/
+packages/*/*.js.map
+packages/*/tsconfig.tsbuildinfo
