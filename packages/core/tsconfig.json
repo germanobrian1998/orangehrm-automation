@@ -14,17 +14,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "moduleResolution": "node",
-    "paths": {
-      "@qa-framework/core": ["packages/core/src"],
-      "@qa-framework/shared-utils": ["packages/shared-utils/src"]
-    }
+    "composite": true
   },
   "include": ["src", "tests"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "./packages/core" },
-    { "path": "./packages/shared-utils" },
-    { "path": "./packages/orangehrm-suite" },
-    { "path": "./packages/hrm-api-suite" }
-  ]
+  "exclude": ["node_modules", "dist"]
 }

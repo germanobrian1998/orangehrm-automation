@@ -1,0 +1,28 @@
+{
+  "name": "@qa-framework/hrm-api-suite",
+  "version": "1.0.0",
+  "description": "HRM REST API test suite - request/response validation, contract testing, performance",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "playwright test",
+    "test:api": "playwright test --grep @api",
+    "test:performance": "playwright test --grep @performance",
+    "lint": "eslint src tests --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@playwright/test": "^1.40.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@qa-framework/core": "*",
+    "@qa-framework/shared-utils": "*",
+    "@faker-js/faker": "^8.0.0"
+  }
+}

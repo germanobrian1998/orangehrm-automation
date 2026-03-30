@@ -1,9 +1,13 @@
 {
   "name": "orangehrm-automation",
   "version": "1.0.0",
-  "description": "QA Automation suite for OrangeHRM using Playwright - Test strategy, API integration, CI/CD",
+  "description": "QA Automation monorepo - scalable, reusable framework for OrangeHRM using Playwright",
   "author": "germanobrian1998",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
@@ -17,9 +21,15 @@
     "lint:fix": "eslint src tests --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"docs/**/*.md\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
-    "build": "tsc",
-    "clean": "rm -rf dist test-results blob-report playwright-report",
-    "report": "playwright show-report"
+    "build": "tsc && npm run build --workspaces --if-present",
+    "build:packages": "npm run build --workspaces --if-present",
+    "clean": "rm -rf dist test-results blob-report playwright-report && npm run clean --workspaces --if-present",
+    "report": "playwright show-report",
+    "test:core": "npm run test --workspace=packages/core",
+    "test:orangehrm": "npm run test --workspace=packages/orangehrm-suite",
+    "test:hrm-api": "npm run test --workspace=packages/hrm-api-suite",
+    "test:shared-utils": "npm run test --workspace=packages/shared-utils",
+    "test:all-packages": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
