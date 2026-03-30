@@ -48,3 +48,8 @@ packages/*/dist/
 packages/*/node_modules/
 packages/*/*.js.map
 packages/*/tsconfig.tsbuildinfo
+packages/*/tsconfig.*.tsbuildinfo
+packages/*/tests/**/*.js
+packages/*/tests/**/*.js.map
+packages/*/tests/**/*.d.ts
+packages/*/tests/**/*.d.ts.map

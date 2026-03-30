@@ -67,7 +67,7 @@ export class BaseApiClient {
       this.logger.debug(`${method} ${endpoint}`);
 
       const response = await (
-        this.requestContext as Record<string, (url: string, opts: unknown) => Promise<{ ok(): boolean; text(): Promise<string>; json(): Promise<unknown>; status(): number }>>
+        this.requestContext as unknown as Record<string, (url: string, opts: unknown) => Promise<{ ok(): boolean; text(): Promise<string>; json(): Promise<unknown>; status(): number }>>
       )[method.toLowerCase()](url, { headers, data: options?.data });
 
       if (!response.ok()) {

@@ -4,7 +4,6 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,7 +13,18 @@
     "declarationMap": true,
     "sourceMap": true,
     "moduleResolution": "node",
-    "composite": true
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["src/*"],
+      "@core/page-objects": ["src/page-objects/base.page"],
+      "@core/api-client": ["src/api-client/base.api-client"],
+      "@core/logger": ["src/logger/logger"],
+      "@core/config": ["src/config/Config"],
+      "@core/utils": ["src/utils/TestHelpers"],
+      "@core/fixtures": ["src/fixtures/TestFixtures"],
+      "@core/types": ["src/types/index"]
+    }
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]
