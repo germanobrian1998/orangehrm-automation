@@ -17,7 +17,16 @@ export type { LogLevel } from './logger/logger';
 export { environment } from './config/environment';
 export { constants } from './config/constants';
 export type { Environment } from './config/environment';
+export { Config, config } from './config/Config';
 
 // Utils
 export { WaitFor, createWaitFor } from './utils/wait-for';
 export { ScreenshotManager, createScreenshotManager } from './utils/screenshot-manager';
+export * from './utils/TestHelpers';
+
+// Fixtures
+export { test, expect } from './fixtures/TestFixtures';
+export type { CoreFixtures } from './fixtures/TestFixtures';
+
+// Types
+export * from './types';

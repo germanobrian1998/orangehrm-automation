@@ -116,6 +116,34 @@ export class BasePage {
     return this.page.url();
   }
 
+  /** Wait for an element to reach the given state (default: visible) */
+  async waitForElement(
+    selector: string,
+    state: 'visible' | 'hidden' | 'attached' | 'detached' = 'visible',
+    timeout?: number
+  ): Promise<void> {
+    try {
+      await this.page
+        .locator(selector)
+        .waitFor({ state, timeout: timeout ?? constants.TIMEOUTS.LONG });
+      this.logger.debug(`Element "${selector}" reached state "${state}"`);
+    } catch (error) {
+      this.logger.error(
+        `Element "${selector}" did not reach state "${state}"`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  /** Wait until an arbitrary async condition returns true */
+  async waitUntil(
+    condition: () => Promise<boolean>,
+    timeout: number = constants.TIMEOUTS.LONG
+  ): Promise<void> {
+    await this.waitFor.condition(condition, timeout);
+  }
+
   /** Reload the page */
   async reload(): Promise<void> {
     try {
