@@ -179,6 +179,8 @@ describe('Config', () => {
     expect(all).toHaveProperty('debug');
     expect(all).toHaveProperty('isCI');
     expect(all).toHaveProperty('isDev');
+    expect(all).toHaveProperty('browser');
+    expect(all).toHaveProperty('headless');
   });
 
   it('should return a readonly config object that matches all property getters', () => {
@@ -187,5 +189,49 @@ describe('Config', () => {
     expect(all.baseURL).toBe(cfg.baseURL);
     expect(all.adminUsername).toBe(cfg.adminUsername);
     expect(all.testTimeout).toBe(cfg.testTimeout);
+    expect(all.browser).toBe(cfg.browser);
+    expect(all.headless).toBe(cfg.headless);
+  });
+
+  // ── Browser Configuration ─────────────────────────────────────────────────
+
+  it('should default browser to "chromium" when BROWSER is not set', () => {
+    delete process.env.BROWSER;
+    Config.reset();
+    expect(Config.getInstance().browser).toBe('chromium');
+  });
+
+  it('should read browser from BROWSER env var', () => {
+    process.env.BROWSER = 'firefox';
+    Config.reset();
+    expect(Config.getInstance().browser).toBe('firefox');
+    delete process.env.BROWSER;
+  });
+
+  it('should default headless to true when HEADLESS is not set', () => {
+    delete process.env.HEADLESS;
+    Config.reset();
+    expect(Config.getInstance().headless).toBe(true);
+  });
+
+  it('should set headless to false when HEADLESS=false', () => {
+    process.env.HEADLESS = 'false';
+    Config.reset();
+    expect(Config.getInstance().headless).toBe(false);
+    delete process.env.HEADLESS;
+  });
+
+  it('should set headless to true when HEADLESS is any value other than "false"', () => {
+    process.env.HEADLESS = 'true';
+    Config.reset();
+    expect(Config.getInstance().headless).toBe(true);
+    delete process.env.HEADLESS;
+  });
+
+  it('should fall back to "chromium" when BROWSER is an invalid value', () => {
+    process.env.BROWSER = 'edge';
+    Config.reset();
+    expect(Config.getInstance().browser).toBe('chromium');
+    delete process.env.BROWSER;
   });
 });

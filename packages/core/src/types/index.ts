@@ -4,6 +4,8 @@
 
 // ─── Environment / Config ────────────────────────────────────────────────────
 
+export type BrowserName = 'chromium' | 'firefox' | 'webkit';
+
 export interface EnvironmentConfig {
   baseURL: string;
   adminUsername: string;
@@ -14,6 +16,8 @@ export interface EnvironmentConfig {
   debug: boolean;
   isCI: boolean;
   isDev: boolean;
+  browser: BrowserName;
+  headless: boolean;
 }
 
 // ─── HTTP / API ───────────────────────────────────────────────────────────────

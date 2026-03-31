@@ -8,12 +8,20 @@ import type { Page, Locator } from '@playwright/test';
 const createMockLocator = (): jest.Mocked<Partial<Locator>> => ({
   waitFor: jest.fn().mockResolvedValue(undefined),
   click: jest.fn().mockResolvedValue(undefined),
+  dblclick: jest.fn().mockResolvedValue(undefined),
   fill: jest.fn().mockResolvedValue(undefined),
   clear: jest.fn().mockResolvedValue(undefined),
   blur: jest.fn().mockResolvedValue(undefined),
+  hover: jest.fn().mockResolvedValue(undefined),
   scrollIntoViewIfNeeded: jest.fn().mockResolvedValue(undefined),
   textContent: jest.fn().mockResolvedValue('mock text'),
+  inputValue: jest.fn().mockResolvedValue('mock-input-value'),
+  getAttribute: jest.fn().mockResolvedValue('mock-attribute'),
   isVisible: jest.fn().mockResolvedValue(true),
+  isEnabled: jest.fn().mockResolvedValue(true),
+  selectOption: jest.fn().mockResolvedValue([]),
+  check: jest.fn().mockResolvedValue(undefined),
+  uncheck: jest.fn().mockResolvedValue(undefined),
   count: jest.fn().mockResolvedValue(0),
 });
 
@@ -32,6 +40,7 @@ export const createMockPage = (): jest.Mocked<Partial<Page>> => {
     url: jest.fn().mockReturnValue('https://test.orangehrmlive.com'),
     title: jest.fn().mockResolvedValue('OrangeHRM'),
     locator: jest.fn().mockReturnValue(locator),
+    once: jest.fn(),
     request: {
       get: jest.fn().mockResolvedValue({
         ok: () => true,

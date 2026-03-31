@@ -8,6 +8,17 @@ import path from 'path';
 const envFile = process.env.NODE_ENV === 'test' ? '.env.local' : '.env.example';
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
+type BrowserName = 'chromium' | 'firefox' | 'webkit';
+const VALID_BROWSERS: BrowserName[] = ['chromium', 'firefox', 'webkit'];
+
+function parseBrowser(value: string | undefined): BrowserName {
+  const browser = value || 'chromium';
+  if (VALID_BROWSERS.includes(browser as BrowserName)) {
+    return browser as BrowserName;
+  }
+  return 'chromium';
+}
+
 export const environment = {
   baseURL: process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com',
   adminUsername: process.env.ORANGEHRM_ADMIN_USERNAME || 'Admin',
@@ -23,6 +34,9 @@ export const environment = {
 
   isCI: process.env.CI === 'true',
   isDev: process.env.NODE_ENV !== 'production',
+
+  browser: parseBrowser(process.env.BROWSER),
+  headless: process.env.HEADLESS !== 'false',
 } as const;
 
 export type Environment = typeof environment;
