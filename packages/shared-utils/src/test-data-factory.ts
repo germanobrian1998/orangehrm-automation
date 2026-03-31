@@ -34,7 +34,7 @@ export class TestDataFactory {
   /** Generate a random user account */
   static user(): UserData {
     return {
-      username: faker.internet.username().toLowerCase(),
+      username: faker.internet.userName().toLowerCase(),
       password: faker.internet.password({ length: 12 }),
       email: faker.internet.email(),
     };
