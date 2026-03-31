@@ -63,6 +63,42 @@ export class BasePage {
     }
   }
 
+  /** Double-click an element */
+  async doubleClick(selector: string): Promise<void> {
+    try {
+      await this.waitFor.elementVisible(selector);
+      await this.page.locator(selector).dblclick();
+      this.logger.debug(`Double-clicked ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to double-click ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Right-click an element */
+  async rightClick(selector: string): Promise<void> {
+    try {
+      await this.waitFor.elementVisible(selector);
+      await this.page.locator(selector).click({ button: 'right' });
+      this.logger.debug(`Right-clicked ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to right-click ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Hover over an element */
+  async hover(selector: string): Promise<void> {
+    try {
+      await this.waitFor.elementVisible(selector);
+      await this.page.locator(selector).hover();
+      this.logger.debug(`Hovered over ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to hover over ${selector}`, error);
+      throw error;
+    }
+  }
+
   /** Get trimmed text content of an element */
   async getText(selector: string): Promise<string> {
     try {
@@ -75,6 +111,28 @@ export class BasePage {
     }
   }
 
+  /** Get the current value of an input element */
+  async getInputValue(selector: string): Promise<string> {
+    try {
+      const value = await this.page.locator(selector).inputValue();
+      return value || '';
+    } catch (error) {
+      this.logger.error(`Failed to get input value from ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Get an attribute value from an element */
+  async getAttribute(selector: string, attribute: string): Promise<string | null> {
+    try {
+      await this.waitFor.elementVisible(selector);
+      return await this.page.locator(selector).getAttribute(attribute);
+    } catch (error) {
+      this.logger.error(`Failed to get attribute "${attribute}" from ${selector}`, error);
+      throw error;
+    }
+  }
+
   /** Check if element is visible */
   async isVisible(selector: string): Promise<boolean> {
     try {
@@ -82,6 +140,64 @@ export class BasePage {
     } catch {
       return false;
     }
+  }
+
+  /** Check if element is enabled */
+  async isEnabled(selector: string): Promise<boolean> {
+    try {
+      return await this.page.locator(selector).isEnabled();
+    } catch {
+      return false;
+    }
+  }
+
+  /** Select an option from a <select> dropdown */
+  async selectOption(selector: string, value: string): Promise<void> {
+    try {
+      await this.page.locator(selector).selectOption(value);
+      this.logger.debug(`Selected option "${value}" in ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to select option "${value}" in ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Check a checkbox or radio button */
+  async check(selector: string): Promise<void> {
+    try {
+      await this.page.locator(selector).check();
+      this.logger.debug(`Checked ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to check ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Uncheck a checkbox */
+  async uncheck(selector: string): Promise<void> {
+    try {
+      await this.page.locator(selector).uncheck();
+      this.logger.debug(`Unchecked ${selector}`);
+    } catch (error) {
+      this.logger.error(`Failed to uncheck ${selector}`, error);
+      throw error;
+    }
+  }
+
+  /** Register a one-time handler that accepts the next browser dialog */
+  acceptAlert(): void {
+    this.page.once('dialog', (dialog) => {
+      this.logger.debug('Accepting dialog');
+      void dialog.accept();
+    });
+  }
+
+  /** Register a one-time handler that dismisses the next browser dialog */
+  dismissAlert(): void {
+    this.page.once('dialog', (dialog) => {
+      this.logger.debug('Dismissing dialog');
+      void dialog.dismiss();
+    });
   }
 
   /** Wait for URL to match pattern */

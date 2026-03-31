@@ -5,12 +5,23 @@
 
 import dotenv from 'dotenv';
 import path from 'path';
-import type { EnvironmentConfig } from '../types';
+import type { EnvironmentConfig, BrowserName } from '../types';
 
 // Load the correct .env file depending on NODE_ENV
 const envFile =
   process.env.NODE_ENV === 'test' ? '.env.local' : '.env';
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+
+const VALID_BROWSERS: BrowserName[] = ['chromium', 'firefox', 'webkit'];
+
+function parseBrowser(value: string | undefined): BrowserName {
+  const browser = value || 'chromium';
+  if (VALID_BROWSERS.includes(browser as BrowserName)) {
+    return browser as BrowserName;
+  }
+  console.warn(`[Config] Invalid BROWSER value "${browser}". Falling back to "chromium".`);
+  return 'chromium';
+}
 
 export class Config {
   private static instance: Config;
@@ -34,6 +45,8 @@ export class Config {
         debug: process.env.DEBUG === 'true',
         isCI: process.env.CI === 'true',
         isDev: process.env.NODE_ENV !== 'production',
+        browser: parseBrowser(process.env.BROWSER),
+        headless: process.env.HEADLESS !== 'false',
       });
     }
     return Config.instance;
@@ -86,6 +99,14 @@ export class Config {
 
   get isDev(): boolean {
     return this._config.isDev;
+  }
+
+  get browser(): BrowserName {
+    return this._config.browser;
+  }
+
+  get headless(): boolean {
+    return this._config.headless;
   }
 }
 

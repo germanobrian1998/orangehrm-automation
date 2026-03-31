@@ -70,5 +70,7 @@ describe('TestFixtures', () => {
     expect(typeof cfg.adminPassword).toBe('string');
     expect(typeof cfg.testTimeout).toBe('number');
     expect(typeof cfg.logLevel).toBe('string');
+    expect(typeof cfg.browser).toBe('string');
+    expect(typeof cfg.headless).toBe('boolean');
   });
 });
