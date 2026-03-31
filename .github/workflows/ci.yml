@@ -1,3 +1,4 @@
+# This is a sample CI configuration
 name: CI
 
 on:
@@ -8,18 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Download chromium report artifact
-        uses: actions/download-artifact@v2
-        continue-on-error: true  # Added continue-on-error
-
-      - name: Publish to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: hashFiles('playwright-report/*') != ''  # Added condition
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./playwright-report
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
