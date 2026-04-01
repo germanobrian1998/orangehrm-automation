@@ -4,7 +4,6 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,18 +13,16 @@
     "declarationMap": true,
     "sourceMap": true,
     "moduleResolution": "node",
+    "composite": true,
     "paths": {
-      "@qa-framework/core": ["packages/core/src"],
-      "@qa-framework/shared-utils": ["packages/shared-utils/src"]
+      "@qa-framework/core": ["../core/src"],
+      "@qa-framework/shared-utils": ["../shared-utils/src"]
     }
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"],
   "references": [
-    { "path": "./packages/core" },
-    { "path": "./packages/shared-utils" },
-    { "path": "./packages/orangehrm-suite" },
-    { "path": "./packages/hrm-api-suite" },
-    { "path": "./packages/orangehrm-api-suite" }
+    { "path": "../core" },
+    { "path": "../shared-utils" }
   ]
 }

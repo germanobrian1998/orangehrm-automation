@@ -28,6 +28,7 @@
     "test:core": "npm run test --workspace=packages/core",
     "test:orangehrm": "npm run test --workspace=packages/orangehrm-suite",
     "test:hrm-api": "npm run test --workspace=packages/hrm-api-suite",
+    "test:orangehrm-api": "npm run test --workspace=packages/orangehrm-api-suite",
     "test:shared-utils": "npm run test --workspace=packages/shared-utils",
     "test:all-packages": "npm run test --workspaces --if-present"
   },
