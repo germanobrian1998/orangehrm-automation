@@ -1,0 +1,29 @@
+{
+  "name": "@qa-framework/orangehrm-api-suite",
+  "version": "1.0.0",
+  "description": "OrangeHRM comprehensive REST API test suite - authentication, employee, and leave management",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "playwright test",
+    "test:auth": "playwright test tests/auth",
+    "test:employee": "playwright test tests/employee",
+    "test:leave": "playwright test tests/leave",
+    "lint": "eslint src tests --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@playwright/test": "^1.40.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@qa-framework/core": "*",
+    "@qa-framework/shared-utils": "*",
+    "@faker-js/faker": "^8.0.0"
+  }
+}
