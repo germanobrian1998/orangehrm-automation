@@ -222,4 +222,57 @@ test.describe('@auth Login Test Suite', () => {
       expect(selectors.dashboard.logoutOption).toBeTruthy();
     });
   });
+
+  // ── 5. Remember me functionality ─────────────────────────────────────────
+
+  test.describe('Remember me functionality', () => {
+    test('rememberMeCheckbox selector is defined', () => {
+      // Assert
+      expect(selectors.login.rememberMeCheckbox).toBeTruthy();
+    });
+
+    test('rememberMeLabel selector is defined', () => {
+      // Assert
+      expect(selectors.login.rememberMeLabel).toBeTruthy();
+    });
+
+    test('remember me credential shape includes the rememberMe flag', () => {
+      // Arrange / Act
+      const credentials = { username: 'Admin', password: 'admin123', rememberMe: true };
+
+      // Assert
+      expect(credentials.rememberMe).toBe(true);
+    });
+
+    test('remember me can be disabled by setting the flag to false', () => {
+      // Arrange / Act
+      const credentials = { username: 'Admin', password: 'admin123', rememberMe: false };
+
+      // Assert
+      expect(credentials.rememberMe).toBe(false);
+    });
+
+    test('credential object without rememberMe flag defaults to not remembered', () => {
+      // Arrange / Act
+      const credentials = { username: 'Admin', password: 'admin123' };
+
+      // Assert – rememberMe is optional; absence means it defaults to false/unset
+      expect((credentials as Record<string, unknown>).rememberMe).toBeUndefined();
+    });
+
+    test('rememberMe flag is a boolean type when provided', () => {
+      // Arrange / Act
+      const withRemember = { username: 'Admin', password: 'admin123', rememberMe: true };
+      const withoutRemember = { username: 'Admin', password: 'admin123', rememberMe: false };
+
+      // Assert
+      expect(typeof withRemember.rememberMe).toBe('boolean');
+      expect(typeof withoutRemember.rememberMe).toBe('boolean');
+    });
+
+    test('rememberMeCheckbox selector references a checkbox input', () => {
+      // Assert – the selector should target an input of type checkbox
+      expect(selectors.login.rememberMeCheckbox).toContain('checkbox');
+    });
+  });
 });

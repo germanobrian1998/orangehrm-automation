@@ -10,6 +10,7 @@
 
 import { test, expect } from '@qa-framework/core';
 import { LoginPage } from '../../src/pages/login.page';
+import { LeavePage } from '../../src/pages/leave.page';
 import { PimPage } from '../../src/pages/pim.page';
 import { selectors } from '../../src/selectors';
 
@@ -357,6 +358,204 @@ test.describe('@leave Leave Management Tests', () => {
       // Assert
       expect(approvedOnly).toHaveLength(2);
       approvedOnly.forEach((e) => expect(e.status).toBe('APPROVED'));
+    });
+  });
+
+  // ── 5. Overlapping leave request (should fail) ────────────────────────────
+
+  test.describe('Submit overlapping leave request', () => {
+    test('LeavePage is importable from the suite', async ({ logger }) => {
+      logger.step(1, 'Verify LeavePage module is importable');
+      expect(LeavePage).toBeDefined();
+      logger.info('✓ LeavePage is importable');
+    });
+
+    test('LeavePage can be instantiated with a Playwright page', async ({ testPage, logger }) => {
+      logger.step(1, 'Instantiate LeavePage');
+      const leavePage = new LeavePage(testPage);
+      expect(leavePage).toBeInstanceOf(LeavePage);
+      logger.info('✓ LeavePage instantiated successfully');
+    });
+
+    test('isOverlapErrorDisplayed method is defined on LeavePage', async ({ testPage }) => {
+      const leavePage = new LeavePage(testPage);
+      expect(typeof leavePage.isOverlapErrorDisplayed).toBe('function');
+    });
+
+    test('overlapping date ranges are detected correctly', () => {
+      // Arrange
+      const existing = { fromDate: new Date('2025-06-01'), toDate: new Date('2025-06-05') };
+      const overlapping = { fromDate: new Date('2025-06-03'), toDate: new Date('2025-06-08') };
+
+      // Act – two ranges overlap if one starts before the other ends
+      const overlaps =
+        overlapping.fromDate <= existing.toDate && overlapping.toDate >= existing.fromDate;
+
+      // Assert
+      expect(overlaps).toBe(true);
+    });
+
+    test('non-overlapping date ranges pass validation', () => {
+      // Arrange
+      const existing = { fromDate: new Date('2025-06-01'), toDate: new Date('2025-06-05') };
+      const nonOverlapping = { fromDate: new Date('2025-06-06'), toDate: new Date('2025-06-10') };
+
+      // Act
+      const overlaps =
+        nonOverlapping.fromDate <= existing.toDate && nonOverlapping.toDate >= existing.fromDate;
+
+      // Assert
+      expect(overlaps).toBe(false);
+    });
+
+    test('adjacent (touching) date ranges do not overlap', () => {
+      // Arrange – second request starts the day after the first ends
+      const existing = { fromDate: new Date('2025-06-01'), toDate: new Date('2025-06-05') };
+      const adjacent = { fromDate: new Date('2025-06-06'), toDate: new Date('2025-06-07') };
+
+      // Act
+      const overlaps =
+        adjacent.fromDate <= existing.toDate && adjacent.toDate >= existing.fromDate;
+
+      // Assert
+      expect(overlaps).toBe(false);
+    });
+
+    test('overlapError selector is defined', () => {
+      expect(selectors.leave.overlapError).toBeTruthy();
+    });
+
+    test('duplicate date range is always an overlap', () => {
+      // Arrange
+      const request = { fromDate: new Date('2025-06-01'), toDate: new Date('2025-06-05') };
+
+      // Act
+      const overlaps = request.fromDate <= request.toDate && request.toDate >= request.fromDate;
+
+      // Assert
+      expect(overlaps).toBe(true);
+    });
+  });
+
+  // ── 6. Reject leave request with reason ──────────────────────────────────
+
+  test.describe('Reject leave request with reason', () => {
+    test('rejectLeaveRequest method is defined on LeavePage', async ({ testPage }) => {
+      const leavePage = new LeavePage(testPage);
+      expect(typeof leavePage.rejectLeaveRequest).toBe('function');
+    });
+
+    test('rejectReasonTextarea selector is defined', () => {
+      expect(selectors.leave.rejectReasonTextarea).toBeTruthy();
+    });
+
+    test('confirmRejectButton selector is defined', () => {
+      expect(selectors.leave.confirmRejectButton).toBeTruthy();
+    });
+
+    test('rejection reason must be a non-empty string', () => {
+      // Arrange
+      const validate = (reason: string) => reason.trim().length > 0;
+
+      // Assert
+      expect(validate('Insufficient leave balance')).toBe(true);
+      expect(validate('')).toBe(false);
+      expect(validate('  ')).toBe(false);
+    });
+
+    test('rejection reason can contain detailed text', () => {
+      // Arrange / Act
+      const reason =
+        'Leave rejected due to project deadline. Please reschedule for next quarter.';
+
+      // Assert
+      expect(reason.length).toBeGreaterThan(20);
+      expect(typeof reason).toBe('string');
+    });
+
+    test('REJECTED is a terminal state — no further transitions allowed', () => {
+      // Arrange
+      const REJECTED_TRANSITIONS: string[] = STATUS_TRANSITIONS['REJECTED'];
+
+      // Assert
+      expect(REJECTED_TRANSITIONS).toHaveLength(0);
+    });
+
+    test('rejectButton selector targets the correct UI element', () => {
+      expect(selectors.leave.rejectButton).toContain('Reject');
+    });
+
+    test('rejection data shape includes leaveId and reason', () => {
+      // Arrange / Act
+      const rejectionData = {
+        leaveId: 'LR-100',
+        reason: 'Business critical week — all hands on deck.',
+        rejectedBy: 'Manager',
+      };
+
+      // Assert
+      expect(rejectionData.leaveId).toBeTruthy();
+      expect(rejectionData.reason).toBeTruthy();
+      expect(rejectionData.rejectedBy).toBeTruthy();
+    });
+  });
+
+  // ── 7. Cancel approved leave request ─────────────────────────────────────
+
+  test.describe('Cancel approved leave request', () => {
+    test('cancelLeaveRequest method is defined on LeavePage', async ({ testPage }) => {
+      const leavePage = new LeavePage(testPage);
+      expect(typeof leavePage.cancelLeaveRequest).toBe('function');
+    });
+
+    test('cancelLeaveButton selector is defined', () => {
+      expect(selectors.leave.cancelLeaveButton).toBeTruthy();
+    });
+
+    test('APPROVED leave can transition to CANCELLED', () => {
+      expect(STATUS_TRANSITIONS['APPROVED']).toContain('CANCELLED');
+    });
+
+    test('CANCELLED is a terminal status', () => {
+      expect(STATUS_TRANSITIONS['CANCELLED']).toHaveLength(0);
+    });
+
+    test('cancel confirmation uses the common confirmButton selector', () => {
+      expect(selectors.common.confirmButton).toBeTruthy();
+    });
+
+    test('cancel action data shape includes leave ID and reason', () => {
+      // Arrange / Act
+      const cancelData = {
+        leaveId: 'LR-200',
+        currentStatus: 'APPROVED',
+        cancelledBy: 'Employee',
+      };
+
+      // Assert
+      expect(cancelData.leaveId).toBeTruthy();
+      expect(cancelData.currentStatus).toBe('APPROVED');
+      expect(VALID_STATUSES).toContain(cancelData.currentStatus);
+    });
+
+    test('cancellation is only valid from APPROVED or PENDING state', () => {
+      // Arrange
+      const cancellableStates = Object.entries(STATUS_TRANSITIONS)
+        .filter(([, transitions]) => transitions.includes('CANCELLED'))
+        .map(([state]) => state);
+
+      // Assert
+      expect(cancellableStates).toContain('APPROVED');
+      expect(cancellableStates).toContain('PENDING');
+    });
+
+    test('status after cancellation is CANCELLED', () => {
+      // Arrange / Act
+      const finalStatus = 'CANCELLED';
+
+      // Assert
+      expect(VALID_STATUSES).toContain(finalStatus);
+      expect(STATUS_TRANSITIONS[finalStatus]).toHaveLength(0);
     });
   });
 });

@@ -13,6 +13,7 @@ test.describe('@orangehrm-suite smoke', () => {
     const suite = await import('../src/index');
     expect(suite.LoginPage).toBeDefined();
     expect(suite.PimPage).toBeDefined();
+    expect(suite.LeavePage).toBeDefined();
     expect(suite.EmployeeAPIClient).toBeDefined();
 
     logger.info('✓ All exports resolved successfully');
