@@ -15,6 +15,8 @@ test.describe('@orangehrm-suite smoke', () => {
     expect(suite.PimPage).toBeDefined();
     expect(suite.LeavePage).toBeDefined();
     expect(suite.EmployeeAPIClient).toBeDefined();
+    expect(suite.ReportingPage).toBeDefined();
+    expect(suite.REPORT_TYPES).toBeDefined();
 
     logger.info('✓ All exports resolved successfully');
   });
