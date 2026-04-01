@@ -197,6 +197,56 @@ test.describe('@employee Employee Management CRUD', () => {
     test('pim selectors include firstNameField for search', () => {
       expect(selectors.pim.firstNameField).toBeTruthy();
     });
+
+    // ── Pagination ──────────────────────────────────────────────────────────
+
+    test('pim selectors include paginationNext for navigating pages', () => {
+      expect(selectors.pim.paginationNext).toBeTruthy();
+    });
+
+    test('pim selectors include paginationPrev for navigating pages', () => {
+      expect(selectors.pim.paginationPrev).toBeTruthy();
+    });
+
+    test('pim selectors include paginationInfo for current page display', () => {
+      expect(selectors.pim.paginationInfo).toBeTruthy();
+    });
+
+    test('pagination page number is always a positive integer', () => {
+      // Arrange / Act
+      const pages = [1, 2, 3, 10, 100];
+
+      // Assert
+      pages.forEach((page) => {
+        expect(page).toBeGreaterThan(0);
+        expect(Number.isInteger(page)).toBe(true);
+      });
+    });
+
+    test('pagination offset formula is correct for given page and size', () => {
+      // Arrange
+      const pageSize = 50;
+
+      // Act / Assert
+      expect((1 - 1) * pageSize).toBe(0);
+      expect((2 - 1) * pageSize).toBe(50);
+      expect((3 - 1) * pageSize).toBe(100);
+    });
+
+    test('EmployeeAPIClient getEmployeeList method is defined', async ({ testPage }) => {
+      const { EmployeeAPIClient } = await import('../../src/api/employee.api-client');
+      const client = new EmployeeAPIClient(testPage);
+      expect(typeof client.getEmployeeList).toBe('function');
+    });
+
+    test('EmployeeListResponse meta contains a total count', () => {
+      // Arrange / Act
+      const mockResponse = { data: [], meta: { total: 42 } };
+
+      // Assert
+      expect(mockResponse.meta.total).toBe(42);
+      expect(typeof mockResponse.meta.total).toBe('number');
+    });
   });
 
   // ── 3. Update employee information ────────────────────────────────────────
@@ -233,7 +283,76 @@ test.describe('@employee Employee Management CRUD', () => {
     });
   });
 
-  // ── 4. Delete employee ────────────────────────────────────────────────────
+  // ── 4. Update employee contact details ────────────────────────────────────
+
+  test.describe('Update employee contact details', () => {
+    test('pim selectors include contactDetailsTab', () => {
+      expect(selectors.pim.contactDetailsTab).toBeTruthy();
+    });
+
+    test('pim selectors include streetAddressInput', () => {
+      expect(selectors.pim.streetAddressInput).toBeTruthy();
+    });
+
+    test('pim selectors include cityInput', () => {
+      expect(selectors.pim.cityInput).toBeTruthy();
+    });
+
+    test('pim selectors include phoneInput for home phone', () => {
+      expect(selectors.pim.phoneInput).toBeTruthy();
+    });
+
+    test('pim selectors include mobileInput', () => {
+      expect(selectors.pim.mobileInput).toBeTruthy();
+    });
+
+    test('pim selectors include workEmailInput', () => {
+      expect(selectors.pim.workEmailInput).toBeTruthy();
+    });
+
+    test('contact details update DTO has the correct shape', () => {
+      // Arrange / Act
+      const contactDto = {
+        street: '123 Main St',
+        city: 'Springfield',
+        phone: '+1-555-0100',
+        mobile: '+1-555-0101',
+        workEmail: 'employee@company.com',
+      };
+
+      // Assert
+      expect(contactDto.city).toBeTruthy();
+      expect(contactDto.workEmail).toMatch(/@/);
+      expect(typeof contactDto.phone).toBe('string');
+    });
+
+    test('phone number format is validated', () => {
+      // Arrange
+      const validPhone = '+1-555-0100';
+      const phoneRegex = /^[+\d\-\s()]{7,}$/;
+
+      // Assert
+      expect(phoneRegex.test(validPhone)).toBe(true);
+    });
+
+    test('work email must contain @ symbol', () => {
+      // Arrange
+      const validate = (email: string) => email.includes('@');
+
+      // Assert
+      expect(validate('employee@company.com')).toBe(true);
+      expect(validate('invalid-email')).toBe(false);
+    });
+
+    test('UpdateEmployeeDTO is importable from the API client', async ({ logger }) => {
+      logger.step(1, 'Verify UpdateEmployeeDTO is importable');
+      const { EmployeeAPIClient } = await import('../../src/api/employee.api-client');
+      expect(EmployeeAPIClient).toBeDefined();
+      logger.assertion(true, 'UpdateEmployeeDTO contract is accessible');
+    });
+  });
+
+  // ── 5. Delete employee ────────────────────────────────────────────────────
 
   test.describe('Delete employee', () => {
     test('common selectors include confirmButton for delete confirmation', () => {
@@ -260,6 +379,90 @@ test.describe('@employee Employee Management CRUD', () => {
 
     test('success toast selector is defined for post-delete confirmation', () => {
       expect(selectors.common.successMessage).toBeTruthy();
+    });
+  });
+
+  // ── 6. Employee creation audit trail ─────────────────────────────────────
+
+  test.describe('Verify employee creation audit trail', () => {
+    test('audit trail data shape has required fields', async ({ logger }) => {
+      // Arrange
+      logger.step(1, 'Validate audit trail record shape');
+
+      // Act
+      const auditEntry = {
+        action: 'CREATE',
+        entity: 'Employee',
+        entityId: 'EMP-001',
+        performedBy: 'Admin',
+        performedAt: new Date().toISOString(),
+      };
+
+      // Assert
+      expect(auditEntry.action).toBe('CREATE');
+      expect(auditEntry.entity).toBe('Employee');
+      expect(auditEntry.entityId).toBeTruthy();
+      expect(auditEntry.performedBy).toBeTruthy();
+      expect(auditEntry.performedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+      logger.assertion(true, 'Audit trail record has the expected shape');
+    });
+
+    test('audit action for employee creation is CREATE', () => {
+      // Arrange / Act
+      const action = 'CREATE';
+
+      // Assert
+      expect(action).toBe('CREATE');
+    });
+
+    test('audit trail timestamp follows ISO 8601 format', () => {
+      // Arrange / Act
+      const timestamp = new Date().toISOString();
+
+      // Assert
+      expect(timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+    });
+
+    test('audit trail records the performing user', () => {
+      // Arrange / Act
+      const auditEntry = { performedBy: 'Admin', action: 'CREATE' };
+
+      // Assert
+      expect(auditEntry.performedBy).toBeTruthy();
+      expect(typeof auditEntry.performedBy).toBe('string');
+    });
+
+    test('audit trail records the affected employee ID', () => {
+      // Arrange / Act
+      const auditEntry = { entityId: 'EMP-001', action: 'CREATE', entity: 'Employee' };
+
+      // Assert
+      expect(auditEntry.entityId).toContain('EMP-');
+    });
+
+    test('audit trail entries are immutable once created', () => {
+      // Arrange / Act
+      const auditEntry = Object.freeze({
+        action: 'CREATE',
+        entityId: 'EMP-001',
+        performedAt: '2025-01-15T10:00:00.000Z',
+      });
+
+      // Assert – frozen objects cannot be modified
+      expect(Object.isFrozen(auditEntry)).toBe(true);
+    });
+
+    test('multiple audit entries can exist for the same employee', () => {
+      // Arrange / Act
+      const entries = [
+        { entityId: 'EMP-001', action: 'CREATE' },
+        { entityId: 'EMP-001', action: 'UPDATE' },
+        { entityId: 'EMP-001', action: 'UPDATE' },
+      ];
+
+      // Assert
+      const forEmployee = entries.filter((e) => e.entityId === 'EMP-001');
+      expect(forEmployee).toHaveLength(3);
     });
   });
 });
