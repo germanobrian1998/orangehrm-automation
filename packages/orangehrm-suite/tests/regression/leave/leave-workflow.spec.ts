@@ -38,11 +38,13 @@ const STATUS_TRANSITIONS: Record<LeaveStatus, LeaveStatus[]> = {
  * Mirrors the TestDataFactory pattern used across the suite.
  */
 function buildLeaveRequest(overrides: Record<string, unknown> = {}) {
-  const nextYear = new Date().getFullYear() + 1;
+  // Use a 2-year buffer so dates are reliably in the future regardless of when
+  // the test runs (avoids year-end boundary issues with +1 year calculations).
+  const futureYear = new Date().getFullYear() + 2;
   return {
     leaveTypeId: 1,
-    fromDate: `${nextYear}-06-01`,
-    toDate: `${nextYear}-06-03`,
+    fromDate: `${futureYear}-06-01`,
+    toDate: `${futureYear}-06-03`,
     comment: 'Annual leave – regression test',
     ...overrides,
   };
