@@ -1,6 +1,6 @@
 # 🎯 OrangeHRM QA Automation Suite
 
-[![Tests Passing](https://img.shields.io/badge/tests-57%2F57-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
+[![Tests Passing](https://img.shields.io/badge/tests-58%2F58-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Regression Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml)
 [![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml)
@@ -33,7 +33,7 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 | Feature | Description |
 |---|---|
-| 🧪 **57 Test Runs** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
+| 🧪 **58+ Tests** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
 | 🌐 **Cross-Browser** | Chromium, Firefox, and WebKit (Safari) |
 | 🔌 **API Testing** | REST API validation integrated with UI tests |
 | 📄 **Page Object Model** | Clean separation of test logic and page structure |
@@ -42,6 +42,31 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | ⚡ **CI/CD** | GitHub Actions with parallel browser execution |
 | 📊 **HTML Reports** | Playwright's built-in reporting with screenshots on failure |
 | 🔄 **Anti-Flaky Patterns** | Explicit waits, retries, and stable selectors |
+
+---
+
+## 🌟 Project Highlights
+
+- **Monorepo architecture** — 5 packages sharing a common `@qa-framework/core` base, enabling reuse across test suites without publishing to npm
+- **Zero flakiness design** — all tests use explicit waits (`waitForURL`, `waitForSelector`, `waitForResponse`) instead of `waitForTimeout`
+- **10× faster test setup** — API calls used for data creation/teardown; UI reserved for features under test
+- **Production CI patterns** — `retries: 2` in CI, artifact upload on failure, parallel matrix across 3 browsers, required status checks before merge
+- **Type-safe selectors** — TypeScript strict mode catches selector typos and missing required arguments at compile time
+
+---
+
+## 🎭 Why Playwright?
+
+| Factor | Playwright | Cypress | Selenium |
+|--------|-----------|---------|----------|
+| Multi-browser (incl. WebKit) | ✅ | ⚠️ | ✅ |
+| Built-in API testing | ✅ | ❌ | ❌ |
+| Auto-waiting | ✅ | ✅ | ❌ |
+| TypeScript first-class | ✅ | ✅ | ⚠️ |
+| Trace viewer | ✅ | ❌ | ❌ |
+| Parallel (within file) | ✅ | ⚠️ | ✅ |
+
+Playwright is the only tool that combines cross-browser testing (including WebKit/Safari), built-in API testing, and a trace viewer — all in a single framework.
 
 ---
 
@@ -123,7 +148,7 @@ orangehrm-automation/
 | Cross-Browser | Login flow | Chromium, Firefox, WebKit | — |
 | Data-Driven | Login scenarios | Chromium | — |
 
-**Total: 19 test specs across 3 browsers (57 total runs)**
+**Total: 19 test specs across 3 browsers (58+ tests)**
 
 ---
 
@@ -204,6 +229,20 @@ Artifacts (HTML reports, screenshots) are uploaded for every run and retained fo
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute to this project |
 | [DOCKER.md](DOCKER.md) | Docker setup and usage |
 | [CI-CD.md](CI-CD.md) | CI/CD pipeline details |
+
+### 🔗 Quick Links
+
+| Resource | Description |
+|---|---|
+| [docs/QUICK_START.md](docs/QUICK_START.md) | 5-minute setup guide |
+| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Fix common issues fast |
+| [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md) | 20+ Q&A for QA Engineer interviews |
+| [docs/PERFORMANCE.md](docs/PERFORMANCE.md) | Benchmarks and optimization tips |
+| [docs/SECURITY.md](docs/SECURITY.md) | Credential and secrets management |
+| [docs/SCALABILITY.md](docs/SCALABILITY.md) | Growing from 58 to 500+ tests |
+| [docs/CI-CD.md](docs/CI-CD.md) | Detailed CI/CD workflow guide |
+| [docs/MONOREPO.md](docs/MONOREPO.md) | Monorepo structure and package guide |
+| [docs/VIDEO-WALKTHROUGH.md](docs/VIDEO-WALKTHROUGH.md) | Recording and portfolio tips |
 
 ---
 
