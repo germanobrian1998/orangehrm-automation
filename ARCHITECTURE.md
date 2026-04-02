@@ -1,42 +1,55 @@
-# Architecture Documentation
+# Architecture
 
-## Page Object Model (POM)
+> **📖 For the full Architecture & Technical Deep Dive, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**
 
-The Page Object Model is a design pattern commonly used in test automation to create an object repository for web UI elements. In this pattern, each web page is represented as a class, and the elements of the page are defined as variables of the class. This allows for:
-- Separation of test logic from UI interactions.
-- Improved code maintainability and reusability.
-- Easier updates to the tests when the UI changes.
+This document provides a high-level overview. The comprehensive version in `docs/` covers:
 
-### Advantages of POM:
-- Reduces code duplication.
-- Enhances readability of test scripts.
+- Design philosophy and decisions
+- API-first testing strategy
+- Page Object Model implementation
+- Fixture and Test Data Factory patterns
+- Technology decisions (Why Playwright, Why TypeScript, Why monorepo)
+- Scalability considerations
+- Performance optimization strategies
+- Security practices
+- Code organization rationale
+- Dependency graph and package relationships
 
-## API Helpers Structure
+---
 
-API helpers structure refers to the organization of helper functions and classes that enable interaction with various APIs. In this project, API helpers are structured to facilitate:
-- Sending requests to different API endpoints.
-- Handling responses and errors gracefully.
-- Abstracting API-specific details from the main test scripts.
+## Quick Summary
 
-### Components of API Helpers:
-1. **Request Handlers**: Encapsulate methods for sending various types of HTTP requests (GET, POST, PUT, DELETE).
-2. **Response Validators**: Check the responses for expected outcomes.
-3. **Authentication Mechanisms**: Handle authentication-related tasks for interacting with secure APIs.
+### Design Philosophy
 
-## Utilities
+```
+PRINCIPLE: API for Setup, UI for Validation
 
-Utilities are commonly used helper functions that simplify repetitive tasks across the test suite. They may include:
-- Logging utilities: To help track test execution and errors.
-- Configuration readers: To manage configuration settings easily.
-- Data generators: For creating mock data to be used in tests.
+✅ FAST:       Create test data via API (1 second)
+✅ RELIABLE:   No UI flakiness on setup
+✅ REALISTIC:  Validate what users actually see
+✅ CLEAN:      Teardown via API (guaranteed cleanup)
+```
 
-## Design Patterns Used
+### Package Structure
 
-1. **Singleton Pattern**: Used to ensure a single instance of a class exists, especially for managing configurations or database connections.
-2. **Factory Pattern**: Facilitates the creation of objects in a way that allows for flexibility and reusability.
-3. **Strategy Pattern**: Enables selecting an algorithm's behavior at runtime.
-4. **Decorator Pattern**: Adds new functionalities to an object without altering its structure, often used in case of extending existing functionalities.
+```
+packages/
+├── core/                 # @qa-framework/core       – Base framework (reusable)
+├── orangehrm-suite/      # @qa-framework/orangehrm-suite – OrangeHRM UI tests
+├── hrm-api-suite/        # @qa-framework/hrm-api-suite   – HRM REST API tests
+├── orangehrm-api-suite/  # @qa-framework/orangehrm-api-suite – Additional API tests
+└── shared-utils/         # @qa-framework/shared-utils    – Shared utilities
+```
 
-### Conclusion
+### Key Design Patterns
 
-This document provides a comprehensive overview of the architectural design patterns and structures used in the project. By adhering to these practices, the project is set up for scalability and maintainability.
+| Pattern | Where Used | Why |
+|---------|-----------|-----|
+| Page Object Model | `packages/*/src/pages/` | Separates UI structure from test logic |
+| Fixture Pattern | `packages/*/fixtures/` | Automatic setup and teardown |
+| Factory Pattern | `packages/shared-utils/` | Consistent test data generation |
+| API Client Pattern | `packages/*/src/api/` | Reusable API interaction layer |
+
+---
+
+→ **[Read the full Architecture document](docs/ARCHITECTURE.md)**
