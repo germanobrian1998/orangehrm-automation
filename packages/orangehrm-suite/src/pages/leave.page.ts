@@ -162,6 +162,20 @@ export class LeavePage extends BasePage {
     }
   }
 
+  async getLeaveBalance(): Promise<boolean> {
+    try {
+      this.logger.step(1, 'Navigating to leave entitlements / balance page');
+      await this.goto('/leave/viewLeaveEntitlements');
+      await this.waitFor.loadingComplete();
+      const isVisible = await this.isVisible(selectors.leave.leaveBalanceTable);
+      this.logger.info(`✓ Leave balance table ${isVisible ? 'visible' : 'not visible'}`);
+      return isVisible;
+    } catch (error) {
+      this.logger.error('Failed to get leave balance', error);
+      throw error;
+    }
+  }
+
   async isOverlapErrorDisplayed(): Promise<boolean> {
     try {
       return await this.isVisible(selectors.leave.overlapError);
