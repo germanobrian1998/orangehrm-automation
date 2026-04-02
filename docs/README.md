@@ -185,35 +185,37 @@ Every PR checks:
 ESLint (code standards)
 Prettier (formatting)
 TypeScript compilation
-📚 Documentation
-Core Docs
-ARCHITECTURE.md - Technical decisions explained
+## 📚 Documentation
 
-Why Playwright?
-API vs UI testing strategy
-Page Object Model design
-Fixture patterns
-TEST-STRATEGY.md - Testing philosophy
+### Core Docs
 
-What to automate
-What to leave manual
-Coverage targets
-Test data management
-SETUP.md - Detailed environment setup
+| Document | Description |
+|----------|-------------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Technical decisions: Why Playwright, POM design, API strategy |
+| [TEST-STRATEGY.md](TEST-STRATEGY.md) | What to automate, coverage targets, test data management |
+| [BEST-PRACTICES.md](BEST-PRACTICES.md) | Coding standards, anti-patterns, selector guide |
+| [SETUP.md](SETUP.md) | Local dev setup, GitHub Secrets configuration |
+| [KNOWN-ISSUES.md](KNOWN-ISSUES.md) | Flaky tests, workarounds, reliability metrics |
 
-Local development
-GitHub Secrets configuration
-Troubleshooting common issues
-KNOWN-ISSUES.md - Flaky tests documented
+### Operations & Growth
 
-Why tests are flaky
-Workarounds
-Tracking improvements
-BUG-REPORTS/ - Real bug examples
+| Document | Description |
+|----------|-------------|
+| [QUICK_START.md](QUICK_START.md) | 5-minute setup guide |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add tests, page objects, API clients |
+| [CI-CD.md](CI-CD.md) | Pipeline details, workflow diagrams, troubleshooting |
+| [MONOREPO.md](MONOREPO.md) | Package structure, inter-package dependencies |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common issues & solutions, FAQ |
+| [PERFORMANCE.md](PERFORMANCE.md) | Performance baselines, optimization tips |
+| [SCALABILITY.md](SCALABILITY.md) | Growing from 58 to 500+ tests |
+| [SECURITY.md](SECURITY.md) | Credentials management, GitHub Secrets setup |
 
-How to document bugs professionally
-Evidence collection (screenshots, videos)
-Impact assessment
+### Career Resources
+
+| Document | Description |
+|----------|-------------|
+| [INTERVIEW-PREP.md](INTERVIEW-PREP.md) | 20+ Q&A for hiring manager interviews |
+| [VIDEO-WALKTHROUGH.md](VIDEO-WALKTHROUGH.md) | How to demo the project, recording guide |
 ✨ Key Features
 1. Smart Test Data Management
 TypeScript
