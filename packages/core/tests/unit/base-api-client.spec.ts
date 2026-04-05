@@ -16,17 +16,20 @@ const makeMockResponse = (opts: {
 }) => ({
   ok: jest.fn().mockReturnValue(opts.ok ?? true),
   status: jest.fn().mockReturnValue(opts.status ?? 200),
-  json: jest.fn().mockResolvedValue(opts.json ?? {}),
-  text: jest.fn().mockResolvedValue(opts.text ?? ''),
+  json: jest.fn<() => Promise<unknown>>().mockResolvedValue(opts.json ?? {}),
+  text: jest.fn<() => Promise<string>>().mockResolvedValue(opts.text ?? ''),
 });
+
+type MockResponse = ReturnType<typeof makeMockResponse>;
+type MockHTTPMethod = (url: string, options?: Record<string, unknown>) => Promise<MockResponse>;
 
 /** Build a fresh set of mock request context methods */
 const setupMockRequestContext = () => ({
-  get: jest.fn().mockResolvedValue(makeMockResponse({ json: { data: [] } })),
-  post: jest.fn().mockResolvedValue(makeMockResponse({ status: 201, json: { data: { token: 'mock-token-abc123' } } })),
-  put: jest.fn().mockResolvedValue(makeMockResponse({ json: { updated: true } })),
-  delete: jest.fn().mockResolvedValue(makeMockResponse({ status: 204, json: {} })),
-  patch: jest.fn().mockResolvedValue(makeMockResponse({ json: { patched: true } })),
+  get: jest.fn<MockHTTPMethod>().mockResolvedValue(makeMockResponse({ json: { data: [] } })),
+  post: jest.fn<MockHTTPMethod>().mockResolvedValue(makeMockResponse({ status: 201, json: { data: { token: 'mock-token-abc123' } } })),
+  put: jest.fn<MockHTTPMethod>().mockResolvedValue(makeMockResponse({ json: { updated: true } })),
+  delete: jest.fn<MockHTTPMethod>().mockResolvedValue(makeMockResponse({ status: 204, json: {} })),
+  patch: jest.fn<MockHTTPMethod>().mockResolvedValue(makeMockResponse({ json: { patched: true } })),
 });
 
 /** Concrete subclass that exposes protected helpers for testing */
@@ -65,7 +68,7 @@ class TestApiClient extends BaseApiClient {
 }
 
 describe('BaseApiClient', () => {
-  let mockRequestContext: Record<string, jest.Mock>;
+  let mockRequestContext: ReturnType<typeof setupMockRequestContext>;
   let mockPage: Partial<Page>;
   let client: TestApiClient;
 
@@ -106,7 +109,7 @@ describe('BaseApiClient', () => {
       status: 200,
       json: { data: { token: 'bearer-xyz-789' } },
     });
-    mockRequestContext.post = jest.fn().mockResolvedValue(authResponse);
+    mockRequestContext.post = jest.fn<MockHTTPMethod>().mockResolvedValue(authResponse);
 
     const freshClient = new TestApiClient(mockPage as Page);
     await freshClient.authenticate('Admin', 'admin123');
@@ -115,7 +118,7 @@ describe('BaseApiClient', () => {
 
   it('should throw when authenticate() returns a non-ok response', async () => {
     const failResponse = makeMockResponse({ ok: false, status: 401 });
-    mockRequestContext.post = jest.fn().mockResolvedValue(failResponse);
+    mockRequestContext.post = jest.fn<MockHTTPMethod>().mockResolvedValue(failResponse);
 
     const freshClient = new TestApiClient(mockPage as Page);
     await expect(freshClient.authenticate('wrong', 'creds')).rejects.toThrow();
@@ -220,7 +223,7 @@ describe('BaseApiClient', () => {
   it('should include the Authorization Bearer token in request headers', async () => {
     client.setToken('super-secret-token');
     await client.callGet('/api/v2/employees');
-    const callArgs = mockRequestContext.get.mock.calls[0] as [string, { headers: Record<string, string> }];
+    const callArgs = mockRequestContext.get.mock.calls[0] as unknown as [string, { headers: Record<string, string> }];
     expect(callArgs[1].headers['Authorization']).toBe('Bearer super-secret-token');
   });
 });

@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import { BasePage } from '../../src/page-objects/base.page';
 import { createMockPage } from './mocks/mock-page';
-import type { Page } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 
 /** Concrete subclass so we can instantiate the abstract-like BasePage */
 class TestPage extends BasePage {
@@ -55,7 +55,7 @@ describe('BasePage', () => {
   });
 
   it('should return false when locator throws', async () => {
-    (mockPage.locator as jest.Mock).mockImplementationOnce(() => {
+    mockPage.locator!.mockImplementationOnce(() => {
       throw new Error('Element not found');
     });
     const visible = await basePage.isVisible('[data-testid="missing"]');
@@ -73,7 +73,7 @@ describe('BasePage', () => {
   });
 
   it('should throw when page.goto() rejects', async () => {
-    (mockPage.goto as jest.Mock).mockRejectedValueOnce(new Error('Navigation failed'));
+    mockPage.goto!.mockRejectedValueOnce(new Error('Navigation failed'));
     await expect(basePage.goto('/bad-path')).rejects.toThrow('Navigation failed');
   });
 
@@ -81,12 +81,12 @@ describe('BasePage', () => {
 
   it('should call locator methods when filling an input', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      clear: jest.fn().mockResolvedValue(undefined),
-      fill: jest.fn().mockResolvedValue(undefined),
-      blur: jest.fn().mockResolvedValue(undefined),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      clear: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      fill: jest.fn<(value: string) => Promise<void>>().mockResolvedValue(undefined),
+      blur: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.fill('[name="username"]', 'Admin');
     expect(mockLocator.clear).toHaveBeenCalled();
@@ -98,11 +98,11 @@ describe('BasePage', () => {
 
   it('should call scrollIntoViewIfNeeded and click on the locator', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      scrollIntoViewIfNeeded: jest.fn().mockResolvedValue(undefined),
-      click: jest.fn().mockResolvedValue(undefined),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      scrollIntoViewIfNeeded: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      click: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.click('[data-testid="submit"]');
     expect(mockLocator.scrollIntoViewIfNeeded).toHaveBeenCalled();
@@ -111,11 +111,11 @@ describe('BasePage', () => {
 
   it('should throw when click fails', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      scrollIntoViewIfNeeded: jest.fn().mockResolvedValue(undefined),
-      click: jest.fn().mockRejectedValue(new Error('Click failed')),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      scrollIntoViewIfNeeded: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      click: jest.fn<() => Promise<void>>().mockRejectedValue(new Error('Click failed')),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await expect(basePage.click('[data-testid="disabled"]')).rejects.toThrow('Click failed');
   });
@@ -124,10 +124,10 @@ describe('BasePage', () => {
 
   it('should return trimmed text content of an element', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      textContent: jest.fn().mockResolvedValue('  Hello World  '),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      textContent: jest.fn<() => Promise<string | null>>().mockResolvedValue('  Hello World  '),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const text = await basePage.getText('[data-testid="heading"]');
     expect(text).toBe('Hello World');
@@ -135,10 +135,10 @@ describe('BasePage', () => {
 
   it('should return empty string when textContent is null', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      textContent: jest.fn().mockResolvedValue(null),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      textContent: jest.fn<() => Promise<string | null>>().mockResolvedValue(null),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const text = await basePage.getText('[data-testid="empty"]');
     expect(text).toBe('');
@@ -147,17 +147,17 @@ describe('BasePage', () => {
   // ── waitForElement() ──────────────────────────────────────────────────────
 
   it('should resolve without throwing when element reaches visible state', async () => {
-    const mockLocator = { waitFor: jest.fn().mockResolvedValue(undefined) };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    const mockLocator = { waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined) };
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await expect(basePage.waitForElement('[data-testid="modal"]')).resolves.toBeUndefined();
   });
 
   it('should throw when element does not reach expected state', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockRejectedValue(new Error('Timeout')),
+      waitFor: jest.fn<() => Promise<void>>().mockRejectedValue(new Error('Timeout')),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await expect(basePage.waitForElement('[data-testid="missing"]')).rejects.toThrow();
   });
@@ -166,10 +166,10 @@ describe('BasePage', () => {
 
   it('should call dblclick on the locator', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      dblclick: jest.fn().mockResolvedValue(undefined),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      dblclick: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.doubleClick('[data-testid="item"]');
     expect(mockLocator.dblclick).toHaveBeenCalled();
@@ -177,10 +177,10 @@ describe('BasePage', () => {
 
   it('should throw when doubleClick fails', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      dblclick: jest.fn().mockRejectedValue(new Error('Double-click failed')),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      dblclick: jest.fn<() => Promise<void>>().mockRejectedValue(new Error('Double-click failed')),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await expect(basePage.doubleClick('[data-testid="item"]')).rejects.toThrow('Double-click failed');
   });
@@ -189,10 +189,10 @@ describe('BasePage', () => {
 
   it('should call click with right button on the locator', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      click: jest.fn().mockResolvedValue(undefined),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      click: jest.fn<(options?: Record<string, unknown>) => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.rightClick('[data-testid="context-target"]');
     expect(mockLocator.click).toHaveBeenCalledWith({ button: 'right' });
@@ -202,10 +202,10 @@ describe('BasePage', () => {
 
   it('should call hover on the locator', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      hover: jest.fn().mockResolvedValue(undefined),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      hover: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.hover('[data-testid="tooltip-trigger"]');
     expect(mockLocator.hover).toHaveBeenCalled();
@@ -215,9 +215,9 @@ describe('BasePage', () => {
 
   it('should return the value of an input element', async () => {
     const mockLocator = {
-      inputValue: jest.fn().mockResolvedValue('john.doe'),
+      inputValue: jest.fn<() => Promise<string>>().mockResolvedValue('john.doe'),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const value = await basePage.getInputValue('[name="username"]');
     expect(value).toBe('john.doe');
@@ -225,9 +225,9 @@ describe('BasePage', () => {
 
   it('should return empty string when inputValue is empty', async () => {
     const mockLocator = {
-      inputValue: jest.fn().mockResolvedValue(''),
+      inputValue: jest.fn<() => Promise<string>>().mockResolvedValue(''),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const value = await basePage.getInputValue('[name="search"]');
     expect(value).toBe('');
@@ -237,10 +237,10 @@ describe('BasePage', () => {
 
   it('should return the attribute value of an element', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      getAttribute: jest.fn().mockResolvedValue('btn-primary'),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      getAttribute: jest.fn<() => Promise<string | null>>().mockResolvedValue('btn-primary'),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const attr = await basePage.getAttribute('[data-testid="btn"]', 'class');
     expect(attr).toBe('btn-primary');
@@ -248,10 +248,10 @@ describe('BasePage', () => {
 
   it('should return null when attribute does not exist', async () => {
     const mockLocator = {
-      waitFor: jest.fn().mockResolvedValue(undefined),
-      getAttribute: jest.fn().mockResolvedValue(null),
+      waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+      getAttribute: jest.fn<() => Promise<string | null>>().mockResolvedValue(null),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const attr = await basePage.getAttribute('[data-testid="btn"]', 'nonexistent');
     expect(attr).toBeNull();
@@ -261,9 +261,9 @@ describe('BasePage', () => {
 
   it('should return true when element is enabled', async () => {
     const mockLocator = {
-      isEnabled: jest.fn().mockResolvedValue(true),
+      isEnabled: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const enabled = await basePage.isEnabled('[data-testid="submit"]');
     expect(enabled).toBe(true);
@@ -271,16 +271,16 @@ describe('BasePage', () => {
 
   it('should return false when element is disabled', async () => {
     const mockLocator = {
-      isEnabled: jest.fn().mockResolvedValue(false),
+      isEnabled: jest.fn<() => Promise<boolean>>().mockResolvedValue(false),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     const enabled = await basePage.isEnabled('[data-testid="disabled-btn"]');
     expect(enabled).toBe(false);
   });
 
   it('should return false when isEnabled throws', async () => {
-    (mockPage.locator as jest.Mock).mockImplementationOnce(() => {
+    mockPage.locator!.mockImplementationOnce(() => {
       throw new Error('Locator error');
     });
 
@@ -292,9 +292,9 @@ describe('BasePage', () => {
 
   it('should call selectOption on the locator', async () => {
     const mockLocator = {
-      selectOption: jest.fn().mockResolvedValue([]),
+      selectOption: jest.fn<(values: string | string[]) => Promise<string[]>>().mockResolvedValue([]),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.selectOption('select[name="country"]', 'US');
     expect(mockLocator.selectOption).toHaveBeenCalledWith('US');
@@ -302,9 +302,9 @@ describe('BasePage', () => {
 
   it('should throw when selectOption fails', async () => {
     const mockLocator = {
-      selectOption: jest.fn().mockRejectedValue(new Error('Option not found')),
+      selectOption: jest.fn<() => Promise<string[]>>().mockRejectedValue(new Error('Option not found')),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await expect(basePage.selectOption('select[name="country"]', 'XX')).rejects.toThrow('Option not found');
   });
@@ -313,9 +313,9 @@ describe('BasePage', () => {
 
   it('should call check on the locator', async () => {
     const mockLocator = {
-      check: jest.fn().mockResolvedValue(undefined),
+      check: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.check('[data-testid="agree-checkbox"]');
     expect(mockLocator.check).toHaveBeenCalled();
@@ -325,9 +325,9 @@ describe('BasePage', () => {
 
   it('should call uncheck on the locator', async () => {
     const mockLocator = {
-      uncheck: jest.fn().mockResolvedValue(undefined),
+      uncheck: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     };
-    (mockPage.locator as jest.Mock).mockReturnValue(mockLocator);
+    mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
     await basePage.uncheck('[data-testid="agree-checkbox"]');
     expect(mockLocator.uncheck).toHaveBeenCalled();
@@ -337,11 +337,11 @@ describe('BasePage', () => {
 
   it('should register a once handler for "dialog" event on acceptAlert()', () => {
     basePage.acceptAlert();
-    expect(mockPage.once).toHaveBeenCalledWith('dialog', expect.any(Function));
+    expect(mockPage.once as unknown as jest.Mock).toHaveBeenCalledWith('dialog', expect.any(Function));
   });
 
   it('should register a once handler for "dialog" event on dismissAlert()', () => {
     basePage.dismissAlert();
-    expect(mockPage.once).toHaveBeenCalledWith('dialog', expect.any(Function));
+    expect(mockPage.once as unknown as jest.Mock).toHaveBeenCalledWith('dialog', expect.any(Function));
   });
 });
