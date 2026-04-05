@@ -4,6 +4,7 @@
 ![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)
 ![Regression Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml/badge.svg)
 ![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)
+![Coverage](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/coverage.yml/badge.svg)
 
 ## Overview
 
@@ -46,6 +47,45 @@ Triggered on: `pull_request` to `main`
 |-------|---------|
 | ESLint | `npm run lint` |
 | TypeScript | `npm run build` |
+
+### 5. Coverage Report (`coverage.yml`)
+
+Triggered on: `push` and `pull_request` to `main`
+
+Runs the Jest unit test suite for `packages/core` with coverage collection enabled and uploads the results as GitHub Actions artifacts.
+
+| Step | Description |
+|------|-------------|
+| Generate coverage | `npm run test:coverage --workspace=packages/core` |
+| Upload HTML report | `packages/core/coverage/` artifact (30 days) |
+| Upload LCOV | `lcov.info` artifact (30 days) |
+| Upload to Codecov | Optional Codecov integration |
+
+#### Coverage Thresholds
+
+| Metric | Minimum |
+|--------|---------|
+| Statements | 80 % |
+| Branches | 70 % |
+| Functions | 80 % |
+| Lines | 80 % |
+
+#### Viewing Coverage Reports
+
+1. Go to the **Actions** tab on GitHub.
+2. Open the latest **Coverage Report** workflow run.
+3. Download the `coverage-report` artifact.
+4. Open `coverage/index.html` in your browser.
+
+To generate a coverage report locally:
+
+```bash
+# Run tests with coverage (text summary in terminal)
+npm run test:coverage --workspace=packages/core
+
+# Open the HTML report
+open packages/core/coverage/index.html
+```
 
 ## Test Execution
 
@@ -91,6 +131,8 @@ After each run, the following are uploaded to GitHub Actions:
 - `test-results-<browser>/` – Raw test results (30 days)
 - `smoke-report/` – Smoke test HTML report (7 days)
 - `regression-report/` – Regression HTML report (14 days)
+- `coverage-report/` – Jest HTML coverage report (30 days)
+- `coverage-lcov/` – LCOV coverage data for external tools (30 days)
 
 ## Branch Protection Rules
 
