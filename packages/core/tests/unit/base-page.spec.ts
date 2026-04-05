@@ -190,7 +190,7 @@ describe('BasePage', () => {
   it('should call click with right button on the locator', async () => {
     const mockLocator = {
       waitFor: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
-      click: jest.fn<(options?: Record<string, unknown>) => Promise<void>>().mockResolvedValue(undefined),
+      click: jest.fn<(options?: { button?: string }) => Promise<void>>().mockResolvedValue(undefined),
     };
     mockPage.locator!.mockReturnValue(mockLocator as unknown as Locator);
 
