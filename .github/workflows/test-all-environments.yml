@@ -1,0 +1,107 @@
+name: Test All Environments
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-dev:
+    name: Tests – development
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests (development)
+        run: npm run test:dev
+        env:
+          ENVIRONMENT: development
+        continue-on-error: true
+
+      - name: Upload dev test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-results
+          path: test-results/development/
+          retention-days: 30
+
+  test-staging:
+    name: Tests – staging
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests (staging)
+        run: npm run test:staging
+        env:
+          ENVIRONMENT: staging
+        continue-on-error: true
+
+      - name: Upload staging test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-results
+          path: test-results/staging/
+          retention-days: 30
+
+  test-ci:
+    name: Tests – CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests (CI)
+        run: npm run test:ci
+        env:
+          ENVIRONMENT: ci
+          CI: 'true'
+
+      - name: Upload CI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-results
+          path: test-results/ci/
+          retention-days: 30

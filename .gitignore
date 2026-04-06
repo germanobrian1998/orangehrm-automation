@@ -2,7 +2,7 @@
 node_modules/
 yarn.lock
 
-# Environment
+# Environment – ignore secret-bearing files, keep examples and named env templates
 .env
 .env.local
 .env.*.local

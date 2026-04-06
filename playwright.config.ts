@@ -1,24 +1,29 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const environment = process.env.ENVIRONMENT || 'development';
+const testTimeout = process.env.TEST_TIMEOUT ? parseInt(process.env.TEST_TIMEOUT, 10) : 60000;
+const baseURL =
+  process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
+
 export default defineConfig({
   testDir: './tests',
-  outputDir: './test-results',
+  outputDir: `./test-results/${environment}`,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : undefined,
-  timeout: 60000,
+  timeout: testTimeout,
   expect: {
     timeout: 10000,
   },
   reporter: [
     ['list'],
     ['html', { open: 'never' }],
-    ['allure-playwright', { resultsDir: './allure-results' }],
+    ['allure-playwright', { resultsDir: process.env.ALLURE_RESULTS_DIR || './allure-results' }],
   ],
   use: {
-    baseURL: 'https://opensource-demo.orangehrmlive.com',
-    trace: 'on-first-retry',
+    baseURL,
+    trace: environment === 'development' ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     actionTimeout: 10000,
     navigationTimeout: 30000,
