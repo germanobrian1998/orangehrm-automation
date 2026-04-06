@@ -7,6 +7,7 @@
 export type BrowserName = 'chromium' | 'firefox' | 'webkit';
 
 export interface EnvironmentConfig {
+  environment: string;
   baseURL: string;
   adminUsername: string;
   adminPassword: string;

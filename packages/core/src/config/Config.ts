@@ -1,16 +1,47 @@
 /**
  * Core framework - Configuration manager
  * Centralises all environment variable access with typed defaults.
+ * Supports multi-environment loading via the ENVIRONMENT variable.
  */
 
 import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import type { EnvironmentConfig, BrowserName } from '../types';
 
-// Load the correct .env file depending on NODE_ENV
-const envFile =
-  process.env.NODE_ENV === 'test' ? '.env.local' : '.env';
-dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+/**
+ * Load the appropriate .env file based on the ENVIRONMENT variable.
+ * Priority: ENVIRONMENT-specific file > .env > built-in defaults.
+ * In Jest (NODE_ENV=test) .env.local is tried first so unit tests can
+ * override values without touching committed env files.
+ */
+function loadEnvFile(): void {
+  const cwd = process.cwd();
+
+  if (process.env.NODE_ENV === 'test') {
+    const localFile = path.resolve(cwd, '.env.local');
+    if (fs.existsSync(localFile)) {
+      dotenv.config({ path: localFile });
+      return;
+    }
+  }
+
+  const environment = process.env.ENVIRONMENT;
+  if (environment) {
+    const envSpecific = path.resolve(cwd, `.env.${environment}`);
+    if (fs.existsSync(envSpecific)) {
+      dotenv.config({ path: envSpecific });
+      return;
+    }
+    console.warn(
+      `[Config] .env.${environment} not found – falling back to .env`,
+    );
+  }
+
+  dotenv.config({ path: path.resolve(cwd, '.env') });
+}
+
+loadEnvFile();
 
 const VALID_BROWSERS: BrowserName[] = ['chromium', 'firefox', 'webkit'];
 
@@ -32,6 +63,7 @@ export class Config {
   static getInstance(): Config {
     if (!Config.instance) {
       Config.instance = new Config({
+        environment: process.env.ENVIRONMENT || 'development',
         baseURL:
           process.env.ORANGEHRM_BASE_URL ||
           'https://opensource-demo.orangehrmlive.com',
@@ -67,6 +99,15 @@ export class Config {
 
   get baseURL(): string {
     return this._config.baseURL;
+  }
+
+  get environment(): string {
+    return this._config.environment;
+  }
+
+  /** Provides method-based access to the current environment name (e.g. "development", "staging", "ci"). */
+  getEnvironment(): string {
+    return this._config.environment;
   }
 
   get adminUsername(): string {
