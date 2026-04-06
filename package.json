@@ -44,7 +44,14 @@
     "test:shared-utils": "npm run test --workspace=packages/shared-utils",
     "test:all-packages": "npm run test --workspaces --if-present",
     "test:mock": "USE_MOCK_API=true playwright test --grep @mock",
-    "test:mock:api": "USE_MOCK_API=true playwright test --grep @mock"
+    "test:mock:api": "USE_MOCK_API=true playwright test --grep @mock",
+    "load:smoke": "k6 run tests/performance/smoke-load.js",
+    "load:soak": "k6 run tests/performance/soak-test.js",
+    "load:spike": "k6 run tests/performance/spike-test.js",
+    "load:stress": "k6 run tests/performance/stress-test.js",
+    "load:all": "npm run load:smoke && npm run load:soak && npm run load:spike && npm run load:stress",
+    "load:smoke:staging": "BASE_URL=https://staging.example.com k6 run tests/performance/smoke-load.js",
+    "load:results": "open ./k6-results.html"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
