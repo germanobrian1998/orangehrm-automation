@@ -42,7 +42,9 @@
     "test:hrm-api": "npm run test --workspace=packages/hrm-api-suite",
     "test:orangehrm-api": "npm run test --workspace=packages/orangehrm-api-suite",
     "test:shared-utils": "npm run test --workspace=packages/shared-utils",
-    "test:all-packages": "npm run test --workspaces --if-present"
+    "test:all-packages": "npm run test --workspaces --if-present",
+    "test:mock": "USE_MOCK_API=true playwright test --grep @mock",
+    "test:mock:api": "USE_MOCK_API=true playwright test --grep @mock"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
@@ -52,6 +54,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "allure-playwright": "^3.6.0",
     "eslint": "^8.0.0",
+    "msw": "^2.12.14",
     "prettier": "^3.0.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
