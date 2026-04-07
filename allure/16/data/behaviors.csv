@@ -1,8 +1,0 @@
-"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
-"0","","34","","41","0","","0"
-"0","Employee Management","0","Employee List","1","0","Employee table is visible on page","0"
-"0","Employee Management","0","Employee List","1","0","User navigates to employee list","0"
-"0","Employee Management","0","Employee List","1","0","Employee list page loads with correct URL","0"
-"0","Authentication","0","Login","1","0","System shows error for invalid credentials","0"
-"0","Authentication","0","Login","1","0","User logs in with valid credentials","0"
-"0","Authentication","0","Login","1","0","Validation error shown for empty fields","0"
