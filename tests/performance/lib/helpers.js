@@ -18,8 +18,10 @@ export class OrangeHRMClient {
 
     if (response.status === 200) {
       const body = response.json();
-      this.token = body.access_token;
-      return true;
+      if (body && body.access_token) {
+        this.token = body.access_token;
+        return true;
+      }
     }
     return false;
   }

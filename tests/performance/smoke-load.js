@@ -43,7 +43,13 @@ export default function () {
   
   check(employeesResponse, {
     'employees list status is 200': (r) => r.status === 200,
-    'has employee data': (r) => r.body.includes('data'),
+    'has employee data': (r) => {
+      try {
+        return r.json()?.data !== undefined;
+      } catch (_) {
+        return false;
+      }
+    },
   });
 
   sleep(2);
