@@ -55,19 +55,26 @@
     "test:report": "allure generate allure-results --clean -o allure-report && allure open allure-report",
     "test:report:serve": "allure serve allure-results",
     "test:report:history": "cp -r allure-report/history allure-results/history 2>/dev/null || true && allure generate allure-results --clean -o allure-report",
-    "report:open": "allure open allure-report"
+    "report:open": "allure open allure-report",
+    "api-docs:validate": "npx swagger-cli validate docs/openapi.yml",
+    "api-docs:preview": "npx swagger-ui-watcher docs/openapi.yml --port 8888"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
     "@playwright/test": "^1.40.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.0.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "allure-commandline": "^2.38.1",
     "allure-playwright": "^3.6.0",
     "eslint": "^8.0.0",
+    "js-yaml": "^4.1.1",
     "msw": "^2.12.14",
     "prettier": "^3.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
   },
