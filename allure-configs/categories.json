@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Product defects",
+    "matchedStatuses": ["failed"],
+    "flowId": "flowProductDefects"
+  },
+  {
+    "name": "Test defects",
+    "matchedStatuses": ["broken"],
+    "flowId": "flowTestDefects"
+  },
+  {
+    "name": "Skipped",
+    "matchedStatuses": ["skipped"],
+    "flowId": "flowSkipped"
+  }
+]
