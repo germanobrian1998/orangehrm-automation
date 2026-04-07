@@ -3,9 +3,14 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
 
-const swaggerDocument = yaml.load(
-  fs.readFileSync(path.join(__dirname, '../../../docs/openapi.yml'), 'utf8')
-) as Record<string, unknown>;
+const openApiPath = path.resolve(process.cwd(), 'docs/openapi.yml');
+
+let swaggerDocument: Record<string, unknown>;
+try {
+  swaggerDocument = yaml.load(fs.readFileSync(openApiPath, 'utf8')) as Record<string, unknown>;
+} catch (err) {
+  throw new Error(`Failed to load OpenAPI specification from "${openApiPath}": ${(err as Error).message}`);
+}
 
 export const swaggerSetup = (app: {
   use: (path: string, ...handlers: unknown[]) => void;
