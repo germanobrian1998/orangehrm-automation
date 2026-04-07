@@ -1,6 +1,6 @@
 # API Reference
 
-See [API Documentation](api-reference.md) for complete endpoint reference.
+See [OpenAPI Specification](https://github.com/germanobrian1998/orangehrm-automation/blob/main/docs/openapi.yml) for the complete endpoint reference.
 
 ## Authentication
 
