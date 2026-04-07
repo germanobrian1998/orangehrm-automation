@@ -1,13 +1,16 @@
 services:
-  playwright:
+  test:
     build: .
-    image: orangehrm-automation
+    environment:
+      - ORANGEHRM_BASE_URL=https://opensource-demo.orangehrmlive.com
+      - HEADLESS=true
+      - CI=true
     volumes:
       - ./test-results:/app/test-results
+      - ./allure-results:/app/allure-results
       - ./playwright-report:/app/playwright-report
-    environment:
-      - CI=true
-    command: npx playwright test
+    networks:
+      - test-network
 
   smoke:
     build: .
@@ -18,6 +21,8 @@ services:
     environment:
       - CI=true
     command: npm run test:smoke
+    networks:
+      - test-network
 
   regression:
     build: .
@@ -28,3 +33,20 @@ services:
     environment:
       - CI=true
     command: npm run test:regression
+    networks:
+      - test-network
+
+  mock-server:
+    image: mockserver/mockserver:latest
+    ports:
+      - "1080:1080"
+    environment:
+      - MOCKSERVER_PROPERTY_FILE=/config/mockserver.properties
+    volumes:
+      - ./mock-config:/config
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
