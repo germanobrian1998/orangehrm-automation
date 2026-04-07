@@ -1,0 +1,1 @@
+Parallel API requests (3) completed in: 2765ms (threshold: 12000ms)
