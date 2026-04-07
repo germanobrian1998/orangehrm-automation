@@ -1,0 +1,1 @@
+Navigation timing metrics: { domInteractive: 2117, domContentLoaded: 2117, loadComplete: 2117 }
