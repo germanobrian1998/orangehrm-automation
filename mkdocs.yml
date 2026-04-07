@@ -1,0 +1,32 @@
+site_name: OrangeHRM Test Automation Framework
+site_description: Complete testing framework for OrangeHRM with E2E, API, and performance tests
+site_url: https://germanobrian1998.github.io/orangehrm-automation/
+repo_url: https://github.com/germanobrian1998/orangehrm-automation
+repo_name: orangehrm-automation
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - sitemap:
+      priority: 0.8
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Installation: installation.md
+  - Architecture: architecture.md
+  - Configuration: configuration.md
+  - Testing Guide: testing-guide.md
+  - API Reference: api-reference.md
+  - CI/CD: ci-cd.md
+  - Troubleshooting: troubleshooting.md
+  - FAQ: faq.md
