@@ -1,0 +1,18 @@
+{
+  "smoke-load": {
+    "http_req_duration": { "p95": 500, "p99": 1000 },
+    "http_req_failed": { "rate": 0.1 }
+  },
+  "soak-test": {
+    "http_req_duration": { "p95": 1000, "p99": 2000 },
+    "http_req_failed": { "rate": 0.05 }
+  },
+  "spike-test": {
+    "http_req_duration": { "p95": 2000, "p99": 5000 },
+    "http_req_failed": { "rate": 0.2 }
+  },
+  "stress-test": {
+    "http_req_duration": { "p99": 5000 },
+    "http_req_failed": { "rate": 0.3 }
+  }
+}
