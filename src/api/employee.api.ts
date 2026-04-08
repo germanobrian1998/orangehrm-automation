@@ -64,6 +64,7 @@ export class EmployeeAPI extends BaseAPI {
   async deleteById(employeeId: number): Promise<void> {
     try {
       this.logger.step(1, `Deleting employee ${employeeId}`);
+      // Calls BaseAPI.delete(endpoint: string) — not recursive
       await this.delete(`/api/v2/pim/employees/${employeeId}`);
       this.logger.info(`✓ Employee deleted`);
     } catch (error) {
