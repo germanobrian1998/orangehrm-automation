@@ -126,6 +126,8 @@ Total: ~5s per test
 **After**: REST API call to create employee (~0.9s)
 **Saving**: ~7.1s per test, ~6.8 min per full suite run
 
+> Calculation: 58 tests × 7.1s ≈ 412s ≈ 6.8 min. Measured on the OrangeHRM demo; savings will vary with application and network latency.
+
 ### 2. Parallel Browser Execution in CI
 **Before**: Sequential — Chromium → Firefox → WebKit (~75 min)
 **After**: Parallel matrix — all 3 browsers simultaneously (~25 min)

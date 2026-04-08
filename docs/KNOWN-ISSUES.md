@@ -24,7 +24,7 @@ Last 100 CI runs:
 |-----------|-----------|-----------|-------|--------|
 | Admin login | 100% | 0% | ➡️ Stable | ✅ Excellent |
 | Employee CRUD | 99.2% | 0.8% | ↘️ Improving | ✅ Good |
-| Leave approval workflow | 94.5% | 5.5% | ↘️ Improving | ⚠️ Watch |
+| Leave approval workflow | 94.5% | 5.5% | ↘️ Improving | ⚠️ Watch — target < 2%; see Issue #2 |
 | API tests | 100% | 0% | ➡️ Stable | ✅ Excellent |
 | Photo upload | 96.1% | 3.9% | ↘️ Improving | ⚠️ Watch |
 | Cross-browser (WebKit) | 97.3% | 2.7% | ↘️ Improving | ⚠️ Watch |

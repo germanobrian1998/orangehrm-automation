@@ -598,8 +598,8 @@ for (const [username, password, expectedResult] of loginScenarios) {
 - Faker data is not deterministic — harder to reproduce a specific failure
 
 #### 5. Metrics
-- 58 tests with API setup: ~12 min total
-- Same 58 tests with UI setup: estimated ~50+ min
+- 58+ tests (19 specs × 3 browsers) with API setup: ~12 min total
+- Same tests with UI setup: estimated ~50+ min
 - **Saving: ~38 minutes per full run**
 
 ---
