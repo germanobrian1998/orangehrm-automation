@@ -4,7 +4,8 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
+    "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -16,7 +17,10 @@
     "moduleResolution": "node",
     "paths": {
       "@qa-framework/core": ["packages/core/src"],
-      "@qa-framework/shared-utils": ["packages/shared-utils/src"]
+      "@qa-framework/shared-utils": ["packages/shared-utils/src"],
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"]
     }
   },
   "include": ["src", "tests"],

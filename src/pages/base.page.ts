@@ -28,7 +28,7 @@ export class BasePage {
   async goto(path: string): Promise<void> {
     try {
       this.logger.step(1, `Navigating to ${path}`);
-      const url = `${environment.baseURL}${path}`;
+      const url = `${environment.baseUrl}${path}`;
       await this.page.goto(url, { waitUntil: 'networkidle' });
       await this.waitFor.loadingComplete();
       this.logger.info(`✓ Navigated to ${path}`);
@@ -202,11 +202,7 @@ export class BasePage {
    * Wait for element to be visible
    */
   async waitForElement(selector: string): Promise<void> {
-    try {
-      await this.waitFor.elementVisible(selector);
-    } catch (error) {
-      throw error;
-    }
+    await this.waitFor.elementVisible(selector);
   }
 
   /**

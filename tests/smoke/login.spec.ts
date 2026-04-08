@@ -16,7 +16,7 @@ test.describe('Login Tests @smoke', () => {
     await allure.story('User logs in with valid credentials');
     await allure.severity('critical');
     await allure.description('Verify that a user can login with valid admin credentials');
-    await allure.tag('smoke', 'auth');
+    await allure.tags('smoke', 'auth');
 
     await allure.step('Login with valid credentials', async () => {
       await loginPage.login('Admin', 'admin123');

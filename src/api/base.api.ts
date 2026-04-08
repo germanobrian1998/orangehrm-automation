@@ -15,7 +15,7 @@ export class BaseAPI {
   protected requestContext: APIRequestContext | null = null;
 
   constructor(protected page: Page) {
-    this.baseURL = environment.baseURL;
+    this.baseURL = environment.baseUrl;
     this.logger = createLogger(this.constructor.name);
     this.requestContext = page.request;
   }
@@ -79,7 +79,7 @@ export class BaseAPI {
 
       this.logger.debug(`${method} ${endpoint}`);
 
-      const response = await this.requestContext![method.toLowerCase() as any](url, {
+      const response = await (this.requestContext! as any)[method.toLowerCase()](url, {
         headers,
         data: options?.data,
       });

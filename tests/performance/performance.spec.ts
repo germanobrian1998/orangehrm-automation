@@ -79,7 +79,8 @@ test.describe('Performance Tests', () => {
     });
 
     const metrics = await page.evaluate(() => {
-      const timing = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const timing = (performance as any).getEntriesByType('navigation')[0];
       return {
         domInteractive: Math.round(timing.domInteractive),
         domContentLoaded: Math.round(

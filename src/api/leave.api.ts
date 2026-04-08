@@ -12,7 +12,7 @@ import {
   RejectLeaveDTO,
   LeaveBalance,
   LeaveListResponse,
-} from '@types/leave.types';
+} from '../types/leave.types';
 
 export class LeaveAPI extends BaseAPI {
   /**

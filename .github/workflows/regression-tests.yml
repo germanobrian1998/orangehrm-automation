@@ -28,7 +28,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Regression Tests
-        run: npm run test:regression || true
+        run: npm run test:regression
 
       - name: Upload Test Report
         if: always()

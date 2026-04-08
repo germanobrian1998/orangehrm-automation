@@ -11,7 +11,7 @@ import {
   JobTitle,
   CreateJobTitleDTO,
   UserListResponse,
-} from '@types/user.types';
+} from '../types/user.types';
 
 export class AdminAPI extends BaseAPI {
   /**
