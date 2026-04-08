@@ -17,6 +17,10 @@ Comprehensive Q&A for QA Automation Engineer interviews, using this project as y
 - [Scaling Questions](#-scaling-questions)
 - [Behavioral Questions (STAR Format)](#-behavioral-questions-star-format)
 - [Technical Deep-Dive Questions](#-technical-deep-dive-questions)
+- [Technical Deep-Dive: Test Data Strategy](#️-technical-deep-dive-test-data-strategy)
+- [Technical Deep-Dive: Flaky Test Handling](#-technical-deep-dive-flaky-test-handling)
+- [Technical Deep-Dive: CI/CD Architecture](#️-technical-deep-dive-cicd-architecture)
+- [Technical Deep-Dive: Framework Selection](#-technical-deep-dive-framework-selection)
 - [Questions to Ask the Interviewer](#-questions-to-ask-the-interviewer)
 
 ---
@@ -531,7 +535,218 @@ test('submit form', async ({ page, browserName }) => {
 
 ---
 
-## ❓ Questions to Ask the Interviewer
+## 🗂️ Technical Deep-Dive: Test Data Strategy
+
+### Q: Walk me through your test data strategy in detail.
+
+**Answer Framework:**
+
+#### 1. Problem Identified
+Pure UI test data setup is slow (~8s per test) and flaky — it depends on the application under test, which may have bugs itself.
+
+#### 2. Solution: Three-Layer Data Strategy
+
+```
+Layer 1: Generated data (Faker)
+   → For fields where the value doesn't matter
+   → Unique every run — no conflicts between parallel tests
+
+Layer 2: API-created data
+   → For entity setup that's NOT the feature under test
+   → 10× faster than UI forms (0.9s vs 8s)
+   → Independent of UI behaviour
+
+Layer 3: CSV-driven data
+   → For boundary value analysis and equivalence partitions
+   → Parameterised test cases from external data files
+```
+
+#### 3. Implementation
+
+```typescript
+// Layer 1: Generated data
+import { faker } from '@faker-js/faker';
+const testEmployee = {
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  employeeId: faker.string.numeric(5),
+};
+
+// Layer 2: API-created data
+test.beforeEach(async ({ request }) => {
+  const employee = await employeeApi.create(request, testEmployee);
+  employeeId = employee.data.empNumber;
+});
+
+test.afterEach(async ({ request }) => {
+  await employeeApi.delete(request, employeeId);
+});
+
+// Layer 3: CSV-driven
+const loginScenarios = readCsv('tests/data-driven/login-data.csv');
+for (const [username, password, expectedResult] of loginScenarios) {
+  test(`login: ${username} → ${expectedResult}`, async ({ page }) => {
+    await loginPage.login(username, password);
+    await loginPage.verifyResult(expectedResult);
+  });
+}
+```
+
+#### 4. Trade-offs acknowledged
+- API approach adds code complexity (need API client)
+- CSV approach needs maintenance when requirements change
+- Faker data is not deterministic — harder to reproduce a specific failure
+
+#### 5. Metrics
+- 58+ tests (19 specs × 3 browsers) with API setup: ~12 min total
+- Same tests with UI setup: estimated ~50+ min
+- **Saving: ~38 minutes per full run**
+
+---
+
+## 🎲 Technical Deep-Dive: Flaky Test Handling
+
+### Q: Give me a specific example of debugging and fixing a flaky test.
+
+**Answer (STAR format):**
+
+**Situation**: The leave approval test was failing in ~5% of CI runs with a `AssertionError: Expected 7 but received 8` on the leave balance check. It passed 100% locally.
+
+**Task**: Diagnose the root cause and achieve > 99% reliability without masking the issue with more retries.
+
+**Action**:
+
+```typescript
+// Step 1: Isolate the flakiness
+npx playwright test tests/regression/leave/leave-workflow.spec.ts --repeat-each=10
+
+// Step 2: Enable trace on every run (not just retry)
+// playwright.config.ts
+trace: 'on',
+
+// Step 3: Inspect the trace
+npx playwright show-trace test-results/leave-workflow/.../trace.zip
+// Finding: API response returned 200 but body showed OLD balance value
+// The UI showed new balance, but the API was lagging behind
+
+// Step 4: Root cause confirmed
+// OrangeHRM demo has eventual consistency — balance updates async
+```
+
+**Fix applied**:
+```typescript
+// ❌ Before: immediate assertion
+const balance = await leaveApi.getLeaveBalance(empId, leaveTypeId);
+expect(balance).toBe(originalBalance - requestedDays);
+
+// ✅ After: retry until consistent
+await expect(async () => {
+  const balance = await leaveApi.getLeaveBalance(empId, leaveTypeId);
+  expect(balance).toBe(originalBalance - requestedDays);
+}).toPass({ timeout: 5000 });
+```
+
+**Result**: Failure rate dropped from 5% to < 0.5%.
+
+**Key learning**: Never increase `retries` as the first response to flakiness. Always diagnose — the trace viewer shows exactly what happened at each millisecond.
+
+---
+
+## ⚙️ Technical Deep-Dive: CI/CD Architecture
+
+### Q: Design your CI/CD pipeline from scratch for a QA team of 5 engineers.
+
+**Answer:**
+
+#### Architecture Overview
+
+```
+Developer pushes → PR opened
+                        │
+            ┌───────────┴───────────┐
+            ▼                       ▼
+    Code Quality (2 min)    Smoke Tests (5 min)
+    ESLint + TypeScript      Chromium only
+            │                       │
+            └───────────┬───────────┘
+                        ▼
+               Both pass? Merge allowed
+                        │
+                        ▼
+               Push to main branch
+                        │
+            ┌───────────┴───────────┐
+            ▼                       ▼
+    Regression (20 min)    Browser Matrix (25 min)
+    Chromium full suite    Chromium + Firefox + WebKit
+            │                       │
+            └───────────┬───────────┘
+                        ▼
+             Artifacts uploaded to GitHub
+             (HTML report, screenshots, traces)
+                        │
+                        ▼
+              Nightly: performance suite
+```
+
+#### Key decisions and rationale
+
+| Decision | Rationale |
+|----------|-----------|
+| Smoke on every PR | Fast (5 min) gate — finds show-stoppers immediately |
+| Regression on merge to main | Balances speed (don't block PRs) vs. coverage |
+| Parallel browser matrix | 3× coverage for ~same wall-clock time |
+| `retries: 2` in CI | Absorbs transient network issues without masking real failures |
+| Artifacts on every run | Enables debugging without re-running (traces, screenshots) |
+| Required status checks | Prevents broken code from reaching main |
+
+#### What I'd add with more resources
+
+1. **Sharding** — split 58 tests across 4 runners for faster feedback
+2. **Self-hosted runners** — dedicated hardware for consistent performance
+3. **Slack notifications** — alert on first failure, not after all retries
+4. **Test quarantine** — automatically isolate flaky tests to nightly-only
+
+---
+
+## 🏆 Technical Deep-Dive: Framework Selection
+
+### Q: You chose Playwright — defend that decision compared to alternatives.
+
+**Answer:**
+
+#### Evaluation criteria (weighted)
+
+| Criterion | Weight | Why important |
+|-----------|--------|--------------|
+| Multi-browser (incl. WebKit) | 25% | Safari is ~20% of web users |
+| API testing built-in | 20% | API-first setup is key to performance |
+| TypeScript first-class | 20% | Type safety prevents selector bugs |
+| Trace/debug tooling | 15% | Fast diagnosis = lower maintenance cost |
+| Parallel execution | 10% | Scale without configuration overhead |
+| Learning curve | 10% | Team onboarding speed |
+
+#### Comparison matrix
+
+| Criterion | Playwright | Cypress | Selenium | WebdriverIO |
+|-----------|-----------|---------|----------|------------|
+| Multi-browser + WebKit | ✅ 5/5 | ⚠️ 3/5 | ✅ 4/5 | ✅ 4/5 |
+| API testing built-in | ✅ 5/5 | ❌ 1/5 | ❌ 1/5 | ⚠️ 2/5 |
+| TypeScript first-class | ✅ 5/5 | ✅ 4/5 | ⚠️ 3/5 | ✅ 4/5 |
+| Trace viewer | ✅ 5/5 | ⚠️ 3/5 | ❌ 1/5 | ⚠️ 2/5 |
+| Parallel execution | ✅ 5/5 | ⚠️ 3/5 | ✅ 4/5 | ✅ 4/5 |
+| Learning curve | ⚠️ 3/5 | ✅ 5/5 | ❌ 2/5 | ⚠️ 3/5 |
+| **Weighted score** | **4.65** | **3.30** | **2.55** | **3.30** |
+
+**Winner: Playwright** — clear leader on the highest-weight criteria.
+
+#### What I'd use Cypress for instead
+
+Cypress excels for component testing and developer-run tests in a React/Vue project. If the team was primarily front-end focused and Safari wasn't a requirement, Cypress would be a strong choice.
+
+---
+
+
 
 1. "What test frameworks are you currently using, and what pain points are you trying to solve?"
 2. "How many tests are in your current suite, and how long does the CI run take?"

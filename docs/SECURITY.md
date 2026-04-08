@@ -13,6 +13,8 @@ How credentials, secrets, and sensitive data are handled in the OrangeHRM Automa
 - [API Key Rotation](#-api-key-rotation)
 - [Audit Logging](#-audit-logging)
 - [Security Testing Practices](#-security-testing-practices)
+- [Environment-Specific Security Concerns](#-environment-specific-security-concerns)
+- [Security Audit Trail](#-security-audit-trail)
 - [Anti-Patterns: What NOT to Do](#-anti-patterns-what-not-to-do)
 
 ---
@@ -285,7 +287,82 @@ test('unauthenticated API returns 401 @security', async ({ request }) => {
 
 ---
 
-## ❌ Anti-Patterns: What NOT to Do
+## 🌍 Environment-Specific Security Concerns
+
+### Local Development
+
+| Concern | Risk | Mitigation |
+|---------|------|------------|
+| `.env.local` accidentally committed | Credentials exposed in git | `.gitignore` + pre-commit hook |
+| Verbose logging exposes credentials | Logs visible to teammates | Never log passwords or tokens (see Audit Logging) |
+| Browser traces capture passwords | Password visible in trace | Playwright auto-masks `type="password"` inputs |
+
+### CI/CD (GitHub Actions)
+
+| Concern | Risk | Mitigation |
+|---------|------|------------|
+| Secrets visible in workflow logs | Credential exposure | GitHub automatically masks `***` |
+| Fork PRs access secrets | Malicious fork steals credentials | GitHub blocks secret access for fork PRs by default |
+| Workflow file edited by attacker | Runs malicious code with secrets | Branch protection rules; require PR review |
+| Long-lived tokens | Broad attack surface if leaked | Rotate credentials every 90 days |
+
+### Docker
+
+| Concern | Risk | Mitigation |
+|---------|------|------------|
+| Credentials baked into image | Exposed in `docker history` | Pass as runtime env vars, never `COPY .env` |
+| Public Docker Hub push with secrets | Credentials in image layers | Use multi-stage builds; secrets never in final layer |
+
+### Staging / Production
+
+| Concern | Risk | Mitigation |
+|---------|------|------------|
+| Test accounts with broad permissions | Over-privileged test user | Create a dedicated test role with minimal permissions |
+| Test data pollutes production | Real users see test entries | Use dedicated staging; never run against production |
+| PII in test data | GDPR/compliance violations | Use Faker for all personal data; never real PII |
+
+---
+
+## 🔍 Security Audit Trail
+
+This section documents the security posture of the project over time.
+
+### Audit Checklist (Run Before Any Release)
+
+- [ ] `npm audit` passes with no high/critical vulnerabilities
+- [ ] No credentials in git history (`git log -p | grep -i password`)
+- [ ] GitHub Secrets configured and not expired
+- [ ] `.env.local` is listed in `.gitignore` and not tracked
+- [ ] No hardcoded credentials in test files or page objects
+- [ ] Playwright traces do not capture raw password values
+- [ ] Test data uses generated (Faker) values — no real PII
+
+### Running a Security Audit
+
+```bash
+# Check for dependency vulnerabilities
+npm audit
+
+# Auto-fix fixable vulnerabilities
+npm audit fix
+
+# Check for accidentally staged secrets
+git diff --cached | grep -i "password\|secret\|token\|api_key"
+
+# Verify no secrets in committed files
+git log --all -p | grep -i "admin123\|password" | head -20
+```
+
+### Historical Audit Log
+
+| Date | Auditor | Findings | Actions Taken |
+|------|---------|---------|--------------|
+| Project start | Team | No secrets in git | Pre-commit hook added |
+| Ongoing | CI (`npm audit`) | Dependency vulnerabilities | Auto-fixed via `npm audit fix` |
+
+---
+
+
 
 ### Never hardcode credentials
 
