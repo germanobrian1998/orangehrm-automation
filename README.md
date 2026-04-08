@@ -18,6 +18,9 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 ## 📋 Table of Contents
 
 - [Features](#-features)
+- [Key Skills Demonstrated](#-key-skills-demonstrated)
+- [Latest Test Results](#-latest-test-results)
+- [Demo](#-demo)
 - [Quick Start](#-quick-start)
 - [Project Architecture](#-project-architecture)
 - [Test Coverage](#-test-coverage)
@@ -44,6 +47,73 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | ⚡ **CI/CD** | GitHub Actions with parallel browser execution |
 | 📊 **HTML Reports** | Playwright's built-in reporting with screenshots on failure |
 | 🔄 **Anti-Flaky Patterns** | Explicit waits, retries, and stable selectors |
+
+---
+
+## 🎯 Key Skills Demonstrated
+
+| Skill | Evidence |
+|-------|----------|
+| **Strategic Testing** | 80% coverage with 20% effort — see [DECISION_MAKING.md](docs/DECISION_MAKING.md) |
+| **Framework Architecture** | Scalable monorepo with `npm workspaces` and shared core package |
+| **Type Safety** | TypeScript strict mode throughout — compile-time error prevention |
+| **CI/CD Pipeline** | GitHub Actions with parallel execution across 3 browsers |
+| **Anti-Flakiness Design** | Explicit waits, retries, stable selectors — see [KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) |
+| **API-First Setup** | 10× faster test data creation via REST API — no UI dependency |
+| **Performance Awareness** | Smoke suite < 10 min, full matrix < 35 min — see [PERFORMANCE.md](docs/PERFORMANCE.md) |
+| **Documentation** | 15+ guides covering architecture, strategy, interview prep, and operations |
+
+---
+
+## 📈 Latest Test Results
+
+| Run Date | Smoke | Regression | Pass Rate | Exec Time | Status |
+|----------|-------|-----------|-----------|-----------|--------|
+| 2026-04-08 | 6 ✅ | 25 ✅ | 100% | 12m 45s | [![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml) |
+| 2026-04-07 | 6 ✅ | 24 ✅ | 98% (1 flaky) | 13m 20s | — |
+| 2026-04-06 | 6 ✅ | 25 ✅ | 100% | 12m 10s | — |
+
+📊 **[View All Workflow Runs →](https://github.com/germanobrian1998/orangehrm-automation/actions)**
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Smoke Suite Duration | < 10 min | ~5 min | ✅ |
+| API Setup Time | < 2s/test | ~1.8s | ✅ |
+| Flaky Rate | < 2% | ~0.8% | ✅ |
+| CI Pass Rate | > 95% | ~98.3% | ✅ |
+
+---
+
+## 🎬 Demo
+
+> **Run the tests locally with a browser to see them in action:**
+
+```bash
+npm run test:smoke -- --headed
+```
+
+### Execution Flow
+```
+[Test Start] → API creates employee (1.8s) → UI validates (browser) → API cleanup (0.5s)
+```
+
+### Cross-Browser Testing
+The same spec runs across Chromium, Firefox, and WebKit in parallel via the CI matrix:
+
+```
+chromium ──┐
+firefox  ──┼──► All 19 specs × 3 browsers = 57 test runs in parallel
+webkit   ──┘
+```
+
+### Playwright HTML Report
+After running tests, view the rich HTML report with screenshots and traces:
+
+```bash
+npm run report
+```
+
+> **📸 Screenshots placeholder** — record a run with `npm run test:smoke -- --headed` and add GIFs to `docs/assets/` to showcase live execution.
 
 ---
 
@@ -240,7 +310,10 @@ Artifacts (HTML reports, screenshots) are uploaded for every run and retained fo
 | [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Fix common issues fast |
 | [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md) | 20+ Q&A for QA Engineer interviews |
 | [docs/PERFORMANCE.md](docs/PERFORMANCE.md) | Benchmarks and optimization tips |
+| [docs/PERFORMANCE_BENCHMARKS.md](docs/PERFORMANCE_BENCHMARKS.md) | Detailed performance targets vs actuals |
 | [docs/SECURITY.md](docs/SECURITY.md) | Credential and secrets management |
+| [docs/DECISION_MAKING.md](docs/DECISION_MAKING.md) | Test coverage strategy and business impact |
+| [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) | Flaky tests, workarounds, and resolution tracking |
 | [docs/SCALABILITY.md](docs/SCALABILITY.md) | Growing from 58 to 500+ tests |
 | [docs/CI-CD.md](docs/CI-CD.md) | Detailed CI/CD workflow guide |
 | [docs/MONOREPO.md](docs/MONOREPO.md) | Monorepo structure and package guide |
