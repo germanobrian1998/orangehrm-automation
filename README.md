@@ -39,7 +39,7 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 | Feature | Description |
 |---|---|
-| 🧪 **60+ Tests** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
+| 🧪 **57+ Tests** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
 | 🌐 **Cross-Browser** | Chromium, Firefox, and WebKit (Safari) |
 | 🔌 **API Testing** | REST API validation integrated with UI tests |
 | 📄 **Page Object Model** | Clean separation of test logic and page structure |
@@ -264,7 +264,7 @@ orangehrm-automation/
 | Cross-Browser | Login flow | Chromium, Firefox, WebKit | — |
 | Data-Driven | Login scenarios | Chromium | — |
 
-**Total: 19 test specs — 60+ individual test runs**
+**Total: 19 test specs — 57+ individual test runs**
 
 ---
 
