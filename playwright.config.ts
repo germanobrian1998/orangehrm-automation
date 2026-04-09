@@ -53,15 +53,5 @@ export default defineConfig({
         trace: 'on',
       },
     },
-    {
-      name: 'visual',
-      testDir: './tests/visual',
-      use: {
-        ...devices['Desktop Chrome'],
-        // Always capture screenshots for visual regression tests
-        screenshot: 'on',
-        trace: 'on',
-      },
-    },
   ],
 });
