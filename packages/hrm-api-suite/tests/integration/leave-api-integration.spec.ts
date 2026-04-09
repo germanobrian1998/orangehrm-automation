@@ -36,7 +36,7 @@ test.describe('@integration @api Leave API Integration', () => {
       'getEmployeeLeaveRequests',
     ];
     methods.forEach(method => {
-      expect(typeof (LeaveAPIClient.prototype as Record<string, unknown>)[method]).toBe('function');
+      expect(typeof (LeaveAPIClient.prototype as unknown as Record<string, unknown>)[method]).toBe('function');
     });
   });
 

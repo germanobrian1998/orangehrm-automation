@@ -207,7 +207,7 @@ test.describe('@performance Stress Testing Suite', () => {
 
       const alerts = monitor.detectAlerts();
       expect(alerts.length).toBeGreaterThan(0);
-      expect(alerts.some((a) => a.category === 'memory' || a.metric.includes('stress-peak'))).toBe(true);
+      expect(alerts.some((a) => a.metric.includes('stress-peak'))).toBe(true);
     });
 
     test('cpu threshold value is accessible from PERFORMANCE_THRESHOLDS', () => {

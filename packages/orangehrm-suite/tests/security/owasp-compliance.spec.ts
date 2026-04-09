@@ -231,8 +231,8 @@ test.describe('@security OWASP Top 10 Compliance Tests', () => {
     });
 
     test('IDOR attack is blocked for different user IDs', () => {
-      const ownerId = 10;
-      const attackerId = 99;
+      const ownerId: number = 10;
+      const attackerId: number = 99;
       const canAccess = attackerId === ownerId;
       expect(canAccess).toBe(false);
     });
