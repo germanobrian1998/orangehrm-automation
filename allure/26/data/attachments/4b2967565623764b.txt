@@ -1,1 +1,0 @@
-API response time: 605ms (threshold: 5000ms)
