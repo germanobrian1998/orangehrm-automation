@@ -20,7 +20,7 @@ test.describe('@integration @api Employee API Integration', () => {
   test('EmployeeAPIClient exposes all CRUD methods', () => {
     const methods = ['getEmployee', 'listEmployees', 'createEmployee', 'updateEmployee', 'deleteEmployee', 'searchEmployees'];
     methods.forEach(method => {
-      expect(typeof (EmployeeAPIClient.prototype as Record<string, unknown>)[method]).toBe('function');
+      expect(typeof (EmployeeAPIClient.prototype as unknown as Record<string, unknown>)[method]).toBe('function');
     });
   });
 

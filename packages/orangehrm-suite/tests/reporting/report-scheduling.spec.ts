@@ -253,7 +253,7 @@ test.describe('@reporting Report Scheduling Tests', () => {
     test('schedule frequency can be changed from Daily to Weekly', () => {
       // Arrange
       const originalFrequency: 'Daily' | 'Weekly' | 'Monthly' = 'Daily';
-      let currentFrequency = originalFrequency;
+      let currentFrequency: 'Daily' | 'Weekly' | 'Monthly' = originalFrequency;
 
       // Act
       currentFrequency = 'Weekly';
