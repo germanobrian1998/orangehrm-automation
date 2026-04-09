@@ -19,8 +19,9 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 - [Features](#-features)
 - [Key Skills Demonstrated](#-key-skills-demonstrated)
-- [Latest Test Results](#-latest-test-results)
 - [Demo](#-demo)
+- [Visual Test Evidence](#-visual-test-evidence)
+- [Latest Test Results](#-latest-test-results)
 - [Quick Start](#-quick-start)
 - [Project Architecture](#-project-architecture)
 - [Test Coverage](#-test-coverage)
@@ -38,14 +39,15 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 | Feature | Description |
 |---|---|
-| 🧪 **58+ Tests** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
+| 🧪 **64+ Tests** | 21 test specs × 3 browsers — smoke, API, visual, cross-browser, and data-driven |
 | 🌐 **Cross-Browser** | Chromium, Firefox, and WebKit (Safari) |
 | 🔌 **API Testing** | REST API validation integrated with UI tests |
 | 📄 **Page Object Model** | Clean separation of test logic and page structure |
 | 🔒 **Type-Safe** | Full TypeScript with strict mode |
 | 🐳 **Docker Ready** | Containerised test execution |
 | ⚡ **CI/CD** | GitHub Actions with parallel browser execution |
-| 📊 **HTML Reports** | Playwright's built-in reporting with screenshots on failure |
+| 📊 **HTML Reports** | Playwright HTML report + Allure with screenshots and traces |
+| 🖼️ **Visual Regression** | Pixel-level baseline comparisons with `toHaveScreenshot` |
 | 🔄 **Anti-Flaky Patterns** | Explicit waits, retries, and stable selectors |
 
 ---
@@ -60,6 +62,7 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | **CI/CD Pipeline** | GitHub Actions with parallel execution across 3 browsers |
 | **Anti-Flakiness Design** | Explicit waits, retries, stable selectors — see [KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) |
 | **API-First Setup** | 10× faster test data creation via REST API — no UI dependency |
+| **Visual Regression** | Pixel-level baseline comparisons using `toHaveScreenshot` |
 | **Performance Awareness** | Smoke suite < 10 min, full matrix < 35 min — see [PERFORMANCE.md](docs/PERFORMANCE.md) |
 | **Documentation** | 15+ guides covering architecture, strategy, interview prep, and operations |
 
@@ -75,6 +78,8 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 📊 **[View All Workflow Runs →](https://github.com/germanobrian1998/orangehrm-automation/actions)**
 
+📄 **[View Latest HTML Report →](https://germanobrian1998.github.io/orangehrm-automation/)**
+
 | Metric | Target | Actual | Status |
 |--------|--------|--------|--------|
 | Smoke Suite Duration | < 10 min | ~5 min | ✅ |
@@ -82,14 +87,21 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | Flaky Rate | < 2% | ~0.8% | ✅ |
 | CI Pass Rate | > 95% | ~98.3% | ✅ |
 
+See [docs/EXECUTION_METRICS.md](docs/EXECUTION_METRICS.md) for the full metrics dashboard with historical trends.
+
 ---
 
 ## 🎬 Demo
 
-> **Run the tests locally with a browser to see them in action:**
+> **See the tests running in your browser in under 2 minutes:**
 
 ```bash
-npm run test:smoke -- --headed
+git clone https://github.com/germanobrian1998/orangehrm-automation.git
+cd orangehrm-automation
+npm ci
+npx playwright install --with-deps chromium
+npm run test:smoke -- --headed   # watch the browser navigate and assert
+npm run report                   # open the rich HTML report
 ```
 
 ### Execution Flow
@@ -102,9 +114,18 @@ The same spec runs across Chromium, Firefox, and WebKit in parallel via the CI m
 
 ```
 chromium ──┐
-firefox  ──┼──► All 19 specs × 3 browsers = 57 test runs in parallel
+firefox  ──┼──► All 21 specs × 3 browsers = 63+ test runs in parallel
 webkit   ──┘
 ```
+
+### Playwright Trace Viewer (step-by-step replay)
+
+```bash
+npx playwright test tests/smoke/login.spec.ts --trace=on --project=chromium
+npx playwright show-trace test-results/*/trace.zip
+```
+
+The trace viewer shows every action with DOM snapshots, network requests, and timing — the best way to demonstrate the framework in technical interviews.
 
 ### Playwright HTML Report
 After running tests, view the rich HTML report with screenshots and traces:
@@ -113,7 +134,47 @@ After running tests, view the rich HTML report with screenshots and traces:
 npm run report
 ```
 
-> **📸 Screenshots placeholder** — record a run with `npm run test:smoke -- --headed` and add GIFs to `docs/assets/` to showcase live execution.
+📄 **[View Latest Live Report →](https://germanobrian1998.github.io/orangehrm-automation/)** *(updated on every push to main)*
+
+> 💡 **For a complete step-by-step demo guide**, see [docs/DEMO.md](docs/DEMO.md).
+
+---
+
+## 🖼️ Visual Test Evidence
+
+### What gets captured automatically
+
+| Trigger | What is saved | Where |
+|---------|--------------|-------|
+| Test failure | Full-page screenshot + trace | `test-results/` → uploaded as CI artifact |
+| Visual regression test | Pixel-level diff image | `test-results/` → uploaded as CI artifact |
+| CI run | HTML report with all screenshots | GitHub Pages + artifact download |
+| Trace enabled | Step-by-step DOM snapshots | Playwright trace viewer |
+
+### Visual Regression Tests
+
+The `tests/visual/` suite uses Playwright's `toHaveScreenshot()` to detect unintended UI changes:
+
+```bash
+# Create baselines (first time or after intentional UI change)
+npx playwright test tests/visual --update-snapshots --project=visual
+
+# Run comparisons (CI)
+npx playwright test tests/visual --project=visual
+```
+
+Baseline screenshots are committed to git and compared on every run. A pixel diff greater than 2% fails the test and attaches a diff image to the report.
+
+### Download CI Artifacts
+
+Every CI run uploads the Playwright HTML report as a downloadable artifact:
+
+1. Go to the [Actions tab](https://github.com/germanobrian1998/orangehrm-automation/actions)
+2. Click any completed workflow run
+3. Scroll to **Artifacts → smoke-report** or **regression-report**
+4. Extract and open `index.html`
+
+See [docs/assets/README.md](docs/assets/README.md) for instructions on capturing and adding screenshots/GIFs to this portfolio.
 
 ---
 
@@ -219,8 +280,9 @@ orangehrm-automation/
 | API | Employee API, Leave API | Chromium | — |
 | Cross-Browser | Login flow | Chromium, Firefox, WebKit | — |
 | Data-Driven | Login scenarios | Chromium | — |
+| Visual Regression | Login, Dashboard | Chromium (visual project) | `@visual` |
 
-**Total: 19 test specs across 3 browsers (58+ tests)**
+**Total: 21 test specs — 64+ individual test runs**
 
 ---
 
@@ -235,6 +297,12 @@ npm run test:smoke
 
 # Full regression suite
 npm run test:regression
+
+# Visual regression tests
+npx playwright test tests/visual --project=visual
+
+# Update visual baselines (after intentional UI changes)
+npx playwright test tests/visual --update-snapshots --project=visual
 
 # Specific browser
 npx playwright test --project=chromium
@@ -252,6 +320,9 @@ npm run test:ui
 
 # View HTML report
 npm run report
+
+# Generate and open Allure report
+npm run test:report
 ```
 
 ---
@@ -278,16 +349,19 @@ See [DOCKER.md](DOCKER.md) for full details.
 
 ## ⚙️ CI/CD Pipeline
 
-The project uses GitHub Actions with three workflows:
+The project uses GitHub Actions with dedicated workflows:
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| **Smoke Tests** | Push / PR to `main` | Runs smoke suite on Chromium |
-| **Regression Tests** | Push to `main` + nightly cron | Full regression on Chromium |
-| **Code Quality** | PR to `main` | ESLint + TypeScript type check |
+| **Smoke Tests** | Push / PR to `main` | Runs smoke suite on Chromium; uploads HTML report artifact |
+| **Regression Tests** | Push to `main` + nightly cron | Full regression on Chromium; uploads HTML report artifact |
+| **Code Quality** | PR to `main` | ESLint + TypeScript type check (fails on errors) |
 | **Full Matrix** | Push / PR to `main` | Runs all tests on Chromium, Firefox, WebKit in parallel |
+| **Publish Report** | Push to `main` | Deploys latest HTML report to GitHub Pages |
 
 Artifacts (HTML reports, screenshots) are uploaded for every run and retained for 7–30 days.
+
+📄 **[Live Report on GitHub Pages →](https://germanobrian1998.github.io/orangehrm-automation/)**
 
 ---
 
@@ -307,6 +381,8 @@ Artifacts (HTML reports, screenshots) are uploaded for every run and retained fo
 | Resource | Description |
 |---|---|
 | [docs/QUICK_START.md](docs/QUICK_START.md) | 5-minute setup guide |
+| [docs/DEMO.md](docs/DEMO.md) | Step-by-step demo guide with trace viewer and report walkthrough |
+| [docs/EXECUTION_METRICS.md](docs/EXECUTION_METRICS.md) | Visual metrics dashboard with historical trends |
 | [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Fix common issues fast |
 | [docs/INTERVIEW-PREP.md](docs/INTERVIEW-PREP.md) | 20+ Q&A for QA Engineer interviews |
 | [docs/PERFORMANCE.md](docs/PERFORMANCE.md) | Benchmarks and optimization tips |
@@ -314,10 +390,11 @@ Artifacts (HTML reports, screenshots) are uploaded for every run and retained fo
 | [docs/SECURITY.md](docs/SECURITY.md) | Credential and secrets management |
 | [docs/DECISION_MAKING.md](docs/DECISION_MAKING.md) | Test coverage strategy and business impact |
 | [docs/KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) | Flaky tests, workarounds, and resolution tracking |
-| [docs/SCALABILITY.md](docs/SCALABILITY.md) | Growing from 58 to 500+ tests |
+| [docs/SCALABILITY.md](docs/SCALABILITY.md) | Growing from 64 to 500+ tests |
 | [docs/CI-CD.md](docs/CI-CD.md) | Detailed CI/CD workflow guide |
 | [docs/MONOREPO.md](docs/MONOREPO.md) | Monorepo structure and package guide |
 | [docs/VIDEO-WALKTHROUGH.md](docs/VIDEO-WALKTHROUGH.md) | Recording and portfolio tips |
+| [docs/assets/README.md](docs/assets/README.md) | How to capture and add visual assets |
 
 ---
 

@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npm run lint || true
+        run: npm run lint
 
       - name: Check TypeScript
-        run: npm run build || true
+        run: npm run build

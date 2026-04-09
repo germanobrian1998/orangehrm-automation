@@ -32,7 +32,10 @@ tests/**/*.d.ts
 tests/**/*.d.ts.map
 
 # k6 performance test scripts are intentionally plain JS — keep them tracked
-!tests/performance/*.js
+!tests/performance/smoke-load.js
+!tests/performance/soak-test.js
+!tests/performance/spike-test.js
+!tests/performance/stress-test.js
 !tests/performance/lib/*.js
 
 # Logs

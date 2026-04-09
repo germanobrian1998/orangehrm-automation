@@ -11,7 +11,7 @@ import {
   UpdateEmployeeDTO,
   EmployeeSearchDTO,
   EmployeeListResponse,
-} from '@types/employee.types';
+} from '../types/employee.types';
 
 export class EmployeeAPI extends BaseAPI {
   /**
@@ -33,9 +33,9 @@ export class EmployeeAPI extends BaseAPI {
   /**
    * Get employee by ID
    */
-  async get(employeeId: number): Promise<Employee> {
+  async getById(employeeId: number): Promise<Employee> {
     try {
-      const response = await this.get(`/api/v2/pim/employees/${employeeId}`);
+      const response = await this.get<{ data: Employee }>(`/api/v2/pim/employees/${employeeId}`);
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get employee ${employeeId}`, error);
@@ -61,9 +61,10 @@ export class EmployeeAPI extends BaseAPI {
   /**
    * Delete employee
    */
-  async delete(employeeId: number): Promise<void> {
+  async deleteById(employeeId: number): Promise<void> {
     try {
       this.logger.step(1, `Deleting employee ${employeeId}`);
+      // Calls BaseAPI.delete(endpoint: string) — not recursive
       await this.delete(`/api/v2/pim/employees/${employeeId}`);
       this.logger.info(`✓ Employee deleted`);
     } catch (error) {

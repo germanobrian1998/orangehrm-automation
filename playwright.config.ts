@@ -18,13 +18,14 @@ export default defineConfig({
   },
   reporter: [
     ['list'],
-    ['html', { open: 'never' }],
+    ['html', { open: 'never', attachmentsBaseURL: './' }],
     ['allure-playwright', { resultsDir: process.env.ALLURE_RESULTS_DIR || './allure-results' }],
   ],
   use: {
     baseURL,
     trace: environment === 'development' ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     actionTimeout: 10000,
     navigationTimeout: 30000,
   },
@@ -49,6 +50,16 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         // Capture performance metrics on every run
+        trace: 'on',
+      },
+    },
+    {
+      name: 'visual',
+      testDir: './tests/visual',
+      use: {
+        ...devices['Desktop Chrome'],
+        // Always capture screenshots for visual regression tests
+        screenshot: 'on',
         trace: 'on',
       },
     },

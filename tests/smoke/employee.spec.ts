@@ -23,7 +23,7 @@ test.describe('Employee Management Tests @employee', () => {
     await allure.story('User navigates to employee list');
     await allure.severity('major');
     await allure.description('Verify that an admin can navigate to the employee list');
-    await allure.tag('smoke', 'employee');
+    await allure.tags('smoke', 'employee');
 
     await allure.step('Navigate to employee module', async () => {
       await employeePage.navigateToEmployeeList();
