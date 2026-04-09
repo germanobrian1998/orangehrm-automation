@@ -39,7 +39,7 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 
 | Feature | Description |
 |---|---|
-| 🧪 **64+ Tests** | 21 test specs × 3 browsers — smoke, API, visual, cross-browser, and data-driven |
+| 🧪 **60+ Tests** | 19 test specs × 3 browsers — smoke, API, cross-browser, and data-driven |
 | 🌐 **Cross-Browser** | Chromium, Firefox, and WebKit (Safari) |
 | 🔌 **API Testing** | REST API validation integrated with UI tests |
 | 📄 **Page Object Model** | Clean separation of test logic and page structure |
@@ -47,7 +47,6 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | 🐳 **Docker Ready** | Containerised test execution |
 | ⚡ **CI/CD** | GitHub Actions with parallel browser execution |
 | 📊 **HTML Reports** | Playwright HTML report + Allure with screenshots and traces |
-| 🖼️ **Visual Regression** | Pixel-level baseline comparisons with `toHaveScreenshot` |
 | 🔄 **Anti-Flaky Patterns** | Explicit waits, retries, and stable selectors |
 
 ---
@@ -62,7 +61,6 @@ A **production-ready QA automation framework** for [OrangeHRM](https://opensourc
 | **CI/CD Pipeline** | GitHub Actions with parallel execution across 3 browsers |
 | **Anti-Flakiness Design** | Explicit waits, retries, stable selectors — see [KNOWN-ISSUES.md](docs/KNOWN-ISSUES.md) |
 | **API-First Setup** | 10× faster test data creation via REST API — no UI dependency |
-| **Visual Regression** | Pixel-level baseline comparisons using `toHaveScreenshot` |
 | **Performance Awareness** | Smoke suite < 10 min, full matrix < 35 min — see [PERFORMANCE.md](docs/PERFORMANCE.md) |
 | **Documentation** | 15+ guides covering architecture, strategy, interview prep, and operations |
 
@@ -147,23 +145,8 @@ npm run report
 | Trigger | What is saved | Where |
 |---------|--------------|-------|
 | Test failure | Full-page screenshot + trace | `test-results/` → uploaded as CI artifact |
-| Visual regression test | Pixel-level diff image | `test-results/` → uploaded as CI artifact |
 | CI run | HTML report with all screenshots | GitHub Pages + artifact download |
 | Trace enabled | Step-by-step DOM snapshots | Playwright trace viewer |
-
-### Visual Regression Tests
-
-The `tests/visual/` suite uses Playwright's `toHaveScreenshot()` to detect unintended UI changes:
-
-```bash
-# Create baselines (first time or after intentional UI change)
-npx playwright test tests/visual --update-snapshots --project=visual
-
-# Run comparisons (CI)
-npx playwright test tests/visual --project=visual
-```
-
-Baseline screenshots are committed to git and compared on every run. A pixel diff greater than 2% fails the test and attaches a diff image to the report.
 
 ### Download CI Artifacts
 
@@ -280,9 +263,8 @@ orangehrm-automation/
 | API | Employee API, Leave API | Chromium | — |
 | Cross-Browser | Login flow | Chromium, Firefox, WebKit | — |
 | Data-Driven | Login scenarios | Chromium | — |
-| Visual Regression | Login, Dashboard | Chromium (visual project) | `@visual` |
 
-**Total: 21 test specs — 64+ individual test runs**
+**Total: 19 test specs — 60+ individual test runs**
 
 ---
 
@@ -297,12 +279,6 @@ npm run test:smoke
 
 # Full regression suite
 npm run test:regression
-
-# Visual regression tests
-npx playwright test tests/visual --project=visual
-
-# Update visual baselines (after intentional UI changes)
-npx playwright test tests/visual --update-snapshots --project=visual
 
 # Specific browser
 npx playwright test --project=chromium
