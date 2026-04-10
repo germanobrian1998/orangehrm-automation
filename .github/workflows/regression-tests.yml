@@ -24,11 +24,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Remove problematic APT repositories
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list \
+                     /etc/apt/sources.list.d/azure-cli.list || true
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run Regression Tests
-        run: npm run test:regression
+        run: npx playwright test --grep @regression --config packages/orangehrm-suite/playwright.config.ts
 
       - name: Upload Test Report
         if: always()

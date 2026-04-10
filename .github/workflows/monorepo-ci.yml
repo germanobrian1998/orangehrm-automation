@@ -87,8 +87,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Remove problematic APT repositories
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list \
+                     /etc/apt/sources.list.d/azure-cli.list || true
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Lint orangehrm-suite
         run: npm run lint --workspace=packages/orangehrm-suite || true
@@ -127,8 +132,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Remove problematic APT repositories
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list \
+                     /etc/apt/sources.list.d/azure-cli.list || true
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Lint hrm-api-suite
         run: npm run lint --workspace=packages/hrm-api-suite || true
