@@ -173,7 +173,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run tests - ${{ matrix.browser }}
         run: npx playwright test --project=${{ matrix.browser }}
