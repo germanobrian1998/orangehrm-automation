@@ -1,5 +1,5 @@
 export const environment = {
-    baseUrl: 'https://api.orangehrm.com',
-    apiKey: 'YOUR_API_KEY',
+    baseUrl: 'https://opensource-demo.orangehrmlive.com',
+    apiKey: process.env.ORANGEHRM_API_KEY || '',
     // Add more configuration as needed
 };

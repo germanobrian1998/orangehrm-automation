@@ -1,6 +1,6 @@
 # 🎯 OrangeHRM QA Automation Suite
 
-[![Tests Passing](https://img.shields.io/badge/tests-58%2F58-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
+[![Tests Passing](https://img.shields.io/badge/tests-23%2F23-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Regression Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml)
 [![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml)

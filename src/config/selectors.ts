@@ -9,8 +9,8 @@
 export const selectors = {
   // ===== LOGIN PAGE =====
   login: {
-    usernameInput: '#orangehrm-username',
-    passwordInput: '#orangehrm-password',
+    usernameInput: 'input[name="username"]',
+    passwordInput: 'input[name="password"]',
     submitButton: 'button[type="submit"]',
     errorMessage: '.oxd-alert-content',
     logoutButton: 'button:has-text("Logout")',
