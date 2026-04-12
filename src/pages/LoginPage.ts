@@ -1,21 +1,18 @@
 import { BasePage } from './BasePage';
 import { expect } from '@playwright/test';
+import { selectors } from '../config/selectors';
+import { environment } from '../config/environment';
 
 export class LoginPage extends BasePage {
-  private usernameInput = 'input[name="username"]';
-  private passwordInput = 'input[name="password"]';
-  private submitButton = 'button[type="submit"]';
-  private errorAlert = '.oxd-alert';
-
   async navigateToLogin() {
-    await this.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    await this.goto(`${environment.baseUrl}/web/index.php/auth/login`);
     await this.waitForNavigation();
   }
 
   async login(username: string, password: string) {
-    await this.fillInput(this.usernameInput, username);
-    await this.fillInput(this.passwordInput, password);
-    await this.clickButton(this.submitButton);
+    await this.fillInput(selectors.login.usernameInput, username);
+    await this.fillInput(selectors.login.passwordInput, password);
+    await this.clickButton(selectors.login.submitButton);
     await this.waitForNavigation();
   }
 
@@ -24,7 +21,7 @@ export class LoginPage extends BasePage {
   }
 
   async verifyLoginError() {
-    const isErrorVisible = await this.isElementVisible(this.errorAlert);
+    const isErrorVisible = await this.isElementVisible(selectors.login.errorMessage);
     expect(isErrorVisible).toBe(true);
   }
 
