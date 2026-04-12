@@ -1,1 +1,0 @@
-Login page load time: 1969ms (threshold: 8000ms)
