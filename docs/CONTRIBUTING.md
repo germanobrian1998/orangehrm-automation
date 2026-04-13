@@ -23,29 +23,34 @@ How to add new tests, page objects, and API clients to the OrangeHRM Automation 
 1. **Fork** the repository to your GitHub account.
 
 2. **Clone** your fork:
+
    ```bash
    git clone https://github.com/<your-username>/orangehrm-automation.git
    cd orangehrm-automation
    ```
 
 3. **Install** dependencies:
+
    ```bash
    npm ci
    npx playwright install --with-deps chromium
    ```
 
 4. **Copy** the environment template:
+
    ```bash
    cp .env.example .env.local
    # Edit .env.local — this file is gitignored
    ```
 
 5. **Create** a feature branch:
+
    ```bash
    git checkout -b feat/add-recruitment-tests
    ```
 
 6. **Make changes**, verify everything passes:
+
    ```bash
    npm run lint
    npm run build
@@ -60,13 +65,13 @@ How to add new tests, page objects, and API clients to the OrangeHRM Automation 
 
 ### Branch naming
 
-| Prefix | When to use | Example |
-|--------|-------------|---------|
-| `feat/` | New test or feature | `feat/add-recruitment-tests` |
-| `fix/` | Bug fix or flaky test fix | `fix/login-timeout-ci` |
-| `docs/` | Documentation only | `docs/update-best-practices` |
-| `chore/` | Build, CI, dependency updates | `chore/upgrade-playwright-1.45` |
-| `refactor/` | Code restructuring | `refactor/extract-employee-helpers` |
+| Prefix      | When to use                   | Example                             |
+| ----------- | ----------------------------- | ----------------------------------- |
+| `feat/`     | New test or feature           | `feat/add-recruitment-tests`        |
+| `fix/`      | Bug fix or flaky test fix     | `fix/login-timeout-ci`              |
+| `docs/`     | Documentation only            | `docs/update-best-practices`        |
+| `chore/`    | Build, CI, dependency updates | `chore/upgrade-playwright-1.45`     |
+| `refactor/` | Code restructuring            | `refactor/extract-employee-helpers` |
 
 ### Keep branches short-lived
 
@@ -93,14 +98,14 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Types
 
-| Type | When |
-|------|------|
-| `feat` | New test, page object, or feature |
-| `fix` | Bug fix, flaky test correction |
-| `docs` | Documentation only |
+| Type       | When                                 |
+| ---------- | ------------------------------------ |
+| `feat`     | New test, page object, or feature    |
+| `fix`      | Bug fix, flaky test correction       |
+| `docs`     | Documentation only                   |
 | `refactor` | Code change without behaviour change |
-| `chore` | Build, CI, dependencies |
-| `test` | Adding or updating tests only |
+| `chore`    | Build, CI, dependencies              |
+| `test`     | Adding or updating tests only        |
 
 ### Examples
 
@@ -172,13 +177,14 @@ test.describe('Recruitment @smoke', () => {
 
 **Step 2 — Tag the test correctly:**
 
-| Tag | Suite | Trigger |
-|-----|-------|---------|
-| `@smoke` | Smoke | Every push/PR |
-| `@regression` | Regression | Push to main + nightly |
-| (no tag) | Full matrix | Push/PR |
+| Tag           | Suite       | Trigger                |
+| ------------- | ----------- | ---------------------- |
+| `@smoke`      | Smoke       | Every push/PR          |
+| `@regression` | Regression  | Push to main + nightly |
+| (no tag)      | Full matrix | Push/PR                |
 
 **Step 3 — Verify it runs:**
+
 ```bash
 npx playwright test tests/smoke/recruitment.spec.ts --headed
 ```
@@ -256,6 +262,7 @@ export { RecruitmentPage } from './RecruitmentPage'; // ← add here
 ```
 
 **Step 4 — Write a quick unit test:**
+
 ```bash
 npx playwright test --grep "Recruitment" --headed
 ```
@@ -357,11 +364,13 @@ test.describe('Recruitment API', () => {
 ## 🔄 Pull Request Process
 
 1. Ensure your branch is up to date with `main`:
+
    ```bash
    git fetch origin && git rebase origin/main
    ```
 
 2. Run the full quality check locally:
+
    ```bash
    npm run lint && npm run build && npm run test:smoke
    ```
@@ -390,6 +399,7 @@ test.describe('Recruitment API', () => {
 Before submitting a PR, verify all of these:
 
 **Tests:**
+
 - [ ] New tests follow the AAA pattern
 - [ ] Tests are tagged correctly (`@smoke`, `@regression`, or untagged)
 - [ ] Tests clean up any data they create (`afterEach`)
@@ -397,6 +407,7 @@ Before submitting a PR, verify all of these:
 - [ ] No `test.only()` left in test files
 
 **Code quality:**
+
 - [ ] No selectors in test files (all in page objects)
 - [ ] No hardcoded credentials (use `config.adminPassword`)
 - [ ] No `page.waitForTimeout()` (use explicit waits)
@@ -404,10 +415,12 @@ Before submitting a PR, verify all of these:
 - [ ] ESLint passes (`npm run lint`)
 
 **Documentation:**
+
 - [ ] New page objects have JSDoc comments for public methods (if complex)
 - [ ] New scripts added to `package.json` are documented in README
 
 **CI:**
+
 - [ ] Smoke tests pass (`npm run test:smoke`)
 - [ ] No `console.log` debugging left in production code
 

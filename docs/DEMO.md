@@ -47,6 +47,7 @@ npm run test:smoke -- --headed --project=chromium
 ```
 
 **Expected output:**
+
 ```
 Running 6 tests using 2 workers
 
@@ -67,6 +68,7 @@ npm run report
 ```
 
 The Playwright HTML report opens in your browser. It shows:
+
 - Test names, durations, and pass/fail status
 - Screenshots attached on failure
 - Trace files for debugging (click **Retry** on any failed test)
@@ -80,6 +82,7 @@ npx playwright show-trace test-results/*/trace.zip
 ```
 
 The **Playwright Trace Viewer** shows:
+
 - Each action with its exact timing
 - DOM snapshot before and after every step
 - Network requests and console logs
@@ -135,6 +138,7 @@ npm run report
 ```
 
 **Report features:**
+
 - 📋 Test list with pass/fail indicators
 - ⏱️ Per-test and per-step duration
 - 📸 Screenshots attached to failed tests
@@ -143,6 +147,7 @@ npm run report
 - 🔖 Filter by test name, file, tag, or status
 
 **Share the report:**
+
 ```bash
 # Zip the report for sharing
 zip -r playwright-report.zip playwright-report/
@@ -166,6 +171,7 @@ npm run test:report:serve
 ```
 
 **Allure report sections:**
+
 - **Overview** — Pass/fail donut, total tests, duration
 - **Suites** — Tests grouped by Epic → Feature → Story (matches the `allure.*` annotations in test files)
 - **Graphs** — Pass rate trends, duration trends
@@ -180,13 +186,13 @@ npm run test:report:serve
 
 → **[GitHub Actions](https://github.com/germanobrian1998/orangehrm-automation/actions)**
 
-| Workflow | When it runs | What to look for |
-|---|---|---|
-| 🔥 Smoke Tests | Every push & PR | Fast 5-min validation |
-| 🔄 Regression Tests | Push to main + nightly | Full suite pass rate |
-| 📊 Code Quality | PRs to main | ESLint + TypeScript |
-| 🌐 Full Matrix | Push to main + nightly | 3-browser results |
-| 📄 Publish Report | Push to main | Deploy report to GitHub Pages |
+| Workflow            | When it runs           | What to look for              |
+| ------------------- | ---------------------- | ----------------------------- |
+| 🔥 Smoke Tests      | Every push & PR        | Fast 5-min validation         |
+| 🔄 Regression Tests | Push to main + nightly | Full suite pass rate          |
+| 📊 Code Quality     | PRs to main            | ESLint + TypeScript           |
+| 🌐 Full Matrix      | Push to main + nightly | 3-browser results             |
+| 📄 Publish Report   | Push to main           | Deploy report to GitHub Pages |
 
 ### Download CI artifacts
 
@@ -211,11 +217,11 @@ npm run test:regression
 
 **Browser project summary:**
 
-| Browser | Engine | Viewport | Typical Duration |
-|---------|--------|---------|-----------------|
-| Chromium | Blink | 1280×720 | ~5 min |
-| Firefox | Gecko | 1280×720 | ~5.5 min |
-| WebKit | WebKit | 1280×720 | ~6 min |
+| Browser  | Engine | Viewport | Typical Duration |
+| -------- | ------ | -------- | ---------------- |
+| Chromium | Blink  | 1280×720 | ~5 min           |
+| Firefox  | Gecko  | 1280×720 | ~5.5 min         |
+| WebKit   | WebKit | 1280×720 | ~6 min           |
 
 CI runs all three in parallel, reducing total time to the longest individual run.
 
@@ -234,6 +240,7 @@ npm run load:smoke
 ```
 
 **What is measured:**
+
 - Page load time (navigation timing)
 - Time to First Contentful Paint (FCP)
 - Time to Interactive (TTI)

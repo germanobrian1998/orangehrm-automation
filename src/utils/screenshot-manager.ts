@@ -59,7 +59,7 @@ export class ScreenshotManager {
    * Compare screenshots (useful for visual regression)
    * Note: This is a simple implementation, use Percy or similar for production
    */
-  async compare(baseline: string, current: string): Promise<boolean> {
+  async compare(_baseline: string, _current: string): Promise<boolean> {
     // This is a placeholder for visual regression testing
     // In production, you'd use tools like:
     // - Percy.io

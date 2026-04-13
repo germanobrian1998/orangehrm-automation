@@ -62,6 +62,7 @@ export class LoginPage extends BasePage {
 ```
 
 **Rules:**
+
 - Selectors live **only** in the page class — never in test files
 - Page methods return `Promise<void>` for actions and `Promise<boolean | string>` for queries
 - Keep page classes focused: one class per page or major page section
@@ -99,33 +100,33 @@ Choose selectors that survive UI redesigns and refactors.
 
 **Priority order (most stable → least stable):**
 
-| Priority | Selector type | Example | Stability |
-|----------|--------------|---------|-----------|
-| 1 | `data-testid` | `[data-testid="login-btn"]` | ✅ Highest — test-specific |
-| 2 | ARIA role + name | `getByRole('button', { name: 'Login' })` | ✅ Semantic |
-| 3 | Form attributes | `button[type="submit"]`, `input[name="username"]` | ✅ Structural |
-| 4 | Placeholder / label | `getByPlaceholder('Username')` | ✅ User-visible |
-| 5 | Semantic CSS class | `.oxd-button--main` | ⚠️ Brittle on refactor |
-| 6 | Position-based | `div:nth-child(2) button` | ❌ Breaks on reorder |
-| 7 | XPath | `//button[contains(text(),'Login')]` | ❌ Last resort |
+| Priority | Selector type       | Example                                           | Stability                  |
+| -------- | ------------------- | ------------------------------------------------- | -------------------------- |
+| 1        | `data-testid`       | `[data-testid="login-btn"]`                       | ✅ Highest — test-specific |
+| 2        | ARIA role + name    | `getByRole('button', { name: 'Login' })`          | ✅ Semantic                |
+| 3        | Form attributes     | `button[type="submit"]`, `input[name="username"]` | ✅ Structural              |
+| 4        | Placeholder / label | `getByPlaceholder('Username')`                    | ✅ User-visible            |
+| 5        | Semantic CSS class  | `.oxd-button--main`                               | ⚠️ Brittle on refactor     |
+| 6        | Position-based      | `div:nth-child(2) button`                         | ❌ Breaks on reorder       |
+| 7        | XPath               | `//button[contains(text(),'Login')]`              | ❌ Last resort             |
 
 ```typescript
 // ✅ Best — explicitly added for testing
-page.getByTestId('employee-save-btn')
+page.getByTestId('employee-save-btn');
 
 // ✅ Great — semantic, accessible
-page.getByRole('button', { name: 'Save' })
-page.getByRole('textbox', { name: 'First Name' })
+page.getByRole('button', { name: 'Save' });
+page.getByRole('textbox', { name: 'First Name' });
 
 // ✅ Good — stable form attributes
-page.locator('button[type="submit"]')
-page.locator('input[placeholder="Username"]')
+page.locator('button[type="submit"]');
+page.locator('input[placeholder="Username"]');
 
 // ⚠️ Fragile — CSS classes can change on redesign
-page.locator('.oxd-button--medium')
+page.locator('.oxd-button--medium');
 
 // ❌ Avoid — breaks on any DOM reordering
-page.locator('div:nth-child(2) > .container > button')
+page.locator('div:nth-child(2) > .container > button');
 ```
 
 ### Avoiding selector conflicts
@@ -137,9 +138,7 @@ When a selector matches multiple elements, always narrow it:
 await page.locator('button:has-text("Save")').click();
 
 // ✅ Scoped to a specific form section
-await page.locator('[data-testid="personal-info-form"]')
-          .locator('button:has-text("Save")')
-          .click();
+await page.locator('[data-testid="personal-info-form"]').locator('button:has-text("Save")').click();
 
 // ✅ Or use the index when order is guaranteed
 await page.locator('button:has-text("Save")').first().click();
@@ -151,11 +150,11 @@ await page.locator('button:has-text("Save")').first().click();
 
 Every test should be divided into three clearly separated phases:
 
-| Phase | Purpose |
-|-------|---------|
+| Phase       | Purpose                                                               |
+| ----------- | --------------------------------------------------------------------- |
 | **Arrange** | Set up preconditions: navigate, create data, instantiate page objects |
-| **Act** | Perform the single action under test |
-| **Assert** | Verify the expected result with Playwright's web-first assertions |
+| **Act**     | Perform the single action under test                                  |
+| **Assert**  | Verify the expected result with Playwright's web-first assertions     |
 
 ```typescript
 import { test, expect } from '@playwright/test';
@@ -180,6 +179,7 @@ test.describe('Employee Management', () => {
 ```
 
 **Rules:**
+
 - One action per test; if two independent things need testing, write two tests
 - Never assert inside the Arrange phase
 - Keep Act as short as possible — ideally a single page object method call
@@ -196,14 +196,11 @@ await page.click('button[type="submit"]');
 await page.fill('#txtUsername', 'Admin');
 
 // ✅ Wait for navigation after clicking a link
-await Promise.all([
-  page.waitForURL('**/dashboard/**'),
-  page.click('.login-btn'),
-]);
+await Promise.all([page.waitForURL('**/dashboard/**'), page.click('.login-btn')]);
 
 // ✅ Wait for a specific API response (SPA data loading)
 await Promise.all([
-  page.waitForResponse(r => r.url().includes('/api/v2/pim/employees')),
+  page.waitForResponse((r) => r.url().includes('/api/v2/pim/employees')),
   page.click('[data-testid="employee-menu"]'),
 ]);
 
@@ -217,11 +214,11 @@ await page.waitForTimeout(3000);
 
 ### Choosing the right `waitForLoadState`
 
-| State | Waits until | Use when |
-|-------|------------|----------|
-| `'domcontentloaded'` | HTML parsed | SPA navigation (fastest) |
-| `'load'` | All resources loaded | Page has images/scripts needed |
-| `'networkidle'` | No network for 500ms | Dynamic data loading completes |
+| State                | Waits until          | Use when                       |
+| -------------------- | -------------------- | ------------------------------ |
+| `'domcontentloaded'` | HTML parsed          | SPA navigation (fastest)       |
+| `'load'`             | All resources loaded | Page has images/scripts needed |
+| `'networkidle'`      | No network for 500ms | Dynamic data loading completes |
 
 ---
 
@@ -243,8 +240,7 @@ await expect.soft(page.locator('.employee-name')).toBeVisible();
 await expect.soft(page.locator('.employee-id')).toHaveText('0001');
 
 // ✅ Custom failure message
-await expect(page.locator('.error'), 'Error message should appear on invalid login')
-  .toBeVisible();
+await expect(page.locator('.error'), 'Error message should appear on invalid login').toBeVisible();
 
 // ❌ Gets the value immediately — may fail before element updates
 const text = await page.locator('h6').textContent();
@@ -336,8 +332,12 @@ const employee = {
 
 ```typescript
 // tests/data-driven/login.spec.ts
-const rows = fs.readFileSync('tests/data-driven/login-data.csv', 'utf-8')
-  .split('\n').slice(1).filter(Boolean).map(r => r.split(','));
+const rows = fs
+  .readFileSync('tests/data-driven/login-data.csv', 'utf-8')
+  .split('\n')
+  .slice(1)
+  .filter(Boolean)
+  .map((r) => r.split(','));
 
 for (const [username, password, expected] of rows) {
   test(`login: ${username} expects ${expected}`, async ({ page }) => {
@@ -361,6 +361,7 @@ tests/
 ```
 
 **Rules:**
+
 - One test file per feature area (`login.spec.ts`, `leave.spec.ts`)
 - Group related tests with `test.describe`
 - Use `test.beforeEach` for shared setup; `test.afterEach` for cleanup
@@ -383,10 +384,13 @@ test.describe('Employee API', () => {
 
   test('returns employee list when authenticated', async ({ request }) => {
     // Arrange: API auth (faster than UI login)
-    const authResponse = await request.post(
-      '/web/index.php/api/v2/auth/login',
-      { data: { username: config.adminUsername, password: config.adminPassword, grantType: 'password' } }
-    );
+    const authResponse = await request.post('/web/index.php/api/v2/auth/login', {
+      data: {
+        username: config.adminUsername,
+        password: config.adminPassword,
+        grantType: 'password',
+      },
+    });
     const { access_token } = await authResponse.json();
 
     // Act
@@ -417,6 +421,7 @@ projects: [
 ```
 
 **Tips:**
+
 - Run multi-browser in CI; use `--project=chromium` locally for speed
 - Skip known browser-specific issues, don't ignore them:
   ```typescript
@@ -463,14 +468,14 @@ async getCount(selector: any) {
 
 ### Naming conventions
 
-| Entity | Convention | Example |
-|--------|-----------|---------|
-| Test files | `kebab-case.spec.ts` | `leave-request.spec.ts` |
-| Page classes | `PascalCase` | `LeaveRequestPage` |
-| Page files | `PascalCase.ts` | `LeaveRequestPage.ts` |
-| Test suites | Noun phrase | `'Leave Request Submission'` |
-| Test cases | Verb phrase describing behaviour | `'submits a leave request successfully'` |
-| Private selectors | `camelCase` | `submitButton`, `errorAlert` |
+| Entity            | Convention                       | Example                                  |
+| ----------------- | -------------------------------- | ---------------------------------------- |
+| Test files        | `kebab-case.spec.ts`             | `leave-request.spec.ts`                  |
+| Page classes      | `PascalCase`                     | `LeaveRequestPage`                       |
+| Page files        | `PascalCase.ts`                  | `LeaveRequestPage.ts`                    |
+| Test suites       | Noun phrase                      | `'Leave Request Submission'`             |
+| Test cases        | Verb phrase describing behaviour | `'submits a leave request successfully'` |
+| Private selectors | `camelCase`                      | `submitButton`, `errorAlert`             |
 
 ### Before every commit
 
@@ -526,8 +531,12 @@ await loginPage.login(config.adminUsername, config.adminPassword);
 ```typescript
 // ❌ Second test depends on first test's side effect
 let createdId: string;
-test('create', async () => { createdId = await create(); });
-test('edit', async () => { await edit(createdId); }); // ← ordering dependency
+test('create', async () => {
+  createdId = await create();
+});
+test('edit', async () => {
+  await edit(createdId);
+}); // ← ordering dependency
 
 // ✅ Each test is self-contained
 test('edit employee', async ({ request, page }) => {
@@ -545,7 +554,10 @@ test('edit employee', async ({ request, page }) => {
 const data: any = await response.json();
 
 // ✅ Define a proper type
-interface EmployeeResponse { data: Employee[]; meta: Meta; }
+interface EmployeeResponse {
+  data: Employee[];
+  meta: Meta;
+}
 const data: EmployeeResponse = await response.json();
 ```
 

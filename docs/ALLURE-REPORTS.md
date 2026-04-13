@@ -5,6 +5,7 @@ Comprehensive guide for generating, viewing, and understanding Allure test repor
 ## Overview
 
 [Allure Framework](https://allurereport.org/) provides rich, interactive test reports with:
+
 - Visual test result dashboard
 - Test history and trends
 - Epic / Feature / Story hierarchy
@@ -54,14 +55,14 @@ npm run test:report:history
 
 After opening the report you will see several views:
 
-| View | Description |
-|------|-------------|
-| **Overview** | Summary of passed / failed / broken / skipped tests |
-| **Suites** | Tests grouped by test file / describe block |
-| **Behaviors** | Tests grouped by Epic → Feature → Story hierarchy |
-| **Timeline** | When each test ran (useful for parallel runs) |
-| **Categories** | Failures grouped by defect type |
-| **Graphs** | Charts for status distribution and duration |
+| View           | Description                                         |
+| -------------- | --------------------------------------------------- |
+| **Overview**   | Summary of passed / failed / broken / skipped tests |
+| **Suites**     | Tests grouped by test file / describe block         |
+| **Behaviors**  | Tests grouped by Epic → Feature → Story hierarchy   |
+| **Timeline**   | When each test ran (useful for parallel runs)       |
+| **Categories** | Failures grouped by defect type                     |
+| **Graphs**     | Charts for status distribution and duration         |
 
 ---
 
@@ -81,11 +82,11 @@ test('my test', async () => {
 
 ### Hierarchy used in this project
 
-| Level | Examples |
-|-------|---------|
-| **Epic** | Authentication, Employee Management |
-| **Feature** | Login, Employee List, Create Employee |
-| **Story** | User logs in with valid credentials, Admin creates new employee |
+| Level       | Examples                                                        |
+| ----------- | --------------------------------------------------------------- |
+| **Epic**    | Authentication, Employee Management                             |
+| **Feature** | Login, Employee List, Create Employee                           |
+| **Story**   | User logs in with valid credentials, Admin creates new employee |
 
 ---
 
@@ -97,13 +98,13 @@ Severity is set per test and is shown as a label in the report:
 await allure.severity('critical'); // blocker | critical | normal | minor | trivial
 ```
 
-| Severity | Usage |
-|----------|-------|
-| `blocker` | System cannot be used at all |
-| `critical` | Core functionality broken |
-| `normal` | Standard business functionality |
-| `minor` | Minor inconvenience |
-| `trivial` | Cosmetic issues |
+| Severity   | Usage                           |
+| ---------- | ------------------------------- |
+| `blocker`  | System cannot be used at all    |
+| `critical` | Core functionality broken       |
+| `normal`   | Standard business functionality |
+| `minor`    | Minor inconvenience             |
+| `trivial`  | Cosmetic issues                 |
 
 ---
 
@@ -146,8 +147,8 @@ The file `allure-configs/categories.json` defines how failures are classified:
 ```json
 [
   { "name": "Product defects", "matchedStatuses": ["failed"] },
-  { "name": "Test defects",    "matchedStatuses": ["broken"] },
-  { "name": "Skipped",         "matchedStatuses": ["skipped"] }
+  { "name": "Test defects", "matchedStatuses": ["broken"] },
+  { "name": "Skipped", "matchedStatuses": ["skipped"] }
 ]
 ```
 
@@ -170,6 +171,7 @@ The [allure-report.yml](./../.github/workflows/allure-report.yml) workflow:
 4. Posts a comment on PRs with a direct link to the report
 
 Report URL pattern:
+
 ```
 https://<owner>.github.io/<repo>/allure/<run_number>/
 ```
@@ -194,9 +196,9 @@ npm run test:report:history
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `ALLURE_RESULTS_DIR` | `./allure-results` | Where Allure writes raw results |
-| `ALLURE_REPORT_DIR` | `./allure-report` | Where the generated HTML report is saved |
+| Variable             | Default            | Description                              |
+| -------------------- | ------------------ | ---------------------------------------- |
+| `ALLURE_RESULTS_DIR` | `./allure-results` | Where Allure writes raw results          |
+| `ALLURE_REPORT_DIR`  | `./allure-report`  | Where the generated HTML report is saved |
 
 These are set in `.env.ci` for CI runs.

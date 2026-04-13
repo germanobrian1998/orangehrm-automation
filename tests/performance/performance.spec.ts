@@ -64,7 +64,7 @@ test.describe('Performance Tests', () => {
     const elapsed = Date.now() - start;
 
     console.log(
-      `Parallel API requests (${endpoints.length}) completed in: ${elapsed}ms (threshold: ${THRESHOLDS.dashboardLoad}ms)`,
+      `Parallel API requests (${endpoints.length}) completed in: ${elapsed}ms (threshold: ${THRESHOLDS.dashboardLoad}ms)`
     );
 
     for (const response of responses) {
@@ -83,9 +83,7 @@ test.describe('Performance Tests', () => {
       const timing = (performance as any).getEntriesByType('navigation')[0];
       return {
         domInteractive: Math.round(timing.domInteractive),
-        domContentLoaded: Math.round(
-          timing.domContentLoadedEventEnd - timing.startTime,
-        ),
+        domContentLoaded: Math.round(timing.domContentLoadedEventEnd - timing.startTime),
         loadComplete: Math.round(timing.loadEventEnd - timing.startTime),
       };
     });

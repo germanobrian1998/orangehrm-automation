@@ -50,7 +50,9 @@ test.describe('Login Tests @smoke', () => {
     await allure.feature('Login');
     await allure.story('Validation error shown for empty fields');
     await allure.severity('minor');
-    await allure.description('Verify validation error is displayed when submitting empty login form');
+    await allure.description(
+      'Verify validation error is displayed when submitting empty login form'
+    );
 
     await allure.step('Submit empty login form', async () => {
       await loginPage.clickButton('button[type="submit"]');

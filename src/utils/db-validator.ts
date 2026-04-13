@@ -9,7 +9,7 @@ export class DBValidator {
    * Validate that response contains expected data
    */
   static validateResponseData<T>(
-    response: any,
+    response: Record<string, unknown>,
     expectedFields: (keyof T)[]
   ): { isValid: boolean; missingFields: string[] } {
     const missingFields: string[] = [];
@@ -36,7 +36,7 @@ export class DBValidator {
   /**
    * Validate that pagination metadata is correct
    */
-  static validatePagination(data: any): {
+  static validatePagination(data: Record<string, unknown>): {
     isValid: boolean;
     errors: string[];
   } {
@@ -85,8 +85,8 @@ export class DBValidator {
   /**
    * Validate that object matches expected schema
    */
-  static validateSchema<T extends Record<string, any>>(
-    data: any,
+  static validateSchema<T extends Record<string, unknown>>(
+    data: Record<string, unknown>,
     schema: Record<keyof T, 'string' | 'number' | 'boolean' | 'object' | 'array'>
   ): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
@@ -114,19 +114,21 @@ export class DBValidator {
   /**
    * Compare two objects for deep equality
    */
-  static deepEqual(obj1: any, obj2: any): boolean {
+  static deepEqual(obj1: unknown, obj2: unknown): boolean {
     if (obj1 === obj2) return true;
     if (typeof obj1 !== 'object' || obj1 === null) return false;
     if (typeof obj2 !== 'object' || obj2 === null) return false;
 
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
+    const record1 = obj1 as Record<string, unknown>;
+    const record2 = obj2 as Record<string, unknown>;
+    const keys1 = Object.keys(record1);
+    const keys2 = Object.keys(record2);
 
     if (keys1.length !== keys2.length) return false;
 
     for (const key of keys1) {
       if (!keys2.includes(key)) return false;
-      if (!this.deepEqual(obj1[key], obj2[key])) return false;
+      if (!this.deepEqual(record1[key], record2[key])) return false;
     }
 
     return true;
@@ -135,11 +137,11 @@ export class DBValidator {
   /**
    * Extract specific fields from response
    */
-  static extractFields<T extends Record<string, any>>(
-    data: any,
+  static extractFields<T extends Record<string, unknown>>(
+    data: T,
     fields: (keyof T)[]
   ): Partial<T> {
-    const result: any = {};
+    const result: Partial<T> = {};
     for (const field of fields) {
       result[field] = data[field];
     }

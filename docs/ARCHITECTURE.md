@@ -19,16 +19,17 @@ This document explains the **WHY** behind architectural choices. Understanding t
 
 **Why Playwright?**
 
-| Aspect | Playwright | Cypress | Selenium |
-|--------|-----------|---------|----------|
+| Aspect              | Playwright                    | Cypress               | Selenium       |
+| ------------------- | ----------------------------- | --------------------- | -------------- |
 | **Browser Support** | Chrome, Firefox, Safari, Edge | Chrome, Firefox, Edge | All (but slow) |
-| **Speed** | ⚡ Fast (native execution) | ⚡ Fast | 🐢 Slow |
-| **API Testing** | ✅ Built-in | ❌ No | �� No |
-| **Parallel** | ✅ Native | ⚠️ Paid | ❌ Difficult |
-| **Maintenance** | ✅ Excellent | ⚠️ Occasional breaks | ⚠️ Flaky |
-| **Learning Curve** | Low | Low | Moderate |
+| **Speed**           | ⚡ Fast (native execution)    | ⚡ Fast               | 🐢 Slow        |
+| **API Testing**     | ✅ Built-in                   | ❌ No                 | �� No          |
+| **Parallel**        | ✅ Native                     | ⚠️ Paid               | ❌ Difficult   |
+| **Maintenance**     | ✅ Excellent                  | ⚠️ Occasional breaks  | ⚠️ Flaky       |
+| **Learning Curve**  | Low                           | Low                   | Moderate       |
 
 **Decision**: Playwright is the best choice for:
+
 - Speed (important for CI/CD)
 - API testing (native support)
 - Parallel execution (built-in sharding)
@@ -46,7 +47,7 @@ class LoginPageBAD {
   get usernameInput() { return this.page.locator('#username'); }
   get passwordInput() { return this.page.locator('#password'); }
   get submitButton() { return this.page.locator('button[type="submit"]'); }
-  
+
   async login(username, password) {
     // Repetitive, doesn't add value
   }
@@ -58,7 +59,7 @@ class LoginPageGOOD {
     // Single, reusable method
     // Handles waits, error checking, logging
   }
-  
+
   async loginAndExpectError(credentials) {
     // Different workflow, separate method
   }
@@ -119,16 +120,16 @@ TypeScript
 export const test = base.extend({
   uniqueEmployee: async ({ page }, use) => {
     const api = new EmployeeAPI(page);
-    
+
     // Setup
     const employee = await api.create({
       firstName: `Test_${Date.now()}`,
       employeeId: `EMP_${randomId()}`
     });
-    
+
     // Test runs here
     await use(employee);
-    
+
     // Teardown (automatic!)
     await api.delete(employee.id);
   }
@@ -172,3 +173,4 @@ Speed: API setup means faster CI/CD
 Reliability: Fewer flaky tests due to smart waits
 Professionalism: Looks like real QA team's work
 For questions on specific decisions, check individual files or KNOWN-ISSUES.md
+```

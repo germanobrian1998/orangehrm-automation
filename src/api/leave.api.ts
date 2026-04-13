@@ -3,13 +3,10 @@
  * Handles all leave-related API calls
  */
 
-import { Page } from '@playwright/test';
 import { BaseAPI } from './base.api';
 import {
   LeaveRequest,
   CreateLeaveRequestDTO,
-  ApproveLeaveDTO,
-  RejectLeaveDTO,
   LeaveBalance,
   LeaveListResponse,
 } from '../types/leave.types';
@@ -54,10 +51,7 @@ export class LeaveAPI extends BaseAPI {
       );
       return response.data;
     } catch (error) {
-      this.logger.error(
-        `Failed to get leave balance for employee ${employeeId}`,
-        error
-      );
+      this.logger.error(`Failed to get leave balance for employee ${employeeId}`, error);
       throw error;
     }
   }
@@ -106,12 +100,15 @@ export class LeaveAPI extends BaseAPI {
 
       if (filters) {
         const queryParams = new URLSearchParams(
-          Object.entries(filters).reduce((acc, [key, value]) => {
-            if (value !== undefined && value !== null) {
-              acc[key] = String(value);
-            }
-            return acc;
-          }, {} as Record<string, string>)
+          Object.entries(filters).reduce(
+            (acc, [key, value]) => {
+              if (value !== undefined && value !== null) {
+                acc[key] = String(value);
+              }
+              return acc;
+            },
+            {} as Record<string, string>
+          )
         ).toString();
 
         if (queryParams) {
