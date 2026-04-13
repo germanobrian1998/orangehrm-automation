@@ -18,7 +18,9 @@ export class LeaveAPI extends BaseAPI {
   async applyLeave(data: CreateLeaveRequestDTO): Promise<LeaveRequest> {
     try {
       this.logger.step(1, `Applying leave from ${data.fromDate} to ${data.toDate}`);
-      const response = await this.post('/api/v2/leave/leave-requests', { data });
+      const response = await this.post<{ data: LeaveRequest }>('/api/v2/leave/leave-requests', {
+        data,
+      });
       const leaveRequest = response.data;
       this.logger.info(`✓ Leave request created: ${leaveRequest.id}`);
       return leaveRequest;
@@ -33,7 +35,9 @@ export class LeaveAPI extends BaseAPI {
    */
   async getLeaveRequest(leaveRequestId: number): Promise<LeaveRequest> {
     try {
-      const response = await this.get(`/api/v2/leave/leave-requests/${leaveRequestId}`);
+      const response = await this.get<{ data: LeaveRequest }>(
+        `/api/v2/leave/leave-requests/${leaveRequestId}`
+      );
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get leave request ${leaveRequestId}`, error);
@@ -46,7 +50,7 @@ export class LeaveAPI extends BaseAPI {
    */
   async getLeaveBalance(employeeId: number, leaveTypeId: number): Promise<LeaveBalance> {
     try {
-      const response = await this.get(
+      const response = await this.get<{ data: LeaveBalance }>(
         `/api/v2/leave/employees/${employeeId}/leave-balance?leaveTypeId=${leaveTypeId}`
       );
       return response.data;

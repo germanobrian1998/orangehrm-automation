@@ -30,10 +30,10 @@ jobs:
         run: npm ci
 
       - name: Lint core
-        run: npm run lint --workspace=packages/core || true
+        run: npm run lint --workspace=packages/core
 
       - name: Build core
-        run: npm run build --workspace=packages/core || true
+        run: npm run build --workspace=packages/core
 
   # ──────────────────────────────────────────────
   # Job 2: shared-utils package
@@ -59,10 +59,10 @@ jobs:
         run: npm ci
 
       - name: Lint shared-utils
-        run: npm run lint --workspace=packages/shared-utils || true
+        run: npm run lint --workspace=packages/shared-utils
 
       - name: Build shared-utils
-        run: npm run build --workspace=packages/shared-utils || true
+        run: npm run build --workspace=packages/shared-utils
 
   # ──────────────────────────────────────────────
   # Job 3: orangehrm-suite package
@@ -96,10 +96,10 @@ jobs:
         run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Lint orangehrm-suite
-        run: npm run lint --workspace=packages/orangehrm-suite || true
+        run: npm run lint --workspace=packages/orangehrm-suite
 
       - name: Run OrangeHRM smoke tests
-        run: npm run test:smoke --workspace=packages/orangehrm-suite || true
+        run: npm run test:smoke --workspace=packages/orangehrm-suite
 
       - name: Upload OrangeHRM test results
         if: always()
@@ -141,10 +141,10 @@ jobs:
         run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Lint hrm-api-suite
-        run: npm run lint --workspace=packages/hrm-api-suite || true
+        run: npm run lint --workspace=packages/hrm-api-suite
 
       - name: Run API tests
-        run: npm run test:api --workspace=packages/hrm-api-suite || true
+        run: npm run test:api --workspace=packages/hrm-api-suite
 
       - name: Upload API test results
         if: always()

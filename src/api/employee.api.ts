@@ -19,7 +19,7 @@ export class EmployeeAPI extends BaseAPI {
   async create(data: CreateEmployeeDTO): Promise<Employee> {
     try {
       this.logger.step(1, 'Creating employee via API');
-      const response = await this.post('/api/v2/pim/employees', { data });
+      const response = await this.post<{ data: Employee }>('/api/v2/pim/employees', { data });
       const employee = response.data;
       this.logger.info(`✓ Employee created: ${employee.id}`);
       return employee;
@@ -48,7 +48,9 @@ export class EmployeeAPI extends BaseAPI {
   async update(employeeId: number, data: UpdateEmployeeDTO): Promise<Employee> {
     try {
       this.logger.step(1, `Updating employee ${employeeId}`);
-      const response = await this.put(`/api/v2/pim/employees/${employeeId}`, { data });
+      const response = await this.put<{ data: Employee }>(`/api/v2/pim/employees/${employeeId}`, {
+        data,
+      });
       this.logger.info(`✓ Employee updated`);
       return response.data;
     } catch (error) {

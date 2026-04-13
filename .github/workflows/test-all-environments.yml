@@ -76,6 +76,7 @@ jobs:
   test-ci:
     name: Tests – CI
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -88,6 +89,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

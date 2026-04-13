@@ -8,8 +8,8 @@ export class DBValidator {
   /**
    * Validate that response contains expected data
    */
-  static validateResponseData<T>(
-    response: Record<string, unknown>,
+  static validateResponseData<T extends Record<string, unknown>>(
+    response: T,
     expectedFields: (keyof T)[]
   ): { isValid: boolean; missingFields: string[] } {
     const missingFields: string[] = [];
@@ -60,12 +60,12 @@ export class DBValidator {
       if (typeof totalPages !== 'number') errors.push('Invalid total pages');
 
       // Validate logical consistency
-      if (page < 1) errors.push('Page number cannot be less than 1');
-      if (pageSize < 1) errors.push('Page size cannot be less than 1');
-      if (totalPages < 0) errors.push('Total pages cannot be negative');
+      if ((page as number) < 1) errors.push('Page number cannot be less than 1');
+      if ((pageSize as number) < 1) errors.push('Page size cannot be less than 1');
+      if ((totalPages as number) < 0) errors.push('Total pages cannot be negative');
 
       // Validate that totalPages matches total/pageSize
-      const calculatedPages = Math.ceil(total / pageSize);
+      const calculatedPages = Math.ceil((total as number) / (pageSize as number));
       if (calculatedPages !== totalPages) {
         errors.push(`Total pages (${totalPages}) doesn't match calculated (${calculatedPages})`);
       }
@@ -145,7 +145,7 @@ export class DBValidator {
    * Extract specific fields from response
    */
   static extractFields<T extends Record<string, unknown>>(
-    data: Record<string, unknown>,
+    data: T,
     fields: (keyof T)[]
   ): Partial<T> {
     const result: Partial<T> = {};

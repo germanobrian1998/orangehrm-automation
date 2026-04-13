@@ -19,7 +19,7 @@ export class AdminAPI extends BaseAPI {
   async createUser(data: CreateUserDTO): Promise<User> {
     try {
       this.logger.step(1, `Creating user ${data.username}`);
-      const response = await this.post('/api/v2/admin/users', { data });
+      const response = await this.post<{ data: User }>('/api/v2/admin/users', { data });
       const user = response.data;
       this.logger.info(`✓ User created: ${user.id}`);
       return user;
@@ -34,7 +34,7 @@ export class AdminAPI extends BaseAPI {
    */
   async getUser(userId: number): Promise<User> {
     try {
-      const response = await this.get(`/api/v2/admin/users/${userId}`);
+      const response = await this.get<{ data: User }>(`/api/v2/admin/users/${userId}`);
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get user ${userId}`, error);
@@ -77,7 +77,7 @@ export class AdminAPI extends BaseAPI {
   async createJobTitle(data: CreateJobTitleDTO): Promise<JobTitle> {
     try {
       this.logger.step(1, `Creating job title: ${data.title}`);
-      const response = await this.post('/api/v2/admin/job-titles', { data });
+      const response = await this.post<{ data: JobTitle }>('/api/v2/admin/job-titles', { data });
       const jobTitle = response.data;
       this.logger.info(`✓ Job title created: ${jobTitle.id}`);
       return jobTitle;
@@ -92,7 +92,7 @@ export class AdminAPI extends BaseAPI {
    */
   async getJobTitle(jobTitleId: number): Promise<JobTitle> {
     try {
-      const response = await this.get(`/api/v2/admin/job-titles/${jobTitleId}`);
+      const response = await this.get<{ data: JobTitle }>(`/api/v2/admin/job-titles/${jobTitleId}`);
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get job title ${jobTitleId}`, error);
