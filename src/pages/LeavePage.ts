@@ -2,7 +2,9 @@ import { BasePage } from './BasePage';
 
 export class LeavePage extends BasePage {
   async navigateToDashboard() {
-    await this.goto('https://opensource-demo.orangehrmlive.com/web/index.php/leave/viewLeaveModule');
+    await this.goto(
+      'https://opensource-demo.orangehrmlive.com/web/index.php/leave/viewLeaveModule'
+    );
     await this.waitForNavigation();
   }
 

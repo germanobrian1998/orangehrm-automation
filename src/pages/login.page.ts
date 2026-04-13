@@ -65,10 +65,7 @@ export class LoginPage extends BasePage {
       await this.click(selectors.login.submitButton);
 
       // Wait for error message
-      await this.waitFor.elementVisible(
-        selectors.login.errorMessage,
-        constants.TIMEOUTS.MEDIUM
-      );
+      await this.waitFor.elementVisible(selectors.login.errorMessage, constants.TIMEOUTS.MEDIUM);
 
       const errorMessage = await this.getText(selectors.login.errorMessage);
       this.logger.info(`✓ Error message displayed: ${errorMessage}`);

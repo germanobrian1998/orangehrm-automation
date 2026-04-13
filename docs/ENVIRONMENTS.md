@@ -9,13 +9,13 @@ suite against different target environments.
 
 Each environment is driven by a dedicated `.env.*` file at the repository root.
 
-| File | Purpose |
-|------|---------|
+| File           | Purpose                                       |
+| -------------- | --------------------------------------------- |
 | `.env.example` | Template – copy and rename to create your own |
-| `.env.dev` | Local / development server |
-| `.env.staging` | Shared staging server |
-| `.env.prod` | Production (smoke tests only) |
-| `.env.ci` | Values used by GitHub Actions CI |
+| `.env.dev`     | Local / development server                    |
+| `.env.staging` | Shared staging server                         |
+| `.env.prod`    | Production (smoke tests only)                 |
+| `.env.ci`      | Values used by GitHub Actions CI              |
 
 > **Security note:** `.env`, `.env.local`, and `*.local` files are listed in
 > `.gitignore` and will never be committed.  
@@ -27,20 +27,20 @@ Each environment is driven by a dedicated `.env.*` file at the repository root.
 
 ## Configuration Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `ENVIRONMENT` | Environment label (`development`, `staging`, `production`, `ci`) | `development` |
-| `ORANGEHRM_BASE_URL` | Base URL of the OrangeHRM instance under test | `https://opensource-demo.orangehrmlive.com` |
-| `ORANGEHRM_ADMIN_USERNAME` | Admin username | `Admin` |
-| `ORANGEHRM_ADMIN_PASSWORD` | Admin password | `admin123` |
-| `TEST_TIMEOUT` | Global test timeout in ms | `30000` |
-| `API_TIMEOUT` | HTTP request timeout in ms | `10000` |
-| `BROWSER` | Browser to use (`chromium`, `firefox`, `webkit`) | `chromium` |
-| `HEADLESS` | Run browsers headlessly (`true` / `false`) | `true` |
-| `LOG_LEVEL` | Logging verbosity (`debug`, `info`, `warn`, `error`) | `info` |
-| `DEBUG` | Enable verbose debug output | `false` |
-| `ALLURE_RESULTS_DIR` | Output directory for Allure results | `./allure-results` |
-| `CI` | Set to `true` inside CI runners | `false` |
+| Variable                   | Description                                                      | Default                                     |
+| -------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
+| `ENVIRONMENT`              | Environment label (`development`, `staging`, `production`, `ci`) | `development`                               |
+| `ORANGEHRM_BASE_URL`       | Base URL of the OrangeHRM instance under test                    | `https://opensource-demo.orangehrmlive.com` |
+| `ORANGEHRM_ADMIN_USERNAME` | Admin username                                                   | `Admin`                                     |
+| `ORANGEHRM_ADMIN_PASSWORD` | Admin password                                                   | `admin123`                                  |
+| `TEST_TIMEOUT`             | Global test timeout in ms                                        | `30000`                                     |
+| `API_TIMEOUT`              | HTTP request timeout in ms                                       | `10000`                                     |
+| `BROWSER`                  | Browser to use (`chromium`, `firefox`, `webkit`)                 | `chromium`                                  |
+| `HEADLESS`                 | Run browsers headlessly (`true` / `false`)                       | `true`                                      |
+| `LOG_LEVEL`                | Logging verbosity (`debug`, `info`, `warn`, `error`)             | `info`                                      |
+| `DEBUG`                    | Enable verbose debug output                                      | `false`                                     |
+| `ALLURE_RESULTS_DIR`       | Output directory for Allure results                              | `./allure-results`                          |
+| `CI`                       | Set to `true` inside CI runners                                  | `false`                                     |
 
 ---
 
@@ -105,13 +105,19 @@ Annotate tests to indicate which environments they should run against:
 
 ```typescript
 // Runs on every environment
-test('Login @smoke', async ({ page }) => { /* … */ });
+test('Login @smoke', async ({ page }) => {
+  /* … */
+});
 
 // Staging and below only (e.g. uses test data that does not exist in prod)
-test('Create employee @dev @staging', async ({ page }) => { /* … */ });
+test('Create employee @dev @staging', async ({ page }) => {
+  /* … */
+});
 
 // Production smoke only
-test('Homepage loads @prod', async ({ page }) => { /* … */ });
+test('Homepage loads @prod', async ({ page }) => {
+  /* … */
+});
 ```
 
 Filter with `--grep`:
@@ -131,11 +137,11 @@ ENVIRONMENT=production npx playwright test --grep @prod
 The `.github/workflows/test-all-environments.yml` workflow runs three
 parallel jobs on every push / pull-request to `main`:
 
-| Job | Environment | Notes |
-|-----|-------------|-------|
-| `test-dev` | `development` | Uses `.env.dev` |
-| `test-staging` | `staging` | Uses `.env.staging` |
-| `test-ci` | `ci` | Uses `.env.ci`, `CI=true` |
+| Job            | Environment   | Notes                     |
+| -------------- | ------------- | ------------------------- |
+| `test-dev`     | `development` | Uses `.env.dev`           |
+| `test-staging` | `staging`     | Uses `.env.staging`       |
+| `test-ci`      | `ci`          | Uses `.env.ci`, `CI=true` |
 
 Production tests are intentionally excluded from automatic runs to avoid
 hitting a live system on every commit. Add a manual trigger or a separate

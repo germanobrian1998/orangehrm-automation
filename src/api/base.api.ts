@@ -6,7 +6,6 @@
 import { Page, APIRequestContext } from '@playwright/test';
 import { Logger, createLogger } from '@utils/logger';
 import { environment } from '@config/environment';
-import { constants } from '@config/constants';
 
 export class BaseAPI {
   protected baseURL: string;
@@ -41,7 +40,9 @@ export class BaseAPI {
       const data = await response.json();
       this.authToken = data.data?.token || data.access_token;
 
-      this.logger.info(`✓ Authentication successful. Token: ${this.authToken?.substring(0, 20)}...`);
+      this.logger.info(
+        `✓ Authentication successful. Token: ${this.authToken?.substring(0, 20)}...`
+      );
     } catch (error) {
       this.logger.error('Authentication failed', error);
       throw error;
@@ -65,10 +66,10 @@ export class BaseAPI {
   /**
    * Make HTTP request with proper headers and error handling
    */
-  protected async request<T = any>(
+  protected async request<T = unknown>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
     endpoint: string,
-    options?: { data?: any; headers?: Record<string, string> }
+    options?: { data?: unknown; headers?: Record<string, string> }
   ): Promise<T> {
     try {
       const url = `${this.baseURL}${endpoint}`;
@@ -79,6 +80,7 @@ export class BaseAPI {
 
       this.logger.debug(`${method} ${endpoint}`);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = await (this.requestContext! as any)[method.toLowerCase()](url, {
         headers,
         data: options?.data,
@@ -101,35 +103,35 @@ export class BaseAPI {
   /**
    * GET request
    */
-  protected async get<T = any>(endpoint: string): Promise<T> {
+  protected async get<T = unknown>(endpoint: string): Promise<T> {
     return this.request<T>('GET', endpoint);
   }
 
   /**
    * POST request
    */
-  protected async post<T = any>(endpoint: string, data?: any): Promise<T> {
+  protected async post<T = unknown>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>('POST', endpoint, { data });
   }
 
   /**
    * PUT request
    */
-  protected async put<T = any>(endpoint: string, data?: any): Promise<T> {
+  protected async put<T = unknown>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>('PUT', endpoint, { data });
   }
 
   /**
    * DELETE request
    */
-  protected async delete<T = any>(endpoint: string): Promise<T> {
+  protected async delete<T = unknown>(endpoint: string): Promise<T> {
     return this.request<T>('DELETE', endpoint);
   }
 
   /**
    * PATCH request
    */
-  protected async patch<T = any>(endpoint: string, data?: any): Promise<T> {
+  protected async patch<T = unknown>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>('PATCH', endpoint, { data });
   }
 }

@@ -4,10 +4,10 @@ This project uses [Mock Service Worker (MSW)](https://mswjs.io/) to intercept HT
 
 ## Overview
 
-| Mode | Description |
-|------|-------------|
+| Mode         | Description                                                                           |
+| ------------ | ------------------------------------------------------------------------------------- |
 | **Real API** | Tests hit `ORANGEHRM_BASE_URL` (default: `https://opensource-demo.orangehrmlive.com`) |
-| **Mock API** | MSW intercepts all HTTP calls and returns predefined mock responses |
+| **Mock API** | MSW intercepts all HTTP calls and returns predefined mock responses                   |
 
 ## File Structure
 
@@ -116,35 +116,35 @@ test('should handle server error', async ({ baseURL }) => {
 
 ## Mocked Endpoints
 
-| Method | URL | Mock Response |
-|--------|-----|---------------|
-| `POST` | `/api/v2/oauth/token` | `{ access_token: 'mock-token-12345', ... }` |
-| `GET`  | `/api/v2/employees` | List of 2 mock employees |
-| `POST` | `/api/v2/employees` | Created employee with `id: 3` |
-| `GET`  | `/api/v2/employees/:id` | Single mock employee |
-| `PUT`  | `/api/v2/employees/:id` | Updated employee |
-| `DELETE` | `/api/v2/employees/:id` | `{}` with status 204 |
-| `GET`  | `/api/v2/employees/99999` | `{ error: 'Employee not found' }` with status 404 |
-| `GET`  | `/api/v2/protected` | `{ error: 'Unauthorized' }` with status 401 |
+| Method   | URL                       | Mock Response                                     |
+| -------- | ------------------------- | ------------------------------------------------- |
+| `POST`   | `/api/v2/oauth/token`     | `{ access_token: 'mock-token-12345', ... }`       |
+| `GET`    | `/api/v2/employees`       | List of 2 mock employees                          |
+| `POST`   | `/api/v2/employees`       | Created employee with `id: 3`                     |
+| `GET`    | `/api/v2/employees/:id`   | Single mock employee                              |
+| `PUT`    | `/api/v2/employees/:id`   | Updated employee                                  |
+| `DELETE` | `/api/v2/employees/:id`   | `{}` with status 204                              |
+| `GET`    | `/api/v2/employees/99999` | `{ error: 'Employee not found' }` with status 404 |
+| `GET`    | `/api/v2/protected`       | `{ error: 'Unauthorized' }` with status 401       |
 
 ## When to Use Mock vs Real API
 
-| Scenario | Use Mock | Use Real API |
-|----------|----------|--------------|
-| Unit / integration tests | ✅ | — |
-| CI pipelines (fast, stable) | ✅ | — |
-| Error / edge case scenarios | ✅ | — |
-| Offline development | ✅ | — |
-| Contract / schema validation | — | ✅ |
-| End-to-end smoke tests | — | ✅ |
-| Performance / load testing | — | ✅ |
+| Scenario                     | Use Mock | Use Real API |
+| ---------------------------- | -------- | ------------ |
+| Unit / integration tests     | ✅       | —            |
+| CI pipelines (fast, stable)  | ✅       | —            |
+| Error / edge case scenarios  | ✅       | —            |
+| Offline development          | ✅       | —            |
+| Contract / schema validation | —        | ✅           |
+| End-to-end smoke tests       | —        | ✅           |
+| Performance / load testing   | —        | ✅           |
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
+| Variable             | Default                                     | Description                           |
+| -------------------- | ------------------------------------------- | ------------------------------------- |
 | `ORANGEHRM_BASE_URL` | `https://opensource-demo.orangehrmlive.com` | Base URL used by handlers and clients |
-| `USE_MOCK_API` | `false` | Set to `true` to indicate mock mode |
+| `USE_MOCK_API`       | `false`                                     | Set to `true` to indicate mock mode   |
 
 Load the mock environment with:
 

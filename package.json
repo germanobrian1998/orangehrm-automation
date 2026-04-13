@@ -57,9 +57,12 @@
     "test:report:history": "cp -r allure-report/history allure-results/history 2>/dev/null || true && allure generate allure-results --clean -o allure-report",
     "report:open": "allure open allure-report",
     "api-docs:validate": "npx swagger-cli validate docs/openapi.yml",
-    "api-docs:preview": "npx swagger-ui-watcher docs/openapi.yml --port 8888"
+    "api-docs:preview": "npx swagger-ui-watcher docs/openapi.yml --port 8888",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@faker-js/faker": "^8.0.0",
     "@playwright/test": "^1.40.0",
     "@types/js-yaml": "^4.0.9",
@@ -70,6 +73,8 @@
     "allure-commandline": "^2.38.1",
     "allure-playwright": "^3.6.0",
     "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.1.2",
+    "husky": "^9.1.7",
     "js-yaml": "^4.1.1",
     "msw": "^2.12.14",
     "prettier": "^3.0.0",

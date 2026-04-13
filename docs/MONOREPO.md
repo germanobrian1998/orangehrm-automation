@@ -23,13 +23,13 @@ A monorepo lets us share the `@qa-framework/core` base framework across multiple
 
 **Benefits:**
 
-| Benefit | Detail |
-|---------|--------|
-| Shared core | `BasePage`, `BaseApiClient`, `Logger`, `Config` used by all packages |
-| Single install | `npm install` at root installs everything |
-| Unified scripts | `npm run lint` checks all packages |
-| Atomic changes | A single PR can update both core and consumer packages |
-| Clear ownership | Each package has distinct responsibility |
+| Benefit         | Detail                                                               |
+| --------------- | -------------------------------------------------------------------- |
+| Shared core     | `BasePage`, `BaseApiClient`, `Logger`, `Config` used by all packages |
+| Single install  | `npm install` at root installs everything                            |
+| Unified scripts | `npm run lint` checks all packages                                   |
+| Atomic changes  | A single PR can update both core and consumer packages               |
+| Clear ownership | Each package has distinct responsibility                             |
 
 **Tool:** [npm workspaces](https://docs.npmjs.com/cli/v8/using-npm/workspaces) (no external tool like Turborepo or Lerna required)
 
@@ -46,13 +46,13 @@ packages/
 └── orangehrm-api-suite/    # @qa-framework/orangehrm-api-suite
 ```
 
-| Package | npm name | Description | Depends on |
-|---------|----------|-------------|-----------|
-| `core` | `@qa-framework/core` | BasePage, BaseApiClient, Logger, Config, WaitFor, ScreenshotManager | — |
-| `shared-utils` | `@qa-framework/shared-utils` | Test data factory, date/string helpers, Faker wrappers | — |
-| `orangehrm-suite` | `@qa-framework/orangehrm-suite` | OrangeHRM-specific page objects and UI tests | `core`, `shared-utils` |
-| `hrm-api-suite` | `@qa-framework/hrm-api-suite` | HRM REST API clients and API tests | `core`, `shared-utils` |
-| `orangehrm-api-suite` | `@qa-framework/orangehrm-api-suite` | Additional OrangeHRM API tests | `core`, `shared-utils` |
+| Package               | npm name                            | Description                                                         | Depends on             |
+| --------------------- | ----------------------------------- | ------------------------------------------------------------------- | ---------------------- |
+| `core`                | `@qa-framework/core`                | BasePage, BaseApiClient, Logger, Config, WaitFor, ScreenshotManager | —                      |
+| `shared-utils`        | `@qa-framework/shared-utils`        | Test data factory, date/string helpers, Faker wrappers              | —                      |
+| `orangehrm-suite`     | `@qa-framework/orangehrm-suite`     | OrangeHRM-specific page objects and UI tests                        | `core`, `shared-utils` |
+| `hrm-api-suite`       | `@qa-framework/hrm-api-suite`       | HRM REST API clients and API tests                                  | `core`, `shared-utils` |
+| `orangehrm-api-suite` | `@qa-framework/orangehrm-api-suite` | Additional OrangeHRM API tests                                      | `core`, `shared-utils` |
 
 ### `packages/core` — The Foundation
 
@@ -72,6 +72,7 @@ packages/core/src/
 ```
 
 Usage:
+
 ```typescript
 import { BasePage, BaseApiClient, createLogger, config } from '@qa-framework/core';
 ```
@@ -281,12 +282,12 @@ npm install
 
 ## 📋 When to Create a New Package
 
-| ✅ Create a new package | ❌ Don't create a new package |
-|------------------------|-------------------------------|
-| Tests are for a **different application** | New OrangeHRM module (Recruitment, Reports) |
-| Tests need **different npm dependencies** | New test suite tag (`@regression`) |
-| A **different team** owns the tests | Minor refactoring |
-| Tests have a **different execution cadence** | New page object within OrangeHRM |
+| ✅ Create a new package                                        | ❌ Don't create a new package               |
+| -------------------------------------------------------------- | ------------------------------------------- |
+| Tests are for a **different application**                      | New OrangeHRM module (Recruitment, Reports) |
+| Tests need **different npm dependencies**                      | New test suite tag (`@regression`)          |
+| A **different team** owns the tests                            | Minor refactoring                           |
+| Tests have a **different execution cadence**                   | New page object within OrangeHRM            |
 | Tests use a **different technology** (e.g., Appium for mobile) | Adding API tests for existing HRM endpoints |
 
 **Rule of thumb:** If it fits in an existing package with no new dependencies, it doesn't need its own package.
@@ -298,6 +299,7 @@ npm install
 ### Current approach: all `"*"` versions
 
 All workspace packages use `"*"` for cross-package dependencies. This means:
+
 - Always uses the local workspace version
 - No version coordination needed
 - Changes to `core` are immediately reflected in all consumers
@@ -326,9 +328,7 @@ For a framework that stays private (like this one), `"*"` workspace references a
 {
   "name": "orangehrm-automation",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ]
+  "workspaces": ["packages/*"]
 }
 ```
 

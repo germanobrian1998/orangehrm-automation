@@ -25,7 +25,7 @@ const winstonLogger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
     winston.format.errors({ stack: true }),
-    winston.format.json(),
+    winston.format.json()
   ),
   transports: [
     // Colorized console output
@@ -36,7 +36,7 @@ const winstonLogger = winston.createLogger({
           const ctx = context ? ` [${context}]` : '';
           const extra = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
           return `[${timestamp}] [${level}]${ctx} ${message}${extra}`;
-        }),
+        })
       ),
     }),
     // Rolling combined log – kept for 14 days, max 20 MB per file
@@ -82,7 +82,11 @@ export class Logger {
 
   error(message: string, error?: Error | unknown): void {
     if (error instanceof Error) {
-      winstonLogger.error(message, { context: this.context, error: error.message, stack: error.stack });
+      winstonLogger.error(message, {
+        context: this.context,
+        error: error.message,
+        stack: error.stack,
+      });
     } else {
       winstonLogger.error(message, { context: this.context, ...this.toMeta(error) });
     }

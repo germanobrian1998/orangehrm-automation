@@ -1,6 +1,6 @@
 # 🧠 Test Coverage Decision Making
 
-How we decide *what* to test, *how much* to test, and *why* — with a real-world case study.
+How we decide _what_ to test, _how much_ to test, and _why_ — with a real-world case study.
 
 ---
 
@@ -41,6 +41,7 @@ Low value  │  ❌ Skip              │  ⚠️ Low priority      │
 ### Context
 
 The Leave Management module is used by 100% of employees at least once per month. It involves:
+
 - Submitting leave requests (employee role)
 - Approving/rejecting requests (manager role)
 - Balance tracking (system)
@@ -48,15 +49,15 @@ The Leave Management module is used by 100% of employees at least once per month
 
 ### Step 1: Risk Assessment
 
-| Feature | Business Impact | Failure Likelihood | Priority |
-|---------|----------------|-------------------|----------|
-| Submit leave request | 🔴 High — blocks employees | Medium | **P0** |
-| Manager approval flow | 🔴 High — blocks managers | Medium | **P0** |
-| Leave balance update | 🔴 High — wrong data causes disputes | High (API) | **P0** |
-| Rejection with reason | 🟡 Medium — poor UX if broken | Low | **P1** |
-| Leave history view | 🟡 Medium — informational | Low | **P1** |
-| Email notification | 🟢 Low — backup of UI feedback | High (flaky) | **P2** |
-| Delete old records | 🟢 Low — admin only, rare | Very Low | **P3** |
+| Feature               | Business Impact                      | Failure Likelihood | Priority |
+| --------------------- | ------------------------------------ | ------------------ | -------- |
+| Submit leave request  | 🔴 High — blocks employees           | Medium             | **P0**   |
+| Manager approval flow | 🔴 High — blocks managers            | Medium             | **P0**   |
+| Leave balance update  | 🔴 High — wrong data causes disputes | High (API)         | **P0**   |
+| Rejection with reason | 🟡 Medium — poor UX if broken        | Low                | **P1**   |
+| Leave history view    | 🟡 Medium — informational            | Low                | **P1**   |
+| Email notification    | 🟢 Low — backup of UI feedback       | High (flaky)       | **P2**   |
+| Delete old records    | 🟢 Low — admin only, rare            | Very Low           | **P3**   |
 
 ### Step 2: Coverage Decision
 
@@ -69,16 +70,16 @@ P3 — Do not automate (manual if needed)
 
 ### Step 3: Test Cases Written
 
-| Test | Layer | Tags | ROI |
-|------|-------|------|-----|
-| Submit leave request (valid dates) | UI + API | `@smoke` | ⭐⭐⭐ |
-| Submit leave request (insufficient balance) | UI | `@regression` | ⭐⭐⭐ |
-| Manager approves leave | UI + API | `@smoke` | ⭐⭐⭐ |
-| Manager rejects leave with reason | UI | `@regression` | ⭐⭐ |
-| Verify balance decrements after approval | API | `@regression` | ⭐⭐⭐ |
-| Verify leave appears in history | UI | `@regression` | ⭐⭐ |
-| Email notification sent (webhook check) | API | — | ⭐ (P2) |
-| Delete old leave records | — | — | ❌ Not automated |
+| Test                                        | Layer    | Tags          | ROI              |
+| ------------------------------------------- | -------- | ------------- | ---------------- |
+| Submit leave request (valid dates)          | UI + API | `@smoke`      | ⭐⭐⭐           |
+| Submit leave request (insufficient balance) | UI       | `@regression` | ⭐⭐⭐           |
+| Manager approves leave                      | UI + API | `@smoke`      | ⭐⭐⭐           |
+| Manager rejects leave with reason           | UI       | `@regression` | ⭐⭐             |
+| Verify balance decrements after approval    | API      | `@regression` | ⭐⭐⭐           |
+| Verify leave appears in history             | UI       | `@regression` | ⭐⭐             |
+| Email notification sent (webhook check)     | API      | —             | ⭐ (P2)          |
+| Delete old leave records                    | —        | —             | ❌ Not automated |
 
 ### Result
 
@@ -99,23 +100,23 @@ List every meaningful action a user can take in the module.
 
 ### 2. Score Each Journey
 
-| Criterion | Score (1–5) |
-|-----------|-------------|
-| Business impact if broken | 1 = cosmetic, 5 = blocks all users |
-| Failure likelihood | 1 = very stable, 5 = high churn area |
-| Test complexity | 1 = easy, 5 = hard to automate |
-| Existing manual coverage | 1 = well covered, 5 = no manual tests |
+| Criterion                 | Score (1–5)                           |
+| ------------------------- | ------------------------------------- |
+| Business impact if broken | 1 = cosmetic, 5 = blocks all users    |
+| Failure likelihood        | 1 = very stable, 5 = high churn area  |
+| Test complexity           | 1 = easy, 5 = hard to automate        |
+| Existing manual coverage  | 1 = well covered, 5 = no manual tests |
 
 **Automation Priority = (Impact × Likelihood) / Complexity**
 
 ### 3. Apply Thresholds
 
-| Score | Decision |
-|-------|----------|
-| > 15 | Automate immediately (`@smoke` + `@regression`) |
-| 8–15 | Automate in next sprint (`@regression`) |
-| 4–7 | Automate if time permits |
-| < 4 | Manual test or skip |
+| Score | Decision                                        |
+| ----- | ----------------------------------------------- |
+| > 15  | Automate immediately (`@smoke` + `@regression`) |
+| 8–15  | Automate in next sprint (`@regression`)         |
+| 4–7   | Automate if time permits                        |
+| < 4   | Manual test or skip                             |
 
 ---
 
@@ -126,13 +127,13 @@ Copy this template for any new module:
 ```markdown
 ## Module: [Name]
 
-| Journey | Impact (1-5) | Likelihood (1-5) | Complexity (1-5) | Score | Decision |
-|---------|-------------|-----------------|-----------------|-------|----------|
-| Happy path | | | | | |
-| Validation error | | | | | |
-| Auth/permission check | | | | | |
-| Edge case 1 | | | | | |
-| Edge case 2 | | | | | |
+| Journey               | Impact (1-5) | Likelihood (1-5) | Complexity (1-5) | Score | Decision |
+| --------------------- | ------------ | ---------------- | ---------------- | ----- | -------- |
+| Happy path            |              |                  |                  |       |          |
+| Validation error      |              |                  |                  |       |          |
+| Auth/permission check |              |                  |                  |       |          |
+| Edge case 1           |              |                  |                  |       |          |
+| Edge case 2           |              |                  |                  |       |          |
 
 **Selected for automation**: [List test IDs]
 **Skipped**: [List and reason]
@@ -144,21 +145,21 @@ Copy this template for any new module:
 
 ### How automated tests protect the business
 
-| Test Suite | Tests | Business Risk Covered |
-|------------|-------|----------------------|
-| Smoke | 6 | Login, employee create, leave request — core system health |
-| API | 8 | Data integrity, auth boundaries, CRUD correctness |
-| Regression | 25 | Full employee lifecycle, leave workflow, cross-module |
-| Cross-Browser | 6 | Compatibility for all user environments |
+| Test Suite    | Tests | Business Risk Covered                                      |
+| ------------- | ----- | ---------------------------------------------------------- |
+| Smoke         | 6     | Login, employee create, leave request — core system health |
+| API           | 8     | Data integrity, auth boundaries, CRUD correctness          |
+| Regression    | 25    | Full employee lifecycle, leave workflow, cross-module      |
+| Cross-Browser | 6     | Compatibility for all user environments                    |
 
 ### Cost of a missed regression
 
-| Scenario | Impact | Detection Method |
-|----------|--------|-----------------|
-| Login broken | 100% of users blocked | Smoke test — detected in < 5 min |
-| Leave balance wrong | Payroll disputes | API regression test |
-| Employee create fails | HR operations blocked | Smoke + API test |
-| Cross-browser layout bug | 30% of users affected | WebKit smoke test |
+| Scenario                 | Impact                | Detection Method                 |
+| ------------------------ | --------------------- | -------------------------------- |
+| Login broken             | 100% of users blocked | Smoke test — detected in < 5 min |
+| Leave balance wrong      | Payroll disputes      | API regression test              |
+| Employee create fails    | HR operations blocked | Smoke + API test                 |
+| Cross-browser layout bug | 30% of users affected | WebKit smoke test                |
 
 ### ROI Calculation
 
@@ -181,26 +182,26 @@ Savings after year 1:
 
 Knowing what **not** to automate is as important as knowing what to automate.
 
-| Scenario | Reason to Skip |
-|----------|----------------|
-| One-time setup tasks | Not worth the investment |
-| Exploratory testing | Requires human creativity |
-| Frequently changing UI | Maintenance cost outweighs value |
-| Email/SMS content validation | External dependencies, high flakiness |
+| Scenario                     | Reason to Skip                              |
+| ---------------------------- | ------------------------------------------- |
+| One-time setup tasks         | Not worth the investment                    |
+| Exploratory testing          | Requires human creativity                   |
+| Frequently changing UI       | Maintenance cost outweighs value            |
+| Email/SMS content validation | External dependencies, high flakiness       |
 | Very complex test data setup | Manual setup faster; automate the assertion |
-| Features being deprecated | Soon gone — don't invest |
+| Features being deprecated    | Soon gone — don't invest                    |
 
 ---
 
 ## 🎯 Coverage Targets by Layer
 
-| Layer | Target | Rationale |
-|-------|--------|-----------|
-| Unit (core utilities) | 80%+ | Fast, cheap, catches regressions early |
-| API contracts | 100% of P0 endpoints | Broken APIs block everything above them |
-| UI smoke | 100% of critical journeys | Fast gate — catches show-stoppers in 5 min |
-| UI regression | P0 + P1 journeys | Full confidence before release |
-| Cross-browser | Top 3 journeys × 3 browsers | Covers 95%+ of user environments |
+| Layer                 | Target                      | Rationale                                  |
+| --------------------- | --------------------------- | ------------------------------------------ |
+| Unit (core utilities) | 80%+                        | Fast, cheap, catches regressions early     |
+| API contracts         | 100% of P0 endpoints        | Broken APIs block everything above them    |
+| UI smoke              | 100% of critical journeys   | Fast gate — catches show-stoppers in 5 min |
+| UI regression         | P0 + P1 journeys            | Full confidence before release             |
+| Cross-browser         | Top 3 journeys × 3 browsers | Covers 95%+ of user environments           |
 
 ---
 

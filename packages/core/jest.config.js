@@ -16,7 +16,7 @@ module.exports = {
           module: 'commonjs',
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
-          strict: false,
+          strict: true,
           skipLibCheck: true,
         },
         diagnostics: {

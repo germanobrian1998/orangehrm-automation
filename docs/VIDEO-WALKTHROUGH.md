@@ -19,16 +19,17 @@ How to record, share, and showcase your test automation framework for interviews
 
 Record **short, focused clips** — not marathon sessions. Interviewers and hiring managers have limited attention spans.
 
-| Demo Type | Duration | What to Show |
-|-----------|----------|--------------|
-| Smoke test run | 1–2 min | `npm run test:smoke` — tests passing in terminal + browser |
-| Cross-browser run | 2–3 min | Same test running on Chromium, Firefox, WebKit |
-| CI/CD pipeline | 1–2 min | GitHub Actions run completing with green checks |
-| HTML report walkthrough | 1 min | Open report, show test names, screenshot on failure |
-| Playwright trace viewer | 1–2 min | Step through a test replay with DOM snapshots |
-| Code walkthrough | 3–5 min | Page Object, BasePage, playwright.config.ts |
+| Demo Type               | Duration | What to Show                                               |
+| ----------------------- | -------- | ---------------------------------------------------------- |
+| Smoke test run          | 1–2 min  | `npm run test:smoke` — tests passing in terminal + browser |
+| Cross-browser run       | 2–3 min  | Same test running on Chromium, Firefox, WebKit             |
+| CI/CD pipeline          | 1–2 min  | GitHub Actions run completing with green checks            |
+| HTML report walkthrough | 1 min    | Open report, show test names, screenshot on failure        |
+| Playwright trace viewer | 1–2 min  | Step through a test replay with DOM snapshots              |
+| Code walkthrough        | 3–5 min  | Page Object, BasePage, playwright.config.ts                |
 
 **Recommended playlist order:**
+
 1. 30-second intro (what the project is)
 2. Smoke test run (1 min)
 3. HTML report (30 sec)
@@ -75,6 +76,7 @@ npx playwright show-trace test-results/*/trace.zip
 ```
 
 The trace viewer is excellent for demos — it shows:
+
 - Each Playwright action with timing
 - DOM snapshot at every step
 - Network requests
@@ -86,13 +88,13 @@ The trace viewer is excellent for demos — it shows:
 
 ### Tools by platform
 
-| Platform | Free Tool | Notes |
-|----------|-----------|-------|
-| macOS | QuickTime Player | Built-in, HD quality |
-| Windows | Xbox Game Bar (Win+G) | Built-in |
-| Linux | OBS Studio | Free, professional quality |
-| All | Loom | Browser extension, easy sharing |
-| All | OBS Studio | Most control, free |
+| Platform | Free Tool             | Notes                           |
+| -------- | --------------------- | ------------------------------- |
+| macOS    | QuickTime Player      | Built-in, HD quality            |
+| Windows  | Xbox Game Bar (Win+G) | Built-in                        |
+| Linux    | OBS Studio            | Free, professional quality      |
+| All      | Loom                  | Browser extension, easy sharing |
+| All      | OBS Studio            | Most control, free              |
 
 ### Recording setup checklist
 
@@ -121,25 +123,25 @@ The trace viewer is excellent for demos — it shows:
 ### Video 1: Smoke Test Run (~90 seconds)
 
 ```
-[0:00] "Hi, this is my OrangeHRM QA Automation Suite, built with 
+[0:00] "Hi, this is my OrangeHRM QA Automation Suite, built with
        Playwright and TypeScript. Let me show it in action."
 
 [0:08] [Type in terminal]
        npm run test:smoke
 
-[0:12] "This runs 19 smoke test specs against the OrangeHRM demo 
-       application using Chromium. Watch how Playwright auto-navigates 
+[0:12] "This runs 19 smoke test specs against the OrangeHRM demo
+       application using Chromium. Watch how Playwright auto-navigates
        the application and validates each step."
 
 [0:15] [Tests run — browser visible on right side]
        [Let terminal output scroll — don't narrate every test]
 
-[1:05] "All 19 tests passed in about 90 seconds. Let me open the 
+[1:05] "All 19 tests passed in about 90 seconds. Let me open the
        HTML report..."
 
 [1:10] npm run report
 
-[1:15] "The report shows each test, its duration, and any screenshots 
+[1:15] "The report shows each test, its duration, and any screenshots
        taken on failure. This is what I'd attach to a CI run artifact."
 
 [1:25] [End]
@@ -152,15 +154,15 @@ The trace viewer is excellent for demos — it shows:
        "Let me walk through the CI/CD pipeline."
 
 [0:05] [Click on a completed workflow run]
-       "Every push to main triggers four workflows: smoke tests, 
+       "Every push to main triggers four workflows: smoke tests,
        regression, cross-browser matrix, and code quality checks."
 
 [0:20] [Click through the steps]
-       "Playwright browsers are cached between runs — this step 
+       "Playwright browsers are cached between runs — this step
        takes 5 seconds instead of 60."
 
 [0:40] [Show artifacts section]
-       "HTML reports and screenshots are uploaded as artifacts 
+       "HTML reports and screenshots are uploaded as artifacts
        for every run, retained for 7 to 30 days."
 
 [0:55] [End]
@@ -172,24 +174,24 @@ The trace viewer is excellent for demos — it shows:
 [0:00] "Let me walk through the code architecture."
 
 [0:05] [Open VS Code, show src/pages/LoginPage.ts]
-       "Page objects encapsulate selectors and actions. No selectors 
+       "Page objects encapsulate selectors and actions. No selectors
        appear in test files — only method calls."
 
 [0:30] [Show tests/smoke/login.spec.ts]
-       "Tests follow the Arrange-Act-Assert pattern. They're 
+       "Tests follow the Arrange-Act-Assert pattern. They're
        readable — you don't need to know Playwright to understand what's tested."
 
 [1:00] [Show packages/core/src/page-objects/BasePage.ts]
-       "BasePage provides shared helpers used by all page objects — 
-       navigation, form filling, waiting. The monorepo shares this 
+       "BasePage provides shared helpers used by all page objects —
+       navigation, form filling, waiting. The monorepo shares this
        across all test suites."
 
 [1:30] [Show playwright.config.ts]
-       "The config defines all four browser projects, timeout settings, 
+       "The config defines all four browser projects, timeout settings,
        and reporters — HTML and Allure."
 
 [2:00] [Show .github/workflows/smoke-tests.yml]
-       "GitHub Actions workflows define the CI pipeline. 
+       "GitHub Actions workflows define the CI pipeline.
        Credentials come from GitHub Secrets — never hardcoded."
 
 [2:30] [End]
@@ -241,9 +243,11 @@ allure generate ./allure-results -o ./allure-report --clean
 ### Option 3: GitHub Actions artifact download
 
 Provide a direct link in your portfolio:
+
 ```
 [View Latest Test Report] → https://github.com/user/repo/actions
 ```
+
 Download the `playwright-report` artifact from the latest run.
 
 ---
@@ -281,6 +285,7 @@ Download the `playwright-report` artifact from the latest run.
 A production-ready test automation framework built with Playwright and TypeScript.
 
 **What it demonstrates:**
+
 - Page Object Model with TypeScript strict mode
 - Integrated UI + API testing in a single framework
 - Cross-browser testing (Chromium, Firefox, WebKit)

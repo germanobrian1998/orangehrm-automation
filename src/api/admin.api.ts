@@ -3,7 +3,6 @@
  * Handles admin-related API calls (users, job titles, etc.)
  */
 
-import { Page } from '@playwright/test';
 import { BaseAPI } from './base.api';
 import {
   User,

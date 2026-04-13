@@ -35,15 +35,15 @@ This project automates **critical business workflows** in OrangeHRM using a **st
 
 ## 📊 Project Metrics
 
-| Metric | Value |
-|--------|-------|
-| **Functional Coverage** | 78% (critical modules only) |
-| **Test Count** | 25+ tests (smoke + regression) |
-| **Execution Time** | 12 min (smoke) / 45 min (full) |
-| **Flaky Test Rate** | < 3% |
-| **CI/CD Pass Rate** | 97% |
-| **Code Duplication** | 4.2% |
-| **Maintainability** | High (POM without overengineering) |
+| Metric                  | Value                              |
+| ----------------------- | ---------------------------------- |
+| **Functional Coverage** | 78% (critical modules only)        |
+| **Test Count**          | 25+ tests (smoke + regression)     |
+| **Execution Time**      | 12 min (smoke) / 45 min (full)     |
+| **Flaky Test Rate**     | < 3%                               |
+| **CI/CD Pass Rate**     | 97%                                |
+| **Code Duplication**    | 4.2%                               |
+| **Maintainability**     | High (POM without overengineering) |
 
 ---
 
@@ -312,3 +312,4 @@ MIT License - See LICENSE for details
 
 Built with ❤️ by germanobrian1998
 A portfolio project demonstrating production-ready QA automation
+```

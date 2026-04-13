@@ -10,7 +10,7 @@ export interface LeaveRequest {
   leaveTypeId: number;
   leaveTypeName: string;
   fromDate: string; // YYYY-MM-DD
-  toDate: string;   // YYYY-MM-DD
+  toDate: string; // YYYY-MM-DD
   status: LeaveStatus;
   comment?: string;
   appliedDate: string;
@@ -24,7 +24,7 @@ export interface CreateLeaveRequestDTO {
   employeeId: number;
   leaveTypeId: number;
   fromDate: string; // YYYY-MM-DD
-  toDate: string;   // YYYY-MM-DD
+  toDate: string; // YYYY-MM-DD
   comment?: string;
 }
 

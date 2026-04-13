@@ -2,7 +2,7 @@
  * Generic API types and response structures
  */
 
-export interface APIResponse<T = any> {
+export interface APIResponse<T = unknown> {
   data?: T;
   success: boolean;
   message?: string;
@@ -14,7 +14,7 @@ export interface APIError {
   code: string;
   message: string;
   field?: string;
-  details?: any;
+  details?: unknown;
 }
 
 export interface APIRequestOptions {
@@ -68,9 +68,9 @@ export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
  * Request/Response interceptor types
  */
 export interface RequestInterceptor {
-  (request: any): any;
+  (request: unknown): unknown;
 }
 
-export interface ResponseInterceptor<T = any> {
+export interface ResponseInterceptor<T = unknown> {
   (response: APIResponse<T>): APIResponse<T>;
 }
