@@ -28,7 +28,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          # No npm cache here — this workflow can run on untrusted PR code,
+          # and caching with untrusted code risks cache poisoning.
 
       - name: Install dependencies
         run: npm ci
