@@ -1,1 +1,0 @@
-Home page load time: 2128ms (threshold: 10000ms)
