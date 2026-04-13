@@ -1,19 +1,30 @@
 name: 🔄 Regression Tests
 
+# Run after Smoke Tests pass — only on the main branch
 on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '0 2 * * *'
+  workflow_run:
+    workflows: [ "🔥 Smoke Tests" ]
+    types: [ completed ]
+
+permissions:
+  contents: read
 
 jobs:
   regression:
+    name: Regression Tests (Chromium)
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # Only run when smoke-tests succeeded on main
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,6 +50,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: regression-report
+          name: regression-report-${{ github.event.workflow_run.head_sha }}
           path: playwright-report/
-          retention-days: 14
+          retention-days: 30
+
+      - name: Upload Screenshots on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-failure-screenshots-${{ github.event.workflow_run.head_sha }}
+          path: test-results/
+          retention-days: 30

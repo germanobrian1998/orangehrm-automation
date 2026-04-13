@@ -19,21 +19,31 @@ Deep dive into the GitHub Actions workflows for the OrangeHRM Automation Suite.
 
 ## 🔭 Pipeline Overview
 
-| Workflow             | File                   | Trigger                            | Duration | Purpose                       |
-| -------------------- | ---------------------- | ---------------------------------- | -------- | ----------------------------- |
-| **Smoke Tests**      | `smoke-tests.yml`      | Push/PR to `main`                  | ~5 min   | Fast gate — blocks broken PRs |
-| **Regression Tests** | `regression-tests.yml` | Push to `main` + nightly 02:00 UTC | ~20 min  | Full validation               |
-| **Code Quality**     | `code-quality.yml`     | PR to `main`                       | ~2 min   | ESLint + TypeScript           |
-| **Full Matrix**      | `test.yml`             | Push/PR to `main`                  | ~25 min  | All tests × 3 browsers        |
-| **Monorepo CI**      | `monorepo-ci.yml`      | Push/PR to `main`                  | ~15 min  | Per-package test runs         |
-| **CI**               | `ci.yml`               | Push/PR to `main`                  | ~10 min  | Combined CI check             |
+The pipeline uses **sequential gating** — each stage must pass before the next runs:
+
+```
+Code Quality ──► Smoke Tests ──► Regression Tests  (main only)
+                            └──► Full Matrix Tests  (main only)
+
+Nightly Tests  (independent, scheduled daily at 02:00 UTC)
+```
+
+| Workflow             | File                   | Trigger                                    | Duration | Purpose                              |
+| -------------------- | ---------------------- | ------------------------------------------ | -------- | ------------------------------------ |
+| **Code Quality**     | `code-quality.yml`     | Push/PR to `main`                          | ~2 min   | ESLint + TypeScript — gates pipeline |
+| **Smoke Tests**      | `smoke-tests.yml`      | After Code Quality passes                  | ~5 min   | Fast gate — blocks broken PRs        |
+| **Regression Tests** | `regression-tests.yml` | After Smoke Tests pass (main only)         | ~20 min  | Full validation on main              |
+| **Full Matrix**      | `test.yml`             | After Smoke Tests pass (main only)         | ~25 min  | All tests × 3 browsers on main       |
+| **Nightly Tests**    | `nightly-tests.yml`    | Scheduled 02:00 UTC + `workflow_dispatch`  | ~30 min  | Independent daily full suite         |
+| **Monorepo CI**      | `monorepo-ci.yml`      | Push/PR to `main`                          | ~15 min  | Per-package lint and build           |
+| **CI**               | `ci.yml`               | `workflow_dispatch` only                   | ~10 min  | Manual troubleshooting               |
 
 ### Branch Protection Requirements
 
 Before a PR can merge to `main`, these checks must pass:
 
-- ✅ `smoke / smoke`
-- ✅ `lint / lint`
+- ✅ `lint / Lint & Type Check` (Code Quality)
+- ✅ `smoke-tests / Smoke Tests (Chromium)` (Smoke Tests)
 
 ---
 

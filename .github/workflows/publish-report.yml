@@ -4,12 +4,16 @@
 #
 # View the live report at:
 # https://germanobrian1998.github.io/orangehrm-automation/
+#
+# Triggered after Smoke Tests pass on the main branch.
 
 name: 📄 Publish Test Report
 
 on:
-  push:
-    branches: [ main ]
+  # Publish only after smoke tests succeed on main — avoids publishing stale/broken reports
+  workflow_run:
+    workflows: [ "🔥 Smoke Tests" ]
+    types: [ completed ]
   workflow_dispatch:
 
 # Allow the workflow to write to GitHub Pages
@@ -27,6 +31,11 @@ jobs:
   run-and-publish:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Only deploy when triggered by a successful smoke run on main (not PRs)
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
 
     environment:
       name: github-pages

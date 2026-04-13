@@ -1,19 +1,28 @@
 name: 🔥 Smoke Tests
 
+# Run after Code Quality passes — on both PRs and pushes to main
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_run:
+    workflows: [ "📊 Code Quality" ]
+    types: [ completed ]
+
+permissions:
+  contents: read
 
 jobs:
   smoke-tests:
+    name: Smoke Tests (Chromium)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Only run when code-quality succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,7 +39,7 @@ jobs:
                      /etc/apt/sources.list.d/azure-cli.list || true
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium firefox webkit
+        run: npx playwright install --with-deps chromium
 
       - name: Run Smoke Tests
         run: npm run test:smoke
@@ -39,14 +48,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-report
+          name: smoke-report-${{ github.event.workflow_run.head_sha }}
           path: playwright-report/
-          retention-days: 7
+          retention-days: ${{ github.event.workflow_run.event == 'pull_request' && 7 || 30 }}
 
       - name: Upload Screenshots on Failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-failure-screenshots
+          name: smoke-failure-screenshots-${{ github.event.workflow_run.head_sha }}
           path: test-results/
-          retention-days: 7
+          retention-days: ${{ github.event.workflow_run.event == 'pull_request' && 7 || 30 }}

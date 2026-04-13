@@ -1,23 +1,19 @@
-name: 🧪 Full Matrix Tests
+name: 🌙 Nightly Tests
 
-# Run after Smoke Tests pass — only on the main branch
+# Independent nightly run — exercises the full suite across all browsers
 on:
-  workflow_run:
-    workflows: [ "🔥 Smoke Tests" ]
-    types: [ completed ]
+  schedule:
+    - cron: '0 2 * * *'  # 02:00 UTC every day
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  full-matrix:
-    name: Full Matrix (${{ matrix.browser }})
+  nightly:
+    name: Nightly Full Suite (${{ matrix.browser }})
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-    # Only run when smoke-tests succeeded on main
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main'
+    timeout-minutes: 60
 
     strategy:
       matrix:
@@ -27,9 +23,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,15 +41,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Run tests - ${{ matrix.browser }}
+      - name: Run full test suite - ${{ matrix.browser }}
         run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          CI: true
         continue-on-error: true
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: full-matrix-results-${{ matrix.browser }}-${{ github.event.workflow_run.head_sha }}
+          name: nightly-results-${{ matrix.browser }}-${{ github.sha }}
           path: test-results/
           retention-days: 30
 
@@ -64,6 +59,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: full-matrix-report-${{ matrix.browser }}-${{ github.event.workflow_run.head_sha }}
+          name: nightly-report-${{ matrix.browser }}-${{ github.sha }}
           path: playwright-report/
           retention-days: 30

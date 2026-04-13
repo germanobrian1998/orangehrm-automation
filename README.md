@@ -1,9 +1,11 @@
 # 🎯 OrangeHRM QA Automation Suite
 
 [![Tests Passing](https://img.shields.io/badge/tests-23%2F23-brightgreen?logo=checkmarx)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
+[![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml)
 [![Smoke Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/smoke-tests.yml)
 [![Regression Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/regression-tests.yml)
-[![Code Quality](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/code-quality.yml)
+[![Full Matrix Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/test.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/test.yml)
+[![Nightly Tests](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/nightly-tests.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/nightly-tests.yml)
 [![Coverage](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/coverage.yml/badge.svg)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/coverage.yml)
 [![Coverage Threshold](https://img.shields.io/badge/coverage-80%25%2B-brightgreen?logo=jest)](https://github.com/germanobrian1998/orangehrm-automation/actions/workflows/coverage.yml)
 [![TypeScript Strict](https://img.shields.io/badge/TypeScript-strict%20mode-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -325,17 +327,25 @@ See [DOCKER.md](DOCKER.md) for full details.
 
 ## ⚙️ CI/CD Pipeline
 
-The project uses GitHub Actions with dedicated workflows:
+The project uses a **gated GitHub Actions pipeline** — each stage must pass before the next runs:
+
+```
+Code Quality ──► Smoke Tests ──► Regression Tests  (main only)
+                            └──► Full Matrix Tests  (main only)
+
+Nightly Tests  (independent, scheduled daily at 02:00 UTC)
+```
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| **Smoke Tests** | Push / PR to `main` | Runs smoke suite on Chromium; uploads HTML report artifact |
-| **Regression Tests** | Push to `main` + nightly cron | Full regression on Chromium; uploads HTML report artifact |
-| **Code Quality** | PR to `main` | ESLint + TypeScript type check (fails on errors) |
-| **Full Matrix** | Push / PR to `main` | Runs all tests on Chromium, Firefox, WebKit in parallel |
-| **Publish Report** | Push to `main` | Deploys latest HTML report to GitHub Pages |
+| **Code Quality** | Push / PR to `main` | ESLint + TypeScript type check — gates the pipeline |
+| **Smoke Tests** | After Code Quality passes | Fast smoke suite on Chromium; blocks PRs from merging |
+| **Regression Tests** | After Smoke Tests pass (main only) | Full regression on Chromium; 30-day artifact retention |
+| **Full Matrix** | After Smoke Tests pass (main only) | All tests on Chromium, Firefox, WebKit in parallel |
+| **Nightly Tests** | Scheduled daily (02:00 UTC) | Independent full suite across all browsers |
+| **Publish Report** | After Smoke Tests pass (main only) | Deploys latest HTML report to GitHub Pages |
 
-Artifacts (HTML reports, screenshots) are uploaded for every run and retained for 7–30 days.
+Artifacts are uniquely named by commit SHA (`smoke-report-<sha>`, `regression-report-<sha>`) and retained for 7 days on PRs and 30 days on main.
 
 📄 **[Live Report on GitHub Pages →](https://germanobrian1998.github.io/orangehrm-automation/)**
 

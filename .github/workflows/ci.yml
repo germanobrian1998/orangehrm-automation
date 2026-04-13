@@ -1,13 +1,9 @@
-# Main CI workflow — runs on every push/PR to main
+# Main CI workflow — superseded by the code-quality → smoke-tests → regression pipeline.
+# Kept for manual troubleshooting via workflow_dispatch.
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build-and-test:
