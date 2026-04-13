@@ -1,0 +1,2433 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-ready QA automation framework for OrangeHRM — E2E, API, and performance testing">
+      
+      
+      
+        <link rel="canonical" href="https://germanobrian1998.github.io/orangehrm-automation/DECISION_MAKING/">
+      
+      
+        <link rel="prev" href="../TEST-STRATEGY/">
+      
+      
+        <link rel="next" href="../BEST-PRACTICES/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Decision Making - OrangeHRM QA Automation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#test-coverage-decision-making" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="OrangeHRM QA Automation" class="md-header__button md-logo" aria-label="OrangeHRM QA Automation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OrangeHRM QA Automation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Decision Making
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/germanobrian1998/orangehrm-automation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    germanobrian1998/orangehrm-automation
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../QUICK_START/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ARCHITECTURE/" class="md-tabs__link">
+          
+  
+  
+  Core Concepts
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../API-DOCUMENTATION/" class="md-tabs__link">
+          
+  
+  
+  Testing Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../INTERVIEW-PREP/" class="md-tabs__link">
+          
+  
+  
+  Interview Prep
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../CI-CD/" class="md-tabs__link">
+          
+  
+  
+  Operations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../CONTRIBUTING/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="OrangeHRM QA Automation" class="md-nav__button md-logo" aria-label="OrangeHRM QA Automation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    OrangeHRM QA Automation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/germanobrian1998/orangehrm-automation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    germanobrian1998/orangehrm-automation
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../QUICK_START/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SETUP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TEST-STRATEGY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision Making
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision Making
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#philosophy-value-vs-effort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Philosophy: Value vs. Effort
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-leave-management-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏖️ Case Study: Leave Management Module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏖️ Case Study: Leave Management Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-risk-assessment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Risk Assessment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-coverage-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Coverage Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-test-cases-written" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Test Cases Written
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-strategy-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📐 Coverage Strategy Framework
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📐 Coverage Strategy Framework">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-identify-the-user-journeys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Identify the User Journeys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-score-each-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Score Each Journey
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-apply-thresholds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Apply Thresholds
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-matrix-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Decision Matrix Template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#business-impact-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💼 Business Impact Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💼 Business Impact Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-automated-tests-protect-the-business" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How automated tests protect the business
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-of-a-missed-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost of a missed regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roi-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROI Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-not-to-automate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚫 When NOT to Automate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-targets-by-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Coverage Targets by Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BEST-PRACTICES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testing Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API-DOCUMENTATION/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SECURITY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PERFORMANCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LOAD-TESTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Load Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MOCK-API/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mock API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ALLURE-REPORTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Allure Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interview Prep
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Interview Prep
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../INTERVIEW-PREP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interview Questions & Answers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CI-CD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI/CD Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MONOREPO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monorepo Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ENVIRONMENTS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TROUBLESHOOTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../KNOWN-ISSUES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PERFORMANCE_BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SCALABILITY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scalability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../EXECUTION_METRICS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Execution Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DEMO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#philosophy-value-vs-effort" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Philosophy: Value vs. Effort
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-leave-management-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏖️ Case Study: Leave Management Module
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏖️ Case Study: Leave Management Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-risk-assessment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Risk Assessment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-coverage-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Coverage Decision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-test-cases-written" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Test Cases Written
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Result
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-strategy-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📐 Coverage Strategy Framework
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📐 Coverage Strategy Framework">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-identify-the-user-journeys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Identify the User Journeys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-score-each-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Score Each Journey
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-apply-thresholds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Apply Thresholds
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-matrix-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Decision Matrix Template
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#business-impact-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💼 Business Impact Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💼 Business Impact Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-automated-tests-protect-the-business" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How automated tests protect the business
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-of-a-missed-regression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost of a missed regression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roi-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROI Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-not-to-automate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚫 When NOT to Automate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coverage-targets-by-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Coverage Targets by Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="test-coverage-decision-making">🧠 Test Coverage Decision Making<a class="headerlink" href="#test-coverage-decision-making" title="Permanent link">&para;</a></h1>
+<p>How we decide <em>what</em> to test, <em>how much</em> to test, and <em>why</em> — with a real-world case study.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#-philosophy-value-vs-effort">Philosophy: Value vs. Effort</a></li>
+<li><a href="#-case-study-leave-management-module">Case Study: Leave Management Module</a></li>
+<li><a href="#-coverage-strategy-framework">Coverage Strategy Framework</a></li>
+<li><a href="#-decision-matrix-template">Decision Matrix Template</a></li>
+<li><a href="#-business-impact-analysis">Business Impact Analysis</a></li>
+<li><a href="#-when-not-to-automate">When NOT to Automate</a></li>
+<li><a href="#-coverage-targets-by-layer">Coverage Targets by Layer</a></li>
+</ul>
+<hr />
+<h2 id="philosophy-value-vs-effort">💡 Philosophy: Value vs. Effort<a class="headerlink" href="#philosophy-value-vs-effort" title="Permanent link">&para;</a></h2>
+<p>This framework applies the <strong>Pareto Principle (80/20 rule)</strong> to test coverage decisions:</p>
+<blockquote>
+<p><strong>80% of the value comes from 20% of the test cases.</strong></p>
+</blockquote>
+<p>The goal is not maximum coverage — it is <strong>maximum risk reduction per test written</strong>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>High value │  ✅ Automate first    │  ✅ Automate          │
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>           │  (quick wins)         │  (high-value tests)   │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>           ├───────────────────────┼───────────────────────┤
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Low value  │  ❌ Skip              │  ⚠️ Low priority      │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>           │  (waste)              │  (nice to have)       │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>           └───────────────────────┴───────────────────────┘
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                 Low effort              High effort
+</code></pre></div>
+<hr />
+<h2 id="case-study-leave-management-module">🏖️ Case Study: Leave Management Module<a class="headerlink" href="#case-study-leave-management-module" title="Permanent link">&para;</a></h2>
+<h3 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h3>
+<p>The Leave Management module is used by 100% of employees at least once per month. It involves:</p>
+<ul>
+<li>Submitting leave requests (employee role)</li>
+<li>Approving/rejecting requests (manager role)</li>
+<li>Balance tracking (system)</li>
+<li>Email notifications (background job)</li>
+</ul>
+<h3 id="step-1-risk-assessment">Step 1: Risk Assessment<a class="headerlink" href="#step-1-risk-assessment" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Business Impact</th>
+<th>Failure Likelihood</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Submit leave request</td>
+<td>🔴 High — blocks employees</td>
+<td>Medium</td>
+<td><strong>P0</strong></td>
+</tr>
+<tr>
+<td>Manager approval flow</td>
+<td>🔴 High — blocks managers</td>
+<td>Medium</td>
+<td><strong>P0</strong></td>
+</tr>
+<tr>
+<td>Leave balance update</td>
+<td>🔴 High — wrong data causes disputes</td>
+<td>High (API)</td>
+<td><strong>P0</strong></td>
+</tr>
+<tr>
+<td>Rejection with reason</td>
+<td>🟡 Medium — poor UX if broken</td>
+<td>Low</td>
+<td><strong>P1</strong></td>
+</tr>
+<tr>
+<td>Leave history view</td>
+<td>🟡 Medium — informational</td>
+<td>Low</td>
+<td><strong>P1</strong></td>
+</tr>
+<tr>
+<td>Email notification</td>
+<td>🟢 Low — backup of UI feedback</td>
+<td>High (flaky)</td>
+<td><strong>P2</strong></td>
+</tr>
+<tr>
+<td>Delete old records</td>
+<td>🟢 Low — admin only, rare</td>
+<td>Very Low</td>
+<td><strong>P3</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-2-coverage-decision">Step 2: Coverage Decision<a class="headerlink" href="#step-2-coverage-decision" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>P0 — Automate fully (happy path + critical edge cases)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>P1 — Automate happy path only
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>P2 — Validate via API only (no UI test)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>P3 — Do not automate (manual if needed)
+</code></pre></div>
+<h3 id="step-3-test-cases-written">Step 3: Test Cases Written<a class="headerlink" href="#step-3-test-cases-written" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Layer</th>
+<th>Tags</th>
+<th>ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Submit leave request (valid dates)</td>
+<td>UI + API</td>
+<td><code>@smoke</code></td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Submit leave request (insufficient balance)</td>
+<td>UI</td>
+<td><code>@regression</code></td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Manager approves leave</td>
+<td>UI + API</td>
+<td><code>@smoke</code></td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Manager rejects leave with reason</td>
+<td>UI</td>
+<td><code>@regression</code></td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>Verify balance decrements after approval</td>
+<td>API</td>
+<td><code>@regression</code></td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Verify leave appears in history</td>
+<td>UI</td>
+<td><code>@regression</code></td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>Email notification sent (webhook check)</td>
+<td>API</td>
+<td>—</td>
+<td>⭐ (P2)</td>
+</tr>
+<tr>
+<td>Delete old leave records</td>
+<td>—</td>
+<td>—</td>
+<td>❌ Not automated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>3 tests</strong> cover 80% of business risk (P0 cases)</li>
+<li><strong>3 more tests</strong> cover the remaining medium-risk scenarios</li>
+<li><strong>Total: 6 tests</strong> vs. potential 20+ for near-complete coverage</li>
+<li><strong>Time saved</strong>: ~14 tests × 2h authoring = ~28 hours</li>
+</ul>
+<hr />
+<h2 id="coverage-strategy-framework">📐 Coverage Strategy Framework<a class="headerlink" href="#coverage-strategy-framework" title="Permanent link">&para;</a></h2>
+<p>Use this framework for any new module or feature:</p>
+<h3 id="1-identify-the-user-journeys">1. Identify the User Journeys<a class="headerlink" href="#1-identify-the-user-journeys" title="Permanent link">&para;</a></h3>
+<p>List every meaningful action a user can take in the module.</p>
+<h3 id="2-score-each-journey">2. Score Each Journey<a class="headerlink" href="#2-score-each-journey" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Score (1–5)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business impact if broken</td>
+<td>1 = cosmetic, 5 = blocks all users</td>
+</tr>
+<tr>
+<td>Failure likelihood</td>
+<td>1 = very stable, 5 = high churn area</td>
+</tr>
+<tr>
+<td>Test complexity</td>
+<td>1 = easy, 5 = hard to automate</td>
+</tr>
+<tr>
+<td>Existing manual coverage</td>
+<td>1 = well covered, 5 = no manual tests</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Automation Priority = (Impact × Likelihood) / Complexity</strong></p>
+<h3 id="3-apply-thresholds">3. Apply Thresholds<a class="headerlink" href="#3-apply-thresholds" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&gt; 15</td>
+<td>Automate immediately (<code>@smoke</code> + <code>@regression</code>)</td>
+</tr>
+<tr>
+<td>8–15</td>
+<td>Automate in next sprint (<code>@regression</code>)</td>
+</tr>
+<tr>
+<td>4–7</td>
+<td>Automate if time permits</td>
+</tr>
+<tr>
+<td>&lt; 4</td>
+<td>Manual test or skip</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="decision-matrix-template">📊 Decision Matrix Template<a class="headerlink" href="#decision-matrix-template" title="Permanent link">&para;</a></h2>
+<p>Copy this template for any new module:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gu">## Module: [Name]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>| Journey               | Impact (1-5) | Likelihood (1-5) | Complexity (1-5) | Score | Decision |
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>| --------------------- | ------------ | ---------------- | ---------------- | ----- | -------- |
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>| Happy path            |              |                  |                  |       |          |
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>| Validation error      |              |                  |                  |       |          |
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>| Auth/permission check |              |                  |                  |       |          |
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>| Edge case 1           |              |                  |                  |       |          |
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>| Edge case 2           |              |                  |                  |       |          |
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="gs">**Selected for automation**</span>: [List test IDs]
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="gs">**Skipped**</span>: [List and reason]
+</code></pre></div>
+<hr />
+<h2 id="business-impact-analysis">💼 Business Impact Analysis<a class="headerlink" href="#business-impact-analysis" title="Permanent link">&para;</a></h2>
+<h3 id="how-automated-tests-protect-the-business">How automated tests protect the business<a class="headerlink" href="#how-automated-tests-protect-the-business" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test Suite</th>
+<th>Tests</th>
+<th>Business Risk Covered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smoke</td>
+<td>6</td>
+<td>Login, employee create, leave request — core system health</td>
+</tr>
+<tr>
+<td>API</td>
+<td>8</td>
+<td>Data integrity, auth boundaries, CRUD correctness</td>
+</tr>
+<tr>
+<td>Regression</td>
+<td>25</td>
+<td>Full employee lifecycle, leave workflow, cross-module</td>
+</tr>
+<tr>
+<td>Cross-Browser</td>
+<td>6</td>
+<td>Compatibility for all user environments</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-of-a-missed-regression">Cost of a missed regression<a class="headerlink" href="#cost-of-a-missed-regression" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Impact</th>
+<th>Detection Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login broken</td>
+<td>100% of users blocked</td>
+<td>Smoke test — detected in &lt; 5 min</td>
+</tr>
+<tr>
+<td>Leave balance wrong</td>
+<td>Payroll disputes</td>
+<td>API regression test</td>
+</tr>
+<tr>
+<td>Employee create fails</td>
+<td>HR operations blocked</td>
+<td>Smoke + API test</td>
+</tr>
+<tr>
+<td>Cross-browser layout bug</td>
+<td>30% of users affected</td>
+<td>WebKit smoke test</td>
+</tr>
+</tbody>
+</table>
+<h3 id="roi-calculation">ROI Calculation<a class="headerlink" href="#roi-calculation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Manual testing cost (per release):
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  2 testers × 4h × 26 releases/year = 208 person-hours/year
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>Automated testing cost:
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  Initial: 40h (framework + tests)
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  Maintenance: 2h/month = 24h/year
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  CI time: negligible
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>Savings after year 1:
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>  208h - 24h - 40h = 144 person-hours = ~$10,800 at $75/h
+</code></pre></div>
+<hr />
+<h2 id="when-not-to-automate">🚫 When NOT to Automate<a class="headerlink" href="#when-not-to-automate" title="Permanent link">&para;</a></h2>
+<p>Knowing what <strong>not</strong> to automate is as important as knowing what to automate.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Reason to Skip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One-time setup tasks</td>
+<td>Not worth the investment</td>
+</tr>
+<tr>
+<td>Exploratory testing</td>
+<td>Requires human creativity</td>
+</tr>
+<tr>
+<td>Frequently changing UI</td>
+<td>Maintenance cost outweighs value</td>
+</tr>
+<tr>
+<td>Email/SMS content validation</td>
+<td>External dependencies, high flakiness</td>
+</tr>
+<tr>
+<td>Very complex test data setup</td>
+<td>Manual setup faster; automate the assertion</td>
+</tr>
+<tr>
+<td>Features being deprecated</td>
+<td>Soon gone — don't invest</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="coverage-targets-by-layer">🎯 Coverage Targets by Layer<a class="headerlink" href="#coverage-targets-by-layer" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Target</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit (core utilities)</td>
+<td>80%+</td>
+<td>Fast, cheap, catches regressions early</td>
+</tr>
+<tr>
+<td>API contracts</td>
+<td>100% of P0 endpoints</td>
+<td>Broken APIs block everything above them</td>
+</tr>
+<tr>
+<td>UI smoke</td>
+<td>100% of critical journeys</td>
+<td>Fast gate — catches show-stoppers in 5 min</td>
+</tr>
+<tr>
+<td>UI regression</td>
+<td>P0 + P1 journeys</td>
+<td>Full confidence before release</td>
+</tr>
+<tr>
+<td>Cross-browser</td>
+<td>Top 3 journeys × 3 browsers</td>
+<td>Covers 95%+ of user environments</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a href=".">← Back to docs/</a> | <a href="../INTERVIEW-PREP/">INTERVIEW-PREP.md</a> | <a href="../BEST-PRACTICES.md">BEST-PRACTICES.md</a> | <a href="../README.md">Main README</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
