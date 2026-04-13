@@ -1,12 +1,15 @@
 # ADR-002 Core Framework Design
 
 ## Context
+
 In software development, especially when dealing with automation frameworks, it is crucial to design the architecture in a way that promotes reusability, simplicity, and maintainability. One effective way to achieve this is by using base classes.
 
 ## Decision
+
 We have decided to implement base classes such as `BasePage` and `BaseApiClient`. These base classes serve as foundational elements for our page objects and API clients, providing common functionalities that can be inherited by specific implementations.
 
 ### Benefits of Using Base Classes
+
 1. **Code Reusability**: By defining generic methods and properties in base classes, we can reuse this code across multiple classes without rewriting it.
    - For example, methods for handling standard actions like navigating to a page or making API calls can be centralized in `BasePage` or `BaseApiClient`.
 
@@ -20,4 +23,5 @@ We have decided to implement base classes such as `BasePage` and `BaseApiClient`
    - This consolidation strengthens the maintainability of the codebase, as changes need to be made in only one location.
 
 ## Conclusion
+
 Implementing a core framework design using base classes like `BasePage` and `BaseApiClient` will enable us to build a more robust, maintainable, and scalable automation testing framework.

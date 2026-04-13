@@ -31,15 +31,15 @@ Comprehensive Q&A for QA Automation Engineer interviews, using this project as y
 
 **Answer:**
 
-| Factor | Playwright | Cypress | Selenium |
-|--------|-----------|---------|----------|
-| Multi-browser | ✅ Chromium, Firefox, WebKit | ⚠️ Firefox limited | ✅ All |
-| API testing | ✅ Built-in `request` fixture | ❌ Separate tool needed | ❌ |
-| Auto-waiting | ✅ Built-in, smart | ✅ Built-in | ❌ Manual waits |
-| TypeScript | ✅ First-class | ✅ Good | ⚠️ Verbose |
-| Speed | ✅ Fast | ✅ Fast | ❌ Slower |
-| Parallel | ✅ Full parallel | ⚠️ Limited | ✅ With Grid |
-| Traces/Video | ✅ Built-in | ✅ Built-in | ❌ |
+| Factor        | Playwright                    | Cypress                 | Selenium        |
+| ------------- | ----------------------------- | ----------------------- | --------------- |
+| Multi-browser | ✅ Chromium, Firefox, WebKit  | ⚠️ Firefox limited      | ✅ All          |
+| API testing   | ✅ Built-in `request` fixture | ❌ Separate tool needed | ❌              |
+| Auto-waiting  | ✅ Built-in, smart            | ✅ Built-in             | ❌ Manual waits |
+| TypeScript    | ✅ First-class                | ✅ Good                 | ⚠️ Verbose      |
+| Speed         | ✅ Fast                       | ✅ Fast                 | ❌ Slower       |
+| Parallel      | ✅ Full parallel              | ⚠️ Limited              | ✅ With Grid    |
+| Traces/Video  | ✅ Built-in                   | ✅ Built-in             | ❌              |
 
 > "I chose Playwright because it's the only tool that does cross-browser testing (including WebKit/Safari), API testing, and UI testing in a single framework. In this project, I run the same login flow across Chromium, Firefox, and WebKit without any additional tooling."
 
@@ -60,7 +60,7 @@ Comprehensive Q&A for QA Automation Engineer interviews, using this project as y
 await page.click('#submitButton');
 
 // Contrast with Selenium where you'd need:
-WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'submitButton')))
+WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'submitButton')));
 ```
 
 ---
@@ -95,7 +95,7 @@ await page.waitForURL('**/dashboard/**');
 
 // Wait for a specific API response (SPA data loading)
 await Promise.all([
-  page.waitForResponse(resp => resp.url().includes('/api/v2/pim/employees')),
+  page.waitForResponse((resp) => resp.url().includes('/api/v2/pim/employees')),
   page.click('[data-testid="employee-list-btn"]'),
 ]);
 
@@ -110,6 +110,7 @@ await page.waitForLoadState('networkidle');
 ### Q: Explain the Page Object Model pattern and why you use it.
 
 **Answer:** POM separates **test logic** from **page structure**. Each page class encapsulates:
+
 - Selectors (as private class fields)
 - Actions (as public methods returning `Promise<void>`)
 - Queries (as public methods returning `Promise<string | boolean>`)
@@ -168,11 +169,11 @@ This avoids duplicating Playwright boilerplate in every page class.
 
 ```typescript
 // ✅ Most stable to least stable
-page.getByTestId('login-btn')
-page.getByRole('button', { name: 'Login' })
-page.locator('button[type="submit"]')
-page.locator('.oxd-button--main')  // ⚠️ brittle
-page.locator('div:nth-child(2) button')  // ❌ avoid
+page.getByTestId('login-btn');
+page.getByRole('button', { name: 'Login' });
+page.locator('button[type="submit"]');
+page.locator('.oxd-button--main'); // ⚠️ brittle
+page.locator('div:nth-child(2) button'); // ❌ avoid
 ```
 
 ---
@@ -184,6 +185,7 @@ page.locator('div:nth-child(2) button')  // ❌ avoid
 **Answer:** Playwright's `request` fixture gives direct HTTP access alongside the browser. I use it two ways:
 
 **1. API-only tests** (in `tests/api/`):
+
 ```typescript
 test('GET /employees returns list', async ({ request }) => {
   const response = await request.get('/web/index.php/api/v2/pim/employees');
@@ -194,6 +196,7 @@ test('GET /employees returns list', async ({ request }) => {
 ```
 
 **2. API setup + UI assertion** (10× faster than pure UI):
+
 ```typescript
 test('employee appears in list after API create', async ({ page, request }) => {
   // Arrange: use API (fast)
@@ -218,7 +221,8 @@ test('employee appears in list after API create', async ({ page, request }) => {
 export class AuthClient extends BaseApiClient {
   async login(username: string, password: string): Promise<string> {
     const response = await this.post('/web/index.php/api/v2/auth/login', {
-      username, password
+      username,
+      password,
     });
     return response.headers['set-cookie'];
   }
@@ -235,12 +239,12 @@ For UI tests, Playwright's `storageState` saves and reuses the entire browser se
 
 **Answer:** The project has 4 GitHub Actions workflows:
 
-| Workflow | Trigger | Duration | Purpose |
-|----------|---------|----------|---------|
-| `smoke-tests.yml` | Every push/PR to `main` | ~5 min | Fast gate — blocks broken PRs |
-| `code-quality.yml` | PR to `main` | ~2 min | ESLint + TypeScript check |
-| `regression-tests.yml` | Push to `main` + nightly | ~20 min | Full validation |
-| `test.yml` | Push/PR to `main` | ~25 min | All browsers in parallel matrix |
+| Workflow               | Trigger                  | Duration | Purpose                         |
+| ---------------------- | ------------------------ | -------- | ------------------------------- |
+| `smoke-tests.yml`      | Every push/PR to `main`  | ~5 min   | Fast gate — blocks broken PRs   |
+| `code-quality.yml`     | PR to `main`             | ~2 min   | ESLint + TypeScript check       |
+| `regression-tests.yml` | Push to `main` + nightly | ~20 min  | Full validation                 |
+| `test.yml`             | Push/PR to `main`        | ~25 min  | All browsers in parallel matrix |
 
 The pipeline provides **progressive validation** — fast checks run first, expensive checks only on `main`.
 
@@ -262,6 +266,7 @@ The pipeline provides **progressive validation** — fast checks run first, expe
 ### Q: How do you manage secrets in CI?
 
 **Answer:** GitHub Secrets — credentials are stored encrypted at the organization/repo level and injected as environment variables at runtime. They are:
+
 - Never visible in logs (GitHub masks `***`)
 - Never accessible to fork PRs (protection)
 - Rotated quarterly
@@ -313,6 +318,7 @@ const emp = await employeeApi.create(request, {
 **Answer:** A monorepo lets me share the `@qa-framework/core` package (BasePage, BaseApiClient, Logger, Config) across multiple test suites without publishing to npm. Changes to core are immediately available to all packages.
 
 **Dependency graph:**
+
 ```
 @qa-framework/core ──┬──► @qa-framework/orangehrm-suite
                      ├──► @qa-framework/hrm-api-suite
@@ -321,6 +327,7 @@ const emp = await employeeApi.create(request, {
 ```
 
 **Alternatives considered:**
+
 - **Single package:** Core utils get duplicated when adding new app suites
 - **Separate repos:** Changes to core require publishing a new version and updating each consumer
 
@@ -330,13 +337,13 @@ const emp = await employeeApi.create(request, {
 
 **Answer:**
 
-| Scenario | Action |
-|----------|--------|
+| Scenario                                    | Action                                      |
+| ------------------------------------------- | ------------------------------------------- |
 | New OrangeHRM module (Recruitment, Reports) | Add page object + spec in `orangehrm-suite` |
-| New REST endpoint | Add client method + spec in `hrm-api-suite` |
-| Completely new application | New package (e.g., `new-app-suite`) |
-| Different team owns the tests | New package for clear ownership |
-| Different tech (e.g., mobile/Appium) | New package with different dependencies |
+| New REST endpoint                           | Add client method + spec in `hrm-api-suite` |
+| Completely new application                  | New package (e.g., `new-app-suite`)         |
+| Different team owns the tests               | New package for clear ownership             |
+| Different tech (e.g., mobile/Appium)        | New package with different dependencies     |
 
 ---
 
@@ -347,11 +354,13 @@ const emp = await employeeApi.create(request, {
 **Answer:** Three strategies depending on the test:
 
 1. **Generated data (Faker):** For fields where the value doesn't matter
+
    ```typescript
    const name = faker.person.firstName(); // unique every run
    ```
 
 2. **API-created data:** For entity setup that's not under test
+
    ```typescript
    const emp = await employeeApi.create(request, { firstName: 'Test' });
    // ... test something else ...
@@ -374,17 +383,20 @@ const emp = await employeeApi.create(request, {
 **Answer:**
 
 **Identify:**
+
 ```bash
 npx playwright test --repeat-each=5  # run each test 5 times
 ```
 
 **Common causes I've encountered:**
+
 1. Hard-coded `waitForTimeout` — replaced with `waitForSelector`
 2. Race condition on SPA navigation — added `waitForURL` or `waitForResponse`
 3. Shared state between tests — moved to `beforeEach` + isolated fixtures
 4. Selector matching multiple elements — used `.first()` or more specific locator
 
 **My systematic approach:**
+
 1. Run the failing test 5× — if < 100% fail rate, it's flaky not broken
 2. Enable `--trace on` and inspect the trace for the exact failure point
 3. Check if it's a timing issue (most common) or a selector issue
@@ -399,14 +411,17 @@ npx playwright test --repeat-each=5  # run each test 5 times
 **Answer:**
 
 **Short-term (up to 300 tests):**
+
 - Increase worker count to 4–8 locally
 - Add more test specs in existing packages
 
 **Medium-term (300–500 tests):**
+
 - Implement test sharding: `npx playwright test --shard=1/6`
 - Run each package's tests as a separate CI job
 
 **Long-term (500+ tests):**
+
 - Self-hosted runners with more cores
 - Cache browser installs in CI
 - Quarantine flaky tests to a separate nightly run
@@ -423,6 +438,7 @@ npx playwright test --repeat-each=5  # run each test 5 times
 **Task:** Identify the root cause and achieve consistent CI runs.
 
 **Action:**
+
 1. Enabled `trace: 'on-first-retry'` to capture failure traces
 2. Downloaded the trace files from GitHub Actions artifacts
 3. Opened traces in `npx playwright show-trace` and found that failures always occurred on the same navigation step — the dashboard load after login
@@ -430,7 +446,7 @@ npx playwright test --repeat-each=5  # run each test 5 times
 5. Changed to `waitForResponse` targeting the last API call:
    ```typescript
    await Promise.all([
-     page.waitForResponse(r => r.url().includes('/api/v2/dashboard/employees/latest')),
+     page.waitForResponse((r) => r.url().includes('/api/v2/dashboard/employees/latest')),
      loginPage.login('Admin', config.adminPassword),
    ]);
    ```
@@ -470,7 +486,9 @@ await page.context().storageState({ path: '.auth/admin.json' });
 await browser.close();
 
 // playwright.config.ts
-use: { storageState: '.auth/admin.json' }
+use: {
+  storageState: '.auth/admin.json';
+}
 ```
 
 **When to use:** Any test suite where login is not the feature under test. Saves ~3s per test.
@@ -481,11 +499,11 @@ use: { storageState: '.auth/admin.json' }
 
 **Answer:**
 
-| Hook/Feature | Scope | Isolated? | Use for |
-|---|---|---|---|
-| `test.beforeEach` | Per test | ✅ Yes | Test data setup, page navigation |
-| `test.beforeAll` | Per `describe` block | ❌ Shared | Expensive one-time setup (DB seed) |
-| Playwright fixtures | Per test | ✅ Yes | Reusable test context (authenticated page) |
+| Hook/Feature        | Scope                | Isolated? | Use for                                    |
+| ------------------- | -------------------- | --------- | ------------------------------------------ |
+| `test.beforeEach`   | Per test             | ✅ Yes    | Test data setup, page navigation           |
+| `test.beforeAll`    | Per `describe` block | ❌ Shared | Expensive one-time setup (DB seed)         |
+| Playwright fixtures | Per test             | ✅ Yes    | Reusable test context (authenticated page) |
 
 ```typescript
 // Custom fixture — reusable authenticated page
@@ -512,9 +530,9 @@ const test = base.extend<{ authenticatedPage: Page }>({
 // playwright.config.ts
 projects: [
   { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-  { name: 'firefox',  use: { ...devices['Desktop Firefox'] } },
-  { name: 'webkit',   use: { ...devices['Desktop Safari'] } },
-]
+  { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+  { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+];
 ```
 
 ```bash
@@ -526,6 +544,7 @@ npx playwright test --project=webkit
 ```
 
 When a test needs browser-specific handling:
+
 ```typescript
 test('submit form', async ({ page, browserName }) => {
   test.skip(browserName === 'webkit', 'Tracked in #42');
@@ -542,6 +561,7 @@ test('submit form', async ({ page, browserName }) => {
 **Answer Framework:**
 
 #### 1. Problem Identified
+
 Pure UI test data setup is slow (~8s per test) and flaky — it depends on the application under test, which may have bugs itself.
 
 #### 2. Solution: Three-Layer Data Strategy
@@ -593,11 +613,13 @@ for (const [username, password, expectedResult] of loginScenarios) {
 ```
 
 #### 4. Trade-offs acknowledged
+
 - API approach adds code complexity (need API client)
 - CSV approach needs maintenance when requirements change
 - Faker data is not deterministic — harder to reproduce a specific failure
 
 #### 5. Metrics
+
 - 58+ tests (19 specs × 3 browsers) with API setup: ~12 min total
 - Same tests with UI setup: estimated ~50+ min
 - **Saving: ~38 minutes per full run**
@@ -634,6 +656,7 @@ npx playwright show-trace test-results/leave-workflow/.../trace.zip
 ```
 
 **Fix applied**:
+
 ```typescript
 // ❌ Before: immediate assertion
 const balance = await leaveApi.getLeaveBalance(empId, leaveTypeId);
@@ -691,14 +714,14 @@ Developer pushes → PR opened
 
 #### Key decisions and rationale
 
-| Decision | Rationale |
-|----------|-----------|
-| Smoke on every PR | Fast (5 min) gate — finds show-stoppers immediately |
-| Regression on merge to main | Balances speed (don't block PRs) vs. coverage |
-| Parallel browser matrix | 3× coverage for ~same wall-clock time |
-| `retries: 2` in CI | Absorbs transient network issues without masking real failures |
-| Artifacts on every run | Enables debugging without re-running (traces, screenshots) |
-| Required status checks | Prevents broken code from reaching main |
+| Decision                    | Rationale                                                      |
+| --------------------------- | -------------------------------------------------------------- |
+| Smoke on every PR           | Fast (5 min) gate — finds show-stoppers immediately            |
+| Regression on merge to main | Balances speed (don't block PRs) vs. coverage                  |
+| Parallel browser matrix     | 3× coverage for ~same wall-clock time                          |
+| `retries: 2` in CI          | Absorbs transient network issues without masking real failures |
+| Artifacts on every run      | Enables debugging without re-running (traces, screenshots)     |
+| Required status checks      | Prevents broken code from reaching main                        |
 
 #### What I'd add with more resources
 
@@ -717,26 +740,26 @@ Developer pushes → PR opened
 
 #### Evaluation criteria (weighted)
 
-| Criterion | Weight | Why important |
-|-----------|--------|--------------|
-| Multi-browser (incl. WebKit) | 25% | Safari is ~20% of web users |
-| API testing built-in | 20% | API-first setup is key to performance |
-| TypeScript first-class | 20% | Type safety prevents selector bugs |
-| Trace/debug tooling | 15% | Fast diagnosis = lower maintenance cost |
-| Parallel execution | 10% | Scale without configuration overhead |
-| Learning curve | 10% | Team onboarding speed |
+| Criterion                    | Weight | Why important                           |
+| ---------------------------- | ------ | --------------------------------------- |
+| Multi-browser (incl. WebKit) | 25%    | Safari is ~20% of web users             |
+| API testing built-in         | 20%    | API-first setup is key to performance   |
+| TypeScript first-class       | 20%    | Type safety prevents selector bugs      |
+| Trace/debug tooling          | 15%    | Fast diagnosis = lower maintenance cost |
+| Parallel execution           | 10%    | Scale without configuration overhead    |
+| Learning curve               | 10%    | Team onboarding speed                   |
 
 #### Comparison matrix
 
-| Criterion | Playwright | Cypress | Selenium | WebdriverIO |
-|-----------|-----------|---------|----------|------------|
-| Multi-browser + WebKit | ✅ 5/5 | ⚠️ 3/5 | ✅ 4/5 | ✅ 4/5 |
-| API testing built-in | ✅ 5/5 | ❌ 1/5 | ❌ 1/5 | ⚠️ 2/5 |
-| TypeScript first-class | ✅ 5/5 | ✅ 4/5 | ⚠️ 3/5 | ✅ 4/5 |
-| Trace viewer | ✅ 5/5 | ⚠️ 3/5 | ❌ 1/5 | ⚠️ 2/5 |
-| Parallel execution | ✅ 5/5 | ⚠️ 3/5 | ✅ 4/5 | ✅ 4/5 |
-| Learning curve | ⚠️ 3/5 | ✅ 5/5 | ❌ 2/5 | ⚠️ 3/5 |
-| **Weighted score** | **4.65** | **3.30** | **2.55** | **3.30** |
+| Criterion              | Playwright | Cypress  | Selenium | WebdriverIO |
+| ---------------------- | ---------- | -------- | -------- | ----------- |
+| Multi-browser + WebKit | ✅ 5/5     | ⚠️ 3/5   | ✅ 4/5   | ✅ 4/5      |
+| API testing built-in   | ✅ 5/5     | ❌ 1/5   | ❌ 1/5   | ⚠️ 2/5      |
+| TypeScript first-class | ✅ 5/5     | ✅ 4/5   | ⚠️ 3/5   | ✅ 4/5      |
+| Trace viewer           | ✅ 5/5     | ⚠️ 3/5   | ❌ 1/5   | ⚠️ 2/5      |
+| Parallel execution     | ✅ 5/5     | ⚠️ 3/5   | ✅ 4/5   | ✅ 4/5      |
+| Learning curve         | ⚠️ 3/5     | ✅ 5/5   | ❌ 2/5   | ⚠️ 3/5      |
+| **Weighted score**     | **4.65**   | **3.30** | **2.55** | **3.30**    |
 
 **Winner: Playwright** — clear leader on the highest-weight criteria.
 
@@ -745,8 +768,6 @@ Developer pushes → PR opened
 Cypress excels for component testing and developer-run tests in a React/Vue project. If the team was primarily front-end focused and Safari wasn't a requirement, Cypress would be a strong choice.
 
 ---
-
-
 
 1. "What test frameworks are you currently using, and what pain points are you trying to solve?"
 2. "How many tests are in your current suite, and how long does the CI run take?"

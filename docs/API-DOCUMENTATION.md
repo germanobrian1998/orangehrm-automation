@@ -1,6 +1,7 @@
 # API Documentation
 
 ## Base URL
+
 - **Production**: https://prod-api.example.com
 - **Staging**: https://staging.example.com
 - **Demo**: https://opensource-demo.orangehrmlive.com
@@ -25,6 +26,7 @@ Authorization: Bearer <access_token>
 ```
 
 **Response:**
+
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -45,12 +47,13 @@ Retrieve a list of all employees.
 
 **Query Parameters:**
 
-| Parameter | Type    | Description               |
-|-----------|---------|---------------------------|
+| Parameter | Type    | Description                 |
+| --------- | ------- | --------------------------- |
 | `limit`   | integer | Number of records to return |
-| `offset`  | integer | Record offset              |
+| `offset`  | integer | Record offset               |
 
 **Response (200):**
+
 ```json
 {
   "data": [
@@ -74,6 +77,7 @@ Retrieve a list of all employees.
 Create a new employee.
 
 **Request Body:**
+
 ```json
 {
   "firstName": "Jane",
@@ -84,6 +88,7 @@ Create a new employee.
 ```
 
 **Response (201):**
+
 ```json
 {
   "data": {
@@ -106,11 +111,12 @@ Retrieve details of a specific employee.
 
 **Path Parameters:**
 
-| Parameter | Type    | Description  |
-|-----------|---------|--------------|
-| `id`      | integer | Employee ID  |
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| `id`      | integer | Employee ID |
 
 **Response (200):**
+
 ```json
 {
   "data": {
@@ -132,11 +138,12 @@ Update an existing employee.
 
 **Path Parameters:**
 
-| Parameter | Type    | Description  |
-|-----------|---------|--------------|
-| `id`      | integer | Employee ID  |
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| `id`      | integer | Employee ID |
 
 **Request Body:**
+
 ```json
 {
   "firstName": "John",
@@ -146,6 +153,7 @@ Update an existing employee.
 ```
 
 **Response (200):**
+
 ```json
 {
   "data": {
@@ -167,9 +175,9 @@ Delete an employee.
 
 **Path Parameters:**
 
-| Parameter | Type    | Description  |
-|-----------|---------|--------------|
-| `id`      | integer | Employee ID  |
+| Parameter | Type    | Description |
+| --------- | ------- | ----------- |
+| `id`      | integer | Employee ID |
 
 **Response (204):** No content
 
@@ -178,6 +186,7 @@ Delete an employee.
 ## Error Responses
 
 ### 400 Bad Request
+
 ```json
 {
   "error": "Invalid request body"
@@ -185,6 +194,7 @@ Delete an employee.
 ```
 
 ### 401 Unauthorized
+
 ```json
 {
   "error": "Missing or invalid authentication token"
@@ -192,6 +202,7 @@ Delete an employee.
 ```
 
 ### 404 Not Found
+
 ```json
 {
   "error": "Resource not found"

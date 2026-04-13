@@ -6,11 +6,11 @@ Get the OrangeHRM Automation Suite running in under 5 minutes.
 
 ## Prerequisites
 
-| Tool | Version | Check |
-|------|---------|-------|
-| [Node.js](https://nodejs.org/) | 18+ | `node --version` |
-| [npm](https://www.npmjs.com/) | 9+ | `npm --version` |
-| [Git](https://git-scm.com/) | any | `git --version` |
+| Tool                           | Version | Check            |
+| ------------------------------ | ------- | ---------------- |
+| [Node.js](https://nodejs.org/) | 18+     | `node --version` |
+| [npm](https://www.npmjs.com/)  | 9+      | `npm --version`  |
+| [Git](https://git-scm.com/)    | any     | `git --version`  |
 
 ---
 
@@ -60,13 +60,13 @@ npm run report
 
 ## Common Next Steps
 
-| What you want | Command |
-|---------------|---------|
-| Run all tests | `npm test` |
-| Run regression suite | `npm run test:regression` |
-| Watch tests run (headed) | `npm run test:headed` |
-| Debug a failing test | `npm run test:debug` |
-| Use the interactive UI | `npm run test:ui` |
+| What you want            | Command                   |
+| ------------------------ | ------------------------- |
+| Run all tests            | `npm test`                |
+| Run regression suite     | `npm run test:regression` |
+| Watch tests run (headed) | `npm run test:headed`     |
+| Debug a failing test     | `npm run test:debug`      |
+| Use the interactive UI   | `npm run test:ui`         |
 
 ---
 

@@ -6,7 +6,6 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { selectors } from '@config/selectors';
-import { constants } from '@config/constants';
 
 export interface EmployeeFormData {
   firstName: string;

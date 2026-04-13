@@ -5,10 +5,13 @@
  * - Proper error messages for debugging
  */
 
-import { Page, expect } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export class WaitFor {
-  constructor(private page: Page, private timeout: number = 30000) {}
+  constructor(
+    private page: Page,
+    private timeout: number = 30000
+  ) {}
 
   /**
    * Wait for element to be visible with retry logic
@@ -109,12 +112,18 @@ export class WaitFor {
   /**
    * Wait for loading spinner to disappear
    */
-  async loadingComplete(selector: string = '.oxd-loading-spinner', timeout?: number): Promise<void> {
+  async loadingComplete(
+    selector: string = '.oxd-loading-spinner',
+    timeout?: number
+  ): Promise<void> {
     const timeoutMs = timeout || 5000;
-    
+
     // Check if spinner exists
-    const spinnerExists = await this.page.locator(selector).count().then(count => count > 0);
-    
+    const spinnerExists = await this.page
+      .locator(selector)
+      .count()
+      .then((count) => count > 0);
+
     if (spinnerExists) {
       await this.elementHidden(selector, timeoutMs);
     }

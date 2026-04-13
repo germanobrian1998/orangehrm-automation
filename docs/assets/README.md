@@ -93,8 +93,8 @@ Once assets are captured, reference them in `README.md`:
 
 ## 📊 Test Reports
 
-| Playwright HTML Report | Allure Overview |
-|---|---|
+| Playwright HTML Report                                      | Allure Overview                                    |
+| ----------------------------------------------------------- | -------------------------------------------------- |
 | ![Report](docs/assets/reports/playwright-report-sample.png) | ![Allure](docs/assets/reports/allure-overview.png) |
 ```
 
@@ -102,12 +102,12 @@ Once assets are captured, reference them in `README.md`:
 
 ## 💡 Tools for Creating GIFs
 
-| Tool | Platform | Notes |
-|------|----------|-------|
-| [LICEcap](https://www.cockos.com/licecap/) | macOS/Windows | Free, easy screen-to-GIF |
-| [Gifski](https://gif.ski/) | All (via ffmpeg) | High-quality GIF from video |
-| [Kap](https://getkap.co/) | macOS | Free, high quality |
-| [ffmpeg](https://ffmpeg.org/) | All | CLI — convert webm to GIF |
+| Tool                                       | Platform         | Notes                       |
+| ------------------------------------------ | ---------------- | --------------------------- |
+| [LICEcap](https://www.cockos.com/licecap/) | macOS/Windows    | Free, easy screen-to-GIF    |
+| [Gifski](https://gif.ski/)                 | All (via ffmpeg) | High-quality GIF from video |
+| [Kap](https://getkap.co/)                  | macOS            | Free, high quality          |
+| [ffmpeg](https://ffmpeg.org/)              | All              | CLI — convert webm to GIF   |
 
 ---
 

@@ -19,18 +19,19 @@ Deep dive into the GitHub Actions workflows for the OrangeHRM Automation Suite.
 
 ## 🔭 Pipeline Overview
 
-| Workflow | File | Trigger | Duration | Purpose |
-|----------|------|---------|----------|---------|
-| **Smoke Tests** | `smoke-tests.yml` | Push/PR to `main` | ~5 min | Fast gate — blocks broken PRs |
-| **Regression Tests** | `regression-tests.yml` | Push to `main` + nightly 02:00 UTC | ~20 min | Full validation |
-| **Code Quality** | `code-quality.yml` | PR to `main` | ~2 min | ESLint + TypeScript |
-| **Full Matrix** | `test.yml` | Push/PR to `main` | ~25 min | All tests × 3 browsers |
-| **Monorepo CI** | `monorepo-ci.yml` | Push/PR to `main` | ~15 min | Per-package test runs |
-| **CI** | `ci.yml` | Push/PR to `main` | ~10 min | Combined CI check |
+| Workflow             | File                   | Trigger                            | Duration | Purpose                       |
+| -------------------- | ---------------------- | ---------------------------------- | -------- | ----------------------------- |
+| **Smoke Tests**      | `smoke-tests.yml`      | Push/PR to `main`                  | ~5 min   | Fast gate — blocks broken PRs |
+| **Regression Tests** | `regression-tests.yml` | Push to `main` + nightly 02:00 UTC | ~20 min  | Full validation               |
+| **Code Quality**     | `code-quality.yml`     | PR to `main`                       | ~2 min   | ESLint + TypeScript           |
+| **Full Matrix**      | `test.yml`             | Push/PR to `main`                  | ~25 min  | All tests × 3 browsers        |
+| **Monorepo CI**      | `monorepo-ci.yml`      | Push/PR to `main`                  | ~15 min  | Per-package test runs         |
+| **CI**               | `ci.yml`               | Push/PR to `main`                  | ~10 min  | Combined CI check             |
 
 ### Branch Protection Requirements
 
 Before a PR can merge to `main`, these checks must pass:
+
 - ✅ `smoke / smoke`
 - ✅ `lint / lint`
 
@@ -176,8 +177,8 @@ jobs:
           node-version: '18'
           cache: 'npm'
       - run: npm ci
-      - run: npm run lint        # ESLint
-      - run: npm run build       # TypeScript type check
+      - run: npm run lint # ESLint
+      - run: npm run build # TypeScript type check
 ```
 
 ### 3. Full Matrix (`test.yml`)
@@ -194,7 +195,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false           # keep running other browsers on failure
+      fail-fast: false # keep running other browsers on failure
       matrix:
         browser: [chromium, firefox, webkit]
     steps:
@@ -224,11 +225,11 @@ jobs:
 
 Navigate to: **Repository → Settings → Secrets and variables → Actions**
 
-| Secret | Description | Example Value |
-|--------|-------------|---------------|
-| `ORANGEHRM_BASE_URL` | Target application URL | `https://opensource-demo.orangehrmlive.com` |
-| `ORANGEHRM_ADMIN_USERNAME` | Admin username | `Admin` |
-| `ORANGEHRM_ADMIN_PASSWORD` | Admin password | *(set from your .env.local)* |
+| Secret                     | Description            | Example Value                               |
+| -------------------------- | ---------------------- | ------------------------------------------- |
+| `ORANGEHRM_BASE_URL`       | Target application URL | `https://opensource-demo.orangehrmlive.com` |
+| `ORANGEHRM_ADMIN_USERNAME` | Admin username         | `Admin`                                     |
+| `ORANGEHRM_ADMIN_PASSWORD` | Admin password         | _(set from your .env.local)_                |
 
 ### Using secrets in workflows
 
@@ -248,7 +249,7 @@ Use [GitHub Environments](https://docs.github.com/en/actions/deployment/targetin
 ```yaml
 jobs:
   staging-smoke:
-    environment: staging    # uses 'staging' environment's secrets
+    environment: staging # uses 'staging' environment's secrets
     steps:
       - run: npm run test:smoke
         env:
@@ -289,15 +290,15 @@ export default defineConfig({
 
 ## 📈 Performance Metrics
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| Smoke suite duration | < 5 min | ~3-4 min |
-| Regression suite duration | < 20 min | ~15-18 min |
+| Metric                             | Target   | Current    |
+| ---------------------------------- | -------- | ---------- |
+| Smoke suite duration               | < 5 min  | ~3-4 min   |
+| Regression suite duration          | < 20 min | ~15-18 min |
 | Full matrix (3 browsers, parallel) | < 30 min | ~20-25 min |
-| Code quality check | < 3 min | ~1-2 min |
-| Browser install (cached) | < 10 s | ~5 s |
-| Browser install (cold) | < 90 s | ~60 s |
-| npm ci (cached) | < 20 s | ~15 s |
+| Code quality check                 | < 3 min  | ~1-2 min   |
+| Browser install (cached)           | < 10 s   | ~5 s       |
+| Browser install (cold)             | < 90 s   | ~60 s      |
+| npm ci (cached)                    | < 20 s   | ~15 s      |
 
 ### Speed optimizations in use
 
@@ -356,13 +357,13 @@ curl -X POST \
 
 ### Tests pass locally, fail in CI
 
-| Cause | Diagnosis | Fix |
-|-------|-----------|-----|
-| Missing secret | Check env var is set in workflow | Add GitHub Secret |
-| Demo site down | Check site status | Retry workflow |
-| Race condition | Compare trace with local | Add `waitForResponse` or `waitForURL` |
-| Worker count | CI uses 2 workers | Test locally with `--workers=2` |
-| `forbidOnly` | `test.only()` in code | Remove `.only()` or use a different branch |
+| Cause          | Diagnosis                        | Fix                                        |
+| -------------- | -------------------------------- | ------------------------------------------ |
+| Missing secret | Check env var is set in workflow | Add GitHub Secret                          |
+| Demo site down | Check site status                | Retry workflow                             |
+| Race condition | Compare trace with local         | Add `waitForResponse` or `waitForURL`      |
+| Worker count   | CI uses 2 workers                | Test locally with `--workers=2`            |
+| `forbidOnly`   | `test.only()` in code            | Remove `.only()` or use a different branch |
 
 ### Artifacts not appearing
 
@@ -370,7 +371,7 @@ Add `if: always()` to upload steps — without it, artifacts are skipped on fail
 
 ```yaml
 - uses: actions/upload-artifact@v4
-  if: always()   # ← upload even when tests fail
+  if: always() # ← upload even when tests fail
   with:
     name: playwright-report
     path: playwright-report/
@@ -395,6 +396,7 @@ GitHub Actions supports re-running only failed jobs:
 2. Click **Re-run failed jobs** (not "Re-run all jobs")
 
 Or via CLI:
+
 ```bash
 gh run rerun <run-id> --failed
 ```

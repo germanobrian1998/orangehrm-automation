@@ -3,7 +3,6 @@
  * Handles all employee-related API calls
  */
 
-import { Page } from '@playwright/test';
 import { BaseAPI } from './base.api';
 import {
   Employee,
@@ -79,12 +78,15 @@ export class EmployeeAPI extends BaseAPI {
   async search(filters: EmployeeSearchDTO): Promise<Employee[]> {
     try {
       const queryParams = new URLSearchParams(
-        Object.entries(filters).reduce((acc, [key, value]) => {
-          if (value !== undefined && value !== null) {
-            acc[key] = String(value);
-          }
-          return acc;
-        }, {} as Record<string, string>)
+        Object.entries(filters).reduce(
+          (acc, [key, value]) => {
+            if (value !== undefined && value !== null) {
+              acc[key] = String(value);
+            }
+            return acc;
+          },
+          {} as Record<string, string>
+        )
       ).toString();
 
       const endpoint = `/api/v2/pim/employees${queryParams ? `?${queryParams}` : ''}`;
@@ -99,7 +101,7 @@ export class EmployeeAPI extends BaseAPI {
   /**
    * Upload employee photo
    */
-  async uploadPhoto(employeeId: number, filePath: string): Promise<void> {
+  async uploadPhoto(employeeId: number, _filePath: string): Promise<void> {
     try {
       this.logger.step(1, `Uploading photo for employee ${employeeId}`);
       // Note: File upload via API might require different handling

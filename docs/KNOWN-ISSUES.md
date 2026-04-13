@@ -20,14 +20,14 @@ This document tracks known issues, flaky tests, workarounds, and resolution stat
 
 Last 100 CI runs:
 
-| Test Area | Pass Rate | Flaky Rate | Trend | Status |
-|-----------|-----------|-----------|-------|--------|
-| Admin login | 100% | 0% | ➡️ Stable | ✅ Excellent |
-| Employee CRUD | 99.2% | 0.8% | ↘️ Improving | ✅ Good |
-| Leave approval workflow | 94.5% | 5.5% | ↘️ Improving | ⚠️ Watch — target < 2%; see Issue #2 |
-| API tests | 100% | 0% | ➡️ Stable | ✅ Excellent |
-| Photo upload | 96.1% | 3.9% | ↘️ Improving | ⚠️ Watch |
-| Cross-browser (WebKit) | 97.3% | 2.7% | ↘️ Improving | ⚠️ Watch |
+| Test Area               | Pass Rate | Flaky Rate | Trend        | Status                               |
+| ----------------------- | --------- | ---------- | ------------ | ------------------------------------ |
+| Admin login             | 100%      | 0%         | ➡️ Stable    | ✅ Excellent                         |
+| Employee CRUD           | 99.2%     | 0.8%       | ↘️ Improving | ✅ Good                              |
+| Leave approval workflow | 94.5%     | 5.5%       | ↘️ Improving | ⚠️ Watch — target < 2%; see Issue #2 |
+| API tests               | 100%      | 0%         | ➡️ Stable    | ✅ Excellent                         |
+| Photo upload            | 96.1%     | 3.9%       | ↘️ Improving | ⚠️ Watch                             |
+| Cross-browser (WebKit)  | 97.3%     | 2.7%       | ↘️ Improving | ⚠️ Watch                             |
 
 **Overall reliability: 97.9%** ✅ (Target: > 95%)
 
@@ -42,6 +42,7 @@ Last 100 CI runs:
 **Root Cause Category**: Upstream / environment — not a framework bug.
 
 **Workaround**:
+
 - Configured `retries: 2` in `playwright.config.ts` — a session timeout on the first attempt is retried automatically
 - Using `storageState` to pre-authenticate reduces round trips to the auth endpoint
 
@@ -103,7 +104,7 @@ expect(updatedBalance).toBeLessThan(originalBalance);
 ```typescript
 // tests/cross-browser/login.spec.ts
 test.describe('WebKit Login @cross-browser', () => {
-  test.use({ actionTimeout: 15000 });  // 15s for WebKit (default: 10s)
+  test.use({ actionTimeout: 15000 }); // 15s for WebKit (default: 10s)
 
   test('should login successfully on Safari/WebKit', async ({ page }) => {
     // ...
@@ -141,14 +142,14 @@ These are known gaps that are intentionally not automated, with documented reaso
 
 ## 📋 Resolution Status Tracking
 
-| Issue | First Seen | Resolved? | Resolution | Frequency Now |
-|-------|-----------|-----------|-----------|--------------|
-| Login session timeout | Project start | ⚠️ Mitigated | `retries: 2` | ~0.2% |
-| Leave balance delay | Week 2 | ✅ Mitigated | Polling retry | < 1% |
-| WebKit CI timeout | Week 3 | ✅ Mitigated | `actionTimeout: 15000` | ~0.5% |
-| Dashboard load race | Week 1 | ✅ Fixed | `waitForResponse` instead of `waitForURL` | 0% |
-| Selector ambiguity | Week 4 | ✅ Fixed | More specific locators | 0% |
-| Shared test state | Week 2 | ✅ Fixed | Independent `beforeEach` setup | 0% |
+| Issue                 | First Seen    | Resolved?    | Resolution                                | Frequency Now |
+| --------------------- | ------------- | ------------ | ----------------------------------------- | ------------- |
+| Login session timeout | Project start | ⚠️ Mitigated | `retries: 2`                              | ~0.2%         |
+| Leave balance delay   | Week 2        | ✅ Mitigated | Polling retry                             | < 1%          |
+| WebKit CI timeout     | Week 3        | ✅ Mitigated | `actionTimeout: 15000`                    | ~0.5%         |
+| Dashboard load race   | Week 1        | ✅ Fixed     | `waitForResponse` instead of `waitForURL` | 0%            |
+| Selector ambiguity    | Week 4        | ✅ Fixed     | More specific locators                    | 0%            |
+| Shared test state     | Week 2        | ✅ Fixed     | Independent `beforeEach` setup            | 0%            |
 
 ---
 

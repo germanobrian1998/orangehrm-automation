@@ -46,6 +46,7 @@ ORANGEHRM_ADMIN_PASSWORD=your_password_here
 ```
 
 Copy this to create your local config:
+
 ```bash
 cp .env.example .env.local
 # Edit .env.local with real values — this file is gitignored
@@ -61,7 +62,7 @@ dotenv.config({ path: '.env.local' });
 export const config = {
   baseURL: process.env.ORANGEHRM_BASE_URL ?? 'https://opensource-demo.orangehrmlive.com',
   adminUsername: process.env.ORANGEHRM_ADMIN_USERNAME ?? 'Admin',
-  adminPassword: process.env.ORANGEHRM_ADMIN_PASSWORD!,  // must be set
+  adminPassword: process.env.ORANGEHRM_ADMIN_PASSWORD!, // must be set
 };
 ```
 
@@ -73,11 +74,11 @@ export const config = {
 
 Navigate to: **Repository → Settings → Secrets and variables → Actions → New repository secret**
 
-| Secret Name | Value | Required? |
-|-------------|-------|-----------|
-| `ORANGEHRM_BASE_URL` | `https://opensource-demo.orangehrmlive.com` | Optional (has default) |
-| `ORANGEHRM_ADMIN_USERNAME` | `Admin` | Optional (has default) |
-| `ORANGEHRM_ADMIN_PASSWORD` | The admin password | ✅ Required |
+| Secret Name                | Value                                       | Required?              |
+| -------------------------- | ------------------------------------------- | ---------------------- |
+| `ORANGEHRM_BASE_URL`       | `https://opensource-demo.orangehrmlive.com` | Optional (has default) |
+| `ORANGEHRM_ADMIN_USERNAME` | `Admin`                                     | Optional (has default) |
+| `ORANGEHRM_ADMIN_PASSWORD` | The admin password                          | ✅ Required            |
 
 ### Using secrets in workflows
 
@@ -97,7 +98,7 @@ For staging/production environments, use [GitHub Environments](https://docs.gith
 ```yaml
 jobs:
   staging-tests:
-    environment: staging  # links to the 'staging' environment's secrets
+    environment: staging # links to the 'staging' environment's secrets
     steps:
       - run: npm run test:smoke
         env:
@@ -170,7 +171,7 @@ import { faker } from '@faker-js/faker';
 const testEmployee = {
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
-  email: faker.internet.email({ provider: 'example.com' }),  // non-real domain
+  email: faker.internet.email({ provider: 'example.com' }), // non-real domain
   phone: faker.phone.number('###-###-####'),
 };
 ```
@@ -197,6 +198,7 @@ test.afterEach(async ({ request }) => {
 For automated frameworks that use long-lived API tokens:
 
 ### Rotation schedule
+
 - Rotate API credentials every **90 days** at minimum
 - Rotate immediately if a secret is suspected compromised
 
@@ -214,7 +216,7 @@ For automated frameworks that use long-lived API tokens:
 # .github/workflows/rotate-credentials.yml
 on:
   schedule:
-    - cron: '0 9 1 */3 *'  # First day of every quarter
+    - cron: '0 9 1 */3 *' # First day of every quarter
   workflow_dispatch:
 jobs:
   notify:
@@ -269,7 +271,7 @@ Logs rotate daily and are retained for 14 days by default (configured in Winston
 ```typescript
 test('unauthenticated API returns 401 @security', async ({ request }) => {
   const response = await request.get(
-    'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees',
+    'https://opensource-demo.orangehrmlive.com/web/index.php/api/v2/pim/employees'
     // No auth headers
   );
   expect(response.status()).toBe(401);
@@ -278,12 +280,12 @@ test('unauthenticated API returns 401 @security', async ({ request }) => {
 
 ### OWASP considerations for test frameworks
 
-| Risk | Mitigation in this project |
-|------|---------------------------|
-| Credential exposure | GitHub Secrets + .gitignore |
-| Log injection | Structured Winston logging (no raw string concat) |
-| Dependency vulnerabilities | `npm audit` in CI pipeline |
-| Supply chain attacks | `package-lock.json` committed; `npm ci` (not `npm install`) in CI |
+| Risk                       | Mitigation in this project                                        |
+| -------------------------- | ----------------------------------------------------------------- |
+| Credential exposure        | GitHub Secrets + .gitignore                                       |
+| Log injection              | Structured Winston logging (no raw string concat)                 |
+| Dependency vulnerabilities | `npm audit` in CI pipeline                                        |
+| Supply chain attacks       | `package-lock.json` committed; `npm ci` (not `npm install`) in CI |
 
 ---
 
@@ -291,35 +293,35 @@ test('unauthenticated API returns 401 @security', async ({ request }) => {
 
 ### Local Development
 
-| Concern | Risk | Mitigation |
-|---------|------|------------|
-| `.env.local` accidentally committed | Credentials exposed in git | `.gitignore` + pre-commit hook |
-| Verbose logging exposes credentials | Logs visible to teammates | Never log passwords or tokens (see Audit Logging) |
-| Browser traces capture passwords | Password visible in trace | Playwright auto-masks `type="password"` inputs |
+| Concern                             | Risk                       | Mitigation                                        |
+| ----------------------------------- | -------------------------- | ------------------------------------------------- |
+| `.env.local` accidentally committed | Credentials exposed in git | `.gitignore` + pre-commit hook                    |
+| Verbose logging exposes credentials | Logs visible to teammates  | Never log passwords or tokens (see Audit Logging) |
+| Browser traces capture passwords    | Password visible in trace  | Playwright auto-masks `type="password"` inputs    |
 
 ### CI/CD (GitHub Actions)
 
-| Concern | Risk | Mitigation |
-|---------|------|------------|
-| Secrets visible in workflow logs | Credential exposure | GitHub automatically masks `***` |
-| Fork PRs access secrets | Malicious fork steals credentials | GitHub blocks secret access for fork PRs by default |
-| Workflow file edited by attacker | Runs malicious code with secrets | Branch protection rules; require PR review |
-| Long-lived tokens | Broad attack surface if leaked | Rotate credentials every 90 days |
+| Concern                          | Risk                              | Mitigation                                          |
+| -------------------------------- | --------------------------------- | --------------------------------------------------- |
+| Secrets visible in workflow logs | Credential exposure               | GitHub automatically masks `***`                    |
+| Fork PRs access secrets          | Malicious fork steals credentials | GitHub blocks secret access for fork PRs by default |
+| Workflow file edited by attacker | Runs malicious code with secrets  | Branch protection rules; require PR review          |
+| Long-lived tokens                | Broad attack surface if leaked    | Rotate credentials every 90 days                    |
 
 ### Docker
 
-| Concern | Risk | Mitigation |
-|---------|------|------------|
-| Credentials baked into image | Exposed in `docker history` | Pass as runtime env vars, never `COPY .env` |
+| Concern                             | Risk                        | Mitigation                                           |
+| ----------------------------------- | --------------------------- | ---------------------------------------------------- |
+| Credentials baked into image        | Exposed in `docker history` | Pass as runtime env vars, never `COPY .env`          |
 | Public Docker Hub push with secrets | Credentials in image layers | Use multi-stage builds; secrets never in final layer |
 
 ### Staging / Production
 
-| Concern | Risk | Mitigation |
-|---------|------|------------|
-| Test accounts with broad permissions | Over-privileged test user | Create a dedicated test role with minimal permissions |
-| Test data pollutes production | Real users see test entries | Use dedicated staging; never run against production |
-| PII in test data | GDPR/compliance violations | Use Faker for all personal data; never real PII |
+| Concern                              | Risk                        | Mitigation                                            |
+| ------------------------------------ | --------------------------- | ----------------------------------------------------- |
+| Test accounts with broad permissions | Over-privileged test user   | Create a dedicated test role with minimal permissions |
+| Test data pollutes production        | Real users see test entries | Use dedicated staging; never run against production   |
+| PII in test data                     | GDPR/compliance violations  | Use Faker for all personal data; never real PII       |
 
 ---
 
@@ -355,14 +357,12 @@ git log --all -p | grep -i "admin123\|password" | head -20
 
 ### Historical Audit Log
 
-| Date | Auditor | Findings | Actions Taken |
-|------|---------|---------|--------------|
-| Project start | Team | No secrets in git | Pre-commit hook added |
-| Ongoing | CI (`npm audit`) | Dependency vulnerabilities | Auto-fixed via `npm audit fix` |
+| Date          | Auditor          | Findings                   | Actions Taken                  |
+| ------------- | ---------------- | -------------------------- | ------------------------------ |
+| Project start | Team             | No secrets in git          | Pre-commit hook added          |
+| Ongoing       | CI (`npm audit`) | Dependency vulnerabilities | Auto-fixed via `npm audit fix` |
 
 ---
-
-
 
 ### Never hardcode credentials
 
@@ -399,12 +399,12 @@ git add .env.local
 ```typescript
 // ❌ Checked into source control
 const TEST_DATA = {
-  admin: { username: 'Admin', password: 'admin123' }  // ← in source control!
+  admin: { username: 'Admin', password: 'admin123' }, // ← in source control!
 };
 
 // ✅ Read from environment
 const TEST_DATA = {
-  admin: { username: config.adminUsername, password: config.adminPassword }
+  admin: { username: config.adminUsername, password: config.adminPassword },
 };
 ```
 

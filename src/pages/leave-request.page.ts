@@ -6,12 +6,11 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { selectors } from '@config/selectors';
-import { constants } from '@config/constants';
 
 export interface LeaveFormData {
   leaveType: string;
   fromDate: string; // YYYY-MM-DD
-  toDate: string;   // YYYY-MM-DD
+  toDate: string; // YYYY-MM-DD
   comment?: string;
 }
 

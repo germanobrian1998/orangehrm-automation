@@ -32,12 +32,12 @@ choco install k6
 
 ## 🧪 Test Scenarios
 
-| Script | Users | Duration | Purpose |
-|---|---|---|---|
-| `smoke-load.js` | 10 | ~2 min | Baseline load validation |
-| `soak-test.js` | 50 | ~9 min | Sustained load / memory leaks |
-| `spike-test.js` | 100 | ~2 min | Sudden traffic spikes |
-| `stress-test.js` | 100 | ~32 min | Find breaking point |
+| Script           | Users | Duration | Purpose                       |
+| ---------------- | ----- | -------- | ----------------------------- |
+| `smoke-load.js`  | 10    | ~2 min   | Baseline load validation      |
+| `soak-test.js`   | 50    | ~9 min   | Sustained load / memory leaks |
+| `spike-test.js`  | 100   | ~2 min   | Sudden traffic spikes         |
+| `stress-test.js` | 100   | ~32 min  | Find breaking point           |
 
 ---
 
@@ -87,14 +87,14 @@ ADMIN_USER=myuser ADMIN_PASS=mypass npm run load:smoke
 
 k6 reports a rich set of built-in metrics after each run:
 
-| Metric | Description |
-|---|---|
-| `http_req_duration` | Total time for an HTTP request (latency) |
-| `http_req_failed` | Rate of failed requests (non-2xx / network errors) |
-| `http_reqs` | Total HTTP requests made |
-| `iterations` | Total number of script iterations completed |
-| `vus` | Current number of active virtual users |
-| `vus_max` | Maximum number of VUs during the test |
+| Metric              | Description                                        |
+| ------------------- | -------------------------------------------------- |
+| `http_req_duration` | Total time for an HTTP request (latency)           |
+| `http_req_failed`   | Rate of failed requests (non-2xx / network errors) |
+| `http_reqs`         | Total HTTP requests made                           |
+| `iterations`        | Total number of script iterations completed        |
+| `vus`               | Current number of active virtual users             |
+| `vus_max`           | Maximum number of VUs during the test              |
 
 ### Key percentiles
 
@@ -113,8 +113,8 @@ Each test script defines thresholds that determine whether the test passes:
 ```javascript
 export const options = {
   thresholds: {
-    http_req_duration: ['p(95)<500', 'p(99)<1000'],  // 95th pct < 500ms, 99th pct < 1000ms
-    http_req_failed: ['rate<0.1'],                     // Error rate < 10%
+    http_req_duration: ['p(95)<500', 'p(99)<1000'], // 95th pct < 500ms, 99th pct < 1000ms
+    http_req_failed: ['rate<0.1'], // Error rate < 10%
   },
 };
 ```
@@ -226,10 +226,10 @@ export default function () {
 
 ### Available methods
 
-| Method | Description |
-|---|---|
-| `authenticate(username, password)` | Obtains an OAuth token |
-| `getAuthHeaders()` | Returns headers with Bearer token |
-| `getEmployees()` | GET `/api/v2/employees` |
-| `createEmployee(data)` | POST `/api/v2/employees` |
-| `deleteEmployee(id)` | DELETE `/api/v2/employees/:id` |
+| Method                             | Description                       |
+| ---------------------------------- | --------------------------------- |
+| `authenticate(username, password)` | Obtains an OAuth token            |
+| `getAuthHeaders()`                 | Returns headers with Bearer token |
+| `getEmployees()`                   | GET `/api/v2/employees`           |
+| `createEmployee(data)`             | POST `/api/v2/employees`          |
+| `deleteEmployee(id)`               | DELETE `/api/v2/employees/:id`    |

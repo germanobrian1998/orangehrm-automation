@@ -10,6 +10,7 @@
 ## Can I run tests offline?
 
 Yes, use mock API:
+
 ```bash
 npm run test:mock
 ```

@@ -11,12 +11,14 @@ This document explains **WHAT** we test and **WHY**, using a pragmatic approach 
 ### ✅ AUTOMATE (Tier 1 - Critical)
 
 **Login & Authentication**
+
 - ✓ Valid login
 - ✓ Invalid credentials error
 - ✓ Logout
 - ✓ Session timeout
 
 **Employee Management (PIM)**
+
 - ✓ Create employee (API + UI validation)
 - ✓ Update employee details
 - ✓ Delete employee
@@ -25,6 +27,7 @@ This document explains **WHAT** we test and **WHY**, using a pragmatic approach 
 - ✓ Duplicate ID validation
 
 **Leave Management**
+
 - ✓ Apply for leave
 - ✓ Manager approval workflow
 - ✓ Leave balance check
@@ -35,11 +38,13 @@ This document explains **WHAT** we test and **WHY**, using a pragmatic approach 
 ### ⚠️ PARTIAL AUTOMATION (Tier 2 - Important)
 
 **Admin Users**
+
 - ✓ Create user (API)
 - ✓ Reset password
 - ❌ Role permissions (manual)
 
 **Job Titles**
+
 - ✓ Create job title
 - ✓ List job titles
 - ❌ Bulk operations (manual)
@@ -49,21 +54,25 @@ This document explains **WHAT** we test and **WHY**, using a pragmatic approach 
 ### ❌ DO NOT AUTOMATE (Justification)
 
 **Email Notifications**
+
 - Reason: Requires external SMTP setup
 - Test Method: Manual in staging
 - ROI: Low (infrastructure-dependent)
 
 **PDF Reports**
+
 - Reason: Requires visual regression tool (Percy, BackstopJS)
 - Test Method: Manual visual inspection
 - ROI: Low (design changes frequently)
 
 **Mobile Responsive**
+
 - Reason: Should use specialized tool (Playwright Mobile)
 - Test Method: Manual or dedicated mobile framework
 - ROI: Out of scope for QA automation
 
 **508 Accessibility**
+
 - Reason: Requires Axe/Pa11y integration
 - Test Method: Automated with Axe plugin
 - ROI: Separate concern, different framework
@@ -85,16 +94,19 @@ Code
 ## Test Types
 
 ### Unit Tests (Utilities)
+
 - Testing utils, helpers
 - Type safety validation
 - Example: DateFormatter, StringValidator
 
 ### Integration Tests (Workflows)
+
 - Multi-step workflows
 - Cross-module interaction
 - Example: Create Employee → Apply Leave → Approve
 
 ### E2E Tests (User Journeys)
+
 - Complete user workflows
 - Real browser, real environment
 - Example: Login → Create Employee → Verify in List
@@ -138,6 +150,7 @@ Delete test data (API)
 Code
 
 **Benefits**:
+
 - ✅ No data pollution
 - ✅ Tests are idempotent
 - ✅ Parallel tests don't conflict
@@ -156,6 +169,7 @@ Metrics tracked:
 - Maintenance effort
 
 Review quarterly and adjust strategy based on:
+
 - Business priorities
 - Technology changes
 - Team capacity

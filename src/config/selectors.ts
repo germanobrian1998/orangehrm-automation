@@ -28,7 +28,7 @@ export const selectors = {
     sidebarLink: 'a:has-text("PIM")',
     employeeListLink: 'a:has-text("Employee List")',
     addEmployeeButton: 'button:has-text("Add")',
-    
+
     // Employee Form
     firstNameInput: 'input[placeholder="First Name"]',
     lastNameInput: 'input[placeholder="Last Name"]',
@@ -36,13 +36,13 @@ export const selectors = {
     emailInput: 'input[type="email"]',
     photoInput: 'input[type="file"]',
     saveButton: 'button[type="submit"]:has-text("Save")',
-    
+
     // Employee List
     employeeTable: '.oxd-table-body',
     employeeRow: (employeeId: string) => `tr:has-text("${employeeId}")`,
     firstNameField: 'input[placeholder="First Name"]',
     searchButton: 'button:has-text("Search")',
-    
+
     // Validations
     fieldError: (fieldName: string) => `div:has-text("${fieldName}") ~ div.oxd-form-row-error`,
     requiredError: '.oxd-input-group__error-message',
@@ -53,14 +53,14 @@ export const selectors = {
     sidebarLink: 'a:has-text("Leave")',
     applyLeaveLink: 'a:has-text("Apply Leave")',
     leaveListLink: 'a:has-text("My Leave")',
-    
+
     // Apply Leave Form
     leaveTypeSelect: '.oxd-select-text',
     fromDateInput: 'input[placeholder="yyyy-mm-dd"]',
     toDateInput: 'input[placeholder="yyyy-mm-dd"]',
     commentTextarea: 'textarea',
     submitButton: 'button[type="submit"]:has-text("Apply")',
-    
+
     // Leave List
     leaveTable: '.oxd-table-body',
     leaveRow: (leaveId: string) => `tr:has-text("${leaveId}")`,
@@ -73,13 +73,13 @@ export const selectors = {
     sidebarLink: 'a:has-text("Admin")',
     usersLink: 'a:has-text("Users")',
     jobTitlesLink: 'a:has-text("Job Titles")',
-    
+
     // Users Management
     addUserButton: 'button:has-text("Add")',
     usernameInput: 'input[placeholder="Username"]',
     passwordInput: 'input[type="password"]',
     userTable: '.oxd-table-body',
-    
+
     // Job Titles
     addJobTitleButton: 'button:has-text("Add")',
     jobTitleInput: 'input[placeholder="Job Title"]',

@@ -6,9 +6,9 @@
 export const constants = {
   // ===== TIMEOUTS =====
   TIMEOUTS: {
-    SHORT: 3000,      // 3 seconds
-    MEDIUM: 5000,     // 5 seconds
-    LONG: 10000,      // 10 seconds
+    SHORT: 3000, // 3 seconds
+    MEDIUM: 5000, // 5 seconds
+    LONG: 10000, // 10 seconds
     VERY_LONG: 30000, // 30 seconds
   },
 
