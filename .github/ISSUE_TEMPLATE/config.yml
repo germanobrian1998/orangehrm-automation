@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: 📖 Documentation
+    url: https://germanobrian1998.github.io/orangehrm-automation
+    about: Read the project documentation before opening an issue.
+  - name: 💬 Discussions
+    url: https://github.com/germanobrian1998/orangehrm-automation/discussions
+    about: Ask questions or share ideas in GitHub Discussions.
