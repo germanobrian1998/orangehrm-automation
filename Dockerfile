@@ -5,6 +5,7 @@ WORKDIR /app
 # Install system dependencies for Playwright
 RUN apk add --no-cache \
     chromium \
+    curl \
     nss \
     freetype \
     harfbuzz \
@@ -20,13 +21,15 @@ COPY packages/orangehrm-suite/package*.json ./packages/orangehrm-suite/
 COPY packages/hrm-api-suite/package*.json ./packages/hrm-api-suite/
 RUN npm ci
 
-# Install Playwright browsers
+# Install Playwright browsers used in CI
 RUN npx playwright install chromium
 
 # Copy application code
 COPY . .
+COPY scripts/health-check.sh /app/scripts/health-check.sh
 
 RUN mkdir -p test-results playwright-report allure-results
+RUN chmod +x /app/scripts/health-check.sh
 
 ENV CI=true
 

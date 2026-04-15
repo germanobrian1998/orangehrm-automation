@@ -2,13 +2,26 @@ services:
   test:
     build: .
     environment:
-      - ORANGEHRM_BASE_URL=https://opensource-demo.orangehrmlive.com
+      - ORANGEHRM_BASE_URL=${ORANGEHRM_BASE_URL:-https://opensource-demo.orangehrmlive.com}
       - HEADLESS=true
       - CI=true
+      - DOCKER=true
+      - ENVIRONMENT=${ENVIRONMENT:-ci}
+      - HEALTH_CHECK_MAX_ATTEMPTS=${HEALTH_CHECK_MAX_ATTEMPTS:-15}
+      - HEALTH_CHECK_INITIAL_TIMEOUT=${HEALTH_CHECK_INITIAL_TIMEOUT:-5}
+      - HEALTH_CHECK_MAX_TIMEOUT=${HEALTH_CHECK_MAX_TIMEOUT:-20}
     volumes:
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
       - ./playwright-report:/app/playwright-report
+    command: >
+      sh -c "./scripts/health-check.sh && npm run ${TEST_COMMAND:-test:ci}"
+    healthcheck:
+      test: ["CMD-SHELL", "./scripts/health-check.sh"]
+      interval: 30s
+      timeout: 90s
+      retries: 5
+      start_period: 30s
     networks:
       - test-network
 
