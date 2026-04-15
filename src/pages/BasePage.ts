@@ -4,14 +4,13 @@ export class BasePage {
   protected page: Page;
   private readonly navigationTimeout = process.env.CI ? 60000 : 30000;
   private readonly maxNavigationRetries = process.env.CI ? 3 : 2;
-  private readonly retryDelayMs = process.env.CI ? 2000 : 1000;
 
   constructor(page: Page) {
     this.page = page;
   }
 
   async goto(url: string) {
-    let lastError: unknown;
+    let lastError: unknown = new Error(`Navigation failed for ${url}`);
 
     for (let attempt = 1; attempt <= this.maxNavigationRetries; attempt++) {
       try {
@@ -22,14 +21,10 @@ export class BasePage {
         return;
       } catch (error) {
         lastError = error;
-        if (attempt === this.maxNavigationRetries) {
-          throw error;
-        }
-        await this.page.waitForTimeout(this.retryDelayMs * attempt);
       }
     }
 
-    throw lastError;
+    throw lastError instanceof Error ? lastError : new Error(`Navigation failed for ${url}`);
   }
 
   async fillInput(selector: string, text: string) {
@@ -43,7 +38,7 @@ export class BasePage {
   async waitForNavigation(timeout: number = this.navigationTimeout) {
     const states: LoadState[] = ['domcontentloaded', 'load', 'networkidle'];
     const perStateTimeout = Math.max(5000, Math.floor(timeout / states.length));
-    let lastError: unknown;
+    let lastError: unknown = new Error('Navigation load state did not stabilize');
 
     for (const state of states) {
       try {
@@ -54,7 +49,9 @@ export class BasePage {
       }
     }
 
-    throw lastError;
+    throw lastError instanceof Error
+      ? lastError
+      : new Error('Navigation load state did not stabilize');
   }
 
   async getPageTitle() {

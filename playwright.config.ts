@@ -5,13 +5,14 @@ const testTimeout = process.env.TEST_TIMEOUT ? parseInt(process.env.TEST_TIMEOUT
 const baseURL =
   process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
 const isCI = !!process.env.CI;
+const ciRetries = process.env.MAX_RETRIES ? parseInt(process.env.MAX_RETRIES, 10) : 3;
 
 export default defineConfig({
   testDir: './tests',
   outputDir: `./test-results/${environment}`,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: isCI ? 3 : 0,
+  retries: isCI ? ciRetries : 0,
   workers: isCI ? 2 : undefined,
   timeout: testTimeout,
   expect: {
