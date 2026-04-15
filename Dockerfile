@@ -33,7 +33,7 @@ RUN chmod +x scripts/health-check.sh
 ENV CI=true
 ENV ORANGEHRM_BASE_URL=https://opensource-demo.orangehrmlive.com
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=5 \
+HEALTHCHECK --interval=30s --timeout=35s --start-period=20s --retries=5 \
   CMD /app/scripts/health-check.sh
 
 # Default command

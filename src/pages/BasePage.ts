@@ -22,10 +22,10 @@ export class BasePage {
   async waitForNavigation(options?: { timeout?: number; retries?: number }) {
     const timeout = options?.timeout ?? 45000;
     const retries = options?.retries ?? 2;
-    const loadStates: Array<'domcontentloaded' | 'load' | 'networkidle'> = [
-      'domcontentloaded',
-      'load',
+    const loadStates: Array<'networkidle' | 'load' | 'domcontentloaded'> = [
       'networkidle',
+      'load',
+      'domcontentloaded',
     ];
 
     let lastError: unknown;
@@ -41,7 +41,13 @@ export class BasePage {
       }
     }
 
-    throw lastError;
+    const message = `waitForNavigation failed after ${retries} retries using load states: ${loadStates.join(
+      ', '
+    )}`;
+    if (lastError instanceof Error) {
+      throw new Error(`${message}. Last error: ${lastError.message}`);
+    }
+    throw new Error(`${message}. Last error: ${String(lastError)}`);
   }
 
   async getPageTitle() {

@@ -16,7 +16,7 @@ services:
       - test-network
     healthcheck:
       test: ['CMD-SHELL', '/app/scripts/health-check.sh']
-      interval: 30s
+      interval: 40s
       timeout: 35s
       retries: 5
       start_period: 20s
