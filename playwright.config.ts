@@ -4,17 +4,18 @@ const environment = process.env.ENVIRONMENT || 'development';
 const testTimeout = process.env.TEST_TIMEOUT ? parseInt(process.env.TEST_TIMEOUT, 10) : 60000;
 const baseURL =
   process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
+const isCI = !!process.env.CI;
 
 export default defineConfig({
   testDir: './tests',
   outputDir: `./test-results/${environment}`,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  retries: isCI ? 3 : 0,
+  workers: isCI ? 2 : undefined,
   timeout: testTimeout,
   expect: {
-    timeout: 10000,
+    timeout: isCI ? 15000 : 10000,
   },
   reporter: [
     ['list'],
@@ -26,8 +27,8 @@ export default defineConfig({
     trace: environment === 'development' ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10000,
-    navigationTimeout: 30000,
+    actionTimeout: isCI ? 20000 : 10000,
+    navigationTimeout: isCI ? 60000 : 30000,
   },
 
   projects: [

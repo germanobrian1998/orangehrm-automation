@@ -8,7 +8,7 @@ export class LoginPage extends BasePage {
   private errorAlert = '.oxd-alert';
 
   async navigateToLogin() {
-    await this.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    await this.goto('/web/index.php/auth/login');
     await this.waitForNavigation();
   }
 
