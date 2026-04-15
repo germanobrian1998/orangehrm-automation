@@ -8,8 +8,37 @@ export class LoginPage extends BasePage {
   private errorAlert = '.oxd-alert';
 
   async navigateToLogin() {
-    await this.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
-    await this.waitForNavigation();
+    const loginPath = '/web/index.php/auth/login';
+    const baseURL = process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
+    const loginURL = new URL(loginPath, baseURL).toString();
+    const retries = parseInt(process.env.LOGIN_NAVIGATION_RETRIES || '3', 10);
+
+    let lastError: unknown;
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        await this.goto(loginPath);
+        await this.waitForNavigation({
+          timeout: parseInt(process.env.NAVIGATION_TIMEOUT || '45000', 10),
+          retries: 2,
+        });
+        return;
+      } catch (error) {
+        lastError = error;
+
+        if (attempt === retries) {
+          throw new Error(
+            `Failed to navigate to login page after ${retries} attempts at ${loginURL}: ${
+              error instanceof Error ? error.message : String(error)
+            }`
+          );
+        }
+
+        await this.page.waitForTimeout(attempt * 1000);
+      }
+    }
+
+    throw lastError;
   }
 
   async login(username: string, password: string) {

@@ -1,16 +1,25 @@
 services:
   test:
     build: .
+    image: orangehrm-automation
     environment:
-      - ORANGEHRM_BASE_URL=https://opensource-demo.orangehrmlive.com
-      - HEADLESS=true
-      - CI=true
+      - ORANGEHRM_BASE_URL=${ORANGEHRM_BASE_URL:-https://opensource-demo.orangehrmlive.com}
+      - HEADLESS=${HEADLESS:-true}
+      - CI=${CI:-true}
+      - HEALTHCHECK_MAX_RETRIES=${HEALTHCHECK_MAX_RETRIES:-15}
+      - HEALTHCHECK_REQUEST_TIMEOUT_SECONDS=${HEALTHCHECK_REQUEST_TIMEOUT_SECONDS:-30}
     volumes:
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
       - ./playwright-report:/app/playwright-report
     networks:
       - test-network
+    healthcheck:
+      test: ['CMD-SHELL', '/app/scripts/health-check.sh']
+      interval: 30s
+      timeout: 35s
+      retries: 5
+      start_period: 20s
 
   smoke:
     build: .
@@ -19,7 +28,8 @@ services:
       - ./test-results:/app/test-results
       - ./playwright-report:/app/playwright-report
     environment:
-      - CI=true
+      - ORANGEHRM_BASE_URL=${ORANGEHRM_BASE_URL:-https://opensource-demo.orangehrmlive.com}
+      - CI=${CI:-true}
     command: npm run test:smoke
     networks:
       - test-network
@@ -31,7 +41,8 @@ services:
       - ./test-results:/app/test-results
       - ./playwright-report:/app/playwright-report
     environment:
-      - CI=true
+      - ORANGEHRM_BASE_URL=${ORANGEHRM_BASE_URL:-https://opensource-demo.orangehrmlive.com}
+      - CI=${CI:-true}
     command: npm run test:regression
     networks:
       - test-network
