@@ -7,101 +7,38 @@ on:
     branches: [main]
 
 jobs:
-  test-dev:
-    name: Tests – development
+  test:
+    name: Tests – ${{ matrix.environment }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - environment: development
+            test_command: test:dev
+            artifact_name: dev-results
+          - environment: staging
+            test_command: test:staging
+            artifact_name: staging-results
+          - environment: ci
+            test_command: test:ci
+            artifact_name: ci-results
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run tests (development)
-        run: npm run test:dev
+      - name: Run tests in Docker
+        run: docker compose run --rm test
         env:
-          ENVIRONMENT: development
-        continue-on-error: true
+          ENVIRONMENT: ${{ matrix.environment }}
+          TEST_COMMAND: ${{ matrix.test_command }}
+          ORANGEHRM_BASE_URL: https://opensource-demo.orangehrmlive.com
 
-      - name: Upload dev test results
+      - name: Upload ${{ matrix.environment }} test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: dev-results
-          path: test-results/development/
-          retention-days: 30
-
-  test-staging:
-    name: Tests – staging
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run tests (staging)
-        run: npm run test:staging
-        env:
-          ENVIRONMENT: staging
-        continue-on-error: true
-
-      - name: Upload staging test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: staging-results
-          path: test-results/staging/
-          retention-days: 30
-
-  test-ci:
-    name: Tests – CI
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run tests (CI)
-        run: npm run test:ci
-        env:
-          ENVIRONMENT: ci
-          CI: 'true'
-
-      - name: Upload CI test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ci-results
-          path: test-results/ci/
+          name: ${{ matrix.artifact_name }}
+          path: test-results/${{ matrix.environment }}/
           retention-days: 30

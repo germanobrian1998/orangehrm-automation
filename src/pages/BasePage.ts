@@ -19,8 +19,43 @@ export class BasePage {
     await this.page.click(selector);
   }
 
-  async waitForNavigation() {
-    await this.page.waitForLoadState('networkidle');
+  protected getNavigationTimeout(): number {
+    if (process.env.NAVIGATION_TIMEOUT) {
+      return parseInt(process.env.NAVIGATION_TIMEOUT, 10);
+    }
+
+    if (process.env.CI === 'true' || process.env.DOCKER === 'true') {
+      return 60000;
+    }
+
+    if (process.env.ENVIRONMENT === 'staging') {
+      return 45000;
+    }
+
+    return 30000;
+  }
+
+  async waitForNavigation(maxRetries: number = 2) {
+    const timeout = this.getNavigationTimeout();
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        await this.page.waitForLoadState('load', { timeout });
+        return;
+      } catch (loadError) {
+        try {
+          await this.page.waitForLoadState('domcontentloaded', {
+            timeout: Math.floor(timeout / 2),
+          });
+          return;
+        } catch {
+          if (attempt === maxRetries) {
+            throw loadError;
+          }
+          await this.page.waitForTimeout(attempt * 1000);
+        }
+      }
+    }
   }
 
   async getPageTitle() {
