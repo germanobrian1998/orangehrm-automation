@@ -24,12 +24,12 @@ export class BasePage {
       return parseInt(process.env.NAVIGATION_TIMEOUT, 10);
     }
 
-    if (process.env.CI === 'true' || process.env.DOCKER === 'true') {
-      return 60000;
-    }
-
     if (process.env.ENVIRONMENT === 'staging') {
       return 45000;
+    }
+
+    if (process.env.CI === 'true' || process.env.DOCKER === 'true') {
+      return 60000;
     }
 
     return 30000;

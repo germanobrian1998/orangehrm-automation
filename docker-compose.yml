@@ -9,7 +9,7 @@ services:
       - ENVIRONMENT=${ENVIRONMENT:-ci}
       - HEALTH_CHECK_MAX_ATTEMPTS=${HEALTH_CHECK_MAX_ATTEMPTS:-15}
       - HEALTH_CHECK_INITIAL_TIMEOUT=${HEALTH_CHECK_INITIAL_TIMEOUT:-5}
-      - HEALTH_CHECK_MAX_TIMEOUT=${HEALTH_CHECK_MAX_TIMEOUT:-60}
+      - HEALTH_CHECK_MAX_TIMEOUT=${HEALTH_CHECK_MAX_TIMEOUT:-20}
     volumes:
       - ./test-results:/app/test-results
       - ./allure-results:/app/allure-results
@@ -19,9 +19,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "./scripts/health-check.sh"]
       interval: 30s
-      timeout: 30s
+      timeout: 90s
       retries: 5
-      start_period: 10s
+      start_period: 30s
     networks:
       - test-network
 

@@ -6,7 +6,7 @@ BASE_URL="${ORANGEHRM_BASE_URL:-https://opensource-demo.orangehrmlive.com}"
 TARGET_URL="${BASE_URL%/}/web/index.php/auth/login"
 MAX_ATTEMPTS="${HEALTH_CHECK_MAX_ATTEMPTS:-15}"
 INITIAL_TIMEOUT="${HEALTH_CHECK_INITIAL_TIMEOUT:-5}"
-MAX_TIMEOUT="${HEALTH_CHECK_MAX_TIMEOUT:-60}"
+MAX_TIMEOUT="${HEALTH_CHECK_MAX_TIMEOUT:-20}"
 
 attempt=1
 timeout="$INITIAL_TIMEOUT"
@@ -22,10 +22,6 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
 
   if [ "$attempt" -eq "$MAX_ATTEMPTS" ]; then
     break
-  fi
-
-  if [ "$sleep_seconds" -gt 30 ]; then
-    sleep_seconds=30
   fi
 
   echo "⏳ Attempt ${attempt}/${MAX_ATTEMPTS} failed (timeout ${timeout}s). Retrying in ${sleep_seconds}s..."

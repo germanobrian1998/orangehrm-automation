@@ -16,7 +16,7 @@ export default defineConfig({
   outputDir: `./test-results/${environment}`,
   fullyParallel: true,
   forbidOnly: isCI,
-  retries: isCI || isDocker ? 3 : 0,
+  retries: isCI || isDocker ? 2 : 0,
   workers: isCI || isDocker ? 2 : undefined,
   timeout: testTimeout,
   expect: {

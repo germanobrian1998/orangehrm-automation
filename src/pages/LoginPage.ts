@@ -2,6 +2,7 @@ import { BasePage } from './BasePage';
 import { expect } from '@playwright/test';
 
 export class LoginPage extends BasePage {
+  private baseURL = process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
   private loginPath = '/web/index.php/auth/login';
   private usernameInput = 'input[name="username"]';
   private passwordInput = 'input[name="password"]';
@@ -11,7 +12,7 @@ export class LoginPage extends BasePage {
   async navigateToLogin(maxRetries: number = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        await this.goto(this.loginPath);
+        await this.goto(`${this.baseURL.replace(/\/$/, '')}${this.loginPath}`);
         await this.waitForNavigation();
         await this.waitForElement(this.usernameInput, this.getNavigationTimeout());
         return;
