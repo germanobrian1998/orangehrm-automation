@@ -10,27 +10,25 @@ jobs:
   test-dev:
     name: Tests – development
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      ORANGEHRM_BASE_URL: https://opensource-demo.orangehrmlive.com
+      CI: 'true'
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build test image
+        run: docker compose build test
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Health check (development)
+        run: docker compose run --rm test /app/scripts/health-check.sh
 
-      - name: Run tests (development)
-        run: npm run test:dev
-        env:
-          ENVIRONMENT: development
-        continue-on-error: true
+      - name: Run tests in Docker (development)
+        run: docker compose run --rm -e ENVIRONMENT=development test npm run test:dev
 
       - name: Upload dev test results
         if: always()
@@ -43,27 +41,25 @@ jobs:
   test-staging:
     name: Tests – staging
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      ORANGEHRM_BASE_URL: https://opensource-demo.orangehrmlive.com
+      CI: 'true'
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build test image
+        run: docker compose build test
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Health check (staging)
+        run: docker compose run --rm test /app/scripts/health-check.sh
 
-      - name: Run tests (staging)
-        run: npm run test:staging
-        env:
-          ENVIRONMENT: staging
-        continue-on-error: true
+      - name: Run tests in Docker (staging)
+        run: docker compose run --rm -e ENVIRONMENT=staging test npm run test:staging
 
       - name: Upload staging test results
         if: always()
@@ -76,27 +72,25 @@ jobs:
   test-ci:
     name: Tests – CI
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: read
+    env:
+      ORANGEHRM_BASE_URL: https://opensource-demo.orangehrmlive.com
+      CI: 'true'
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      - uses: docker/setup-buildx-action@v3
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build test image
+        run: docker compose build test
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Health check (CI)
+        run: docker compose run --rm test /app/scripts/health-check.sh
 
-      - name: Run tests (CI)
-        run: npm run test:ci
-        env:
-          ENVIRONMENT: ci
-          CI: 'true'
+      - name: Run tests in Docker (CI)
+        run: docker compose run --rm -e ENVIRONMENT=ci test npm run test:ci
 
       - name: Upload CI test results
         if: always()

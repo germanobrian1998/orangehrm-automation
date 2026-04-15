@@ -5,6 +5,7 @@ WORKDIR /app
 # Install system dependencies for Playwright
 RUN apk add --no-cache \
     chromium \
+    curl \
     nss \
     freetype \
     harfbuzz \
@@ -27,8 +28,13 @@ RUN npx playwright install chromium
 COPY . .
 
 RUN mkdir -p test-results playwright-report allure-results
+RUN chmod +x scripts/health-check.sh
 
 ENV CI=true
+ENV ORANGEHRM_BASE_URL=https://opensource-demo.orangehrmlive.com
+
+HEALTHCHECK --interval=30s --timeout=35s --start-period=20s --retries=5 \
+  CMD /app/scripts/health-check.sh
 
 # Default command
 CMD ["npm", "test"]
