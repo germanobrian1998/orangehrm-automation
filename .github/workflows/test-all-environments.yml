@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  ORANGEHRM_BASE_URL: https://opensource-demo.orangehrmlive.com
+
 jobs:
   test-dev:
     name: Tests – development
@@ -26,11 +29,24 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Health check OrangeHRM (development)
+        run: |
+          for i in {1..8}; do
+            if curl --silent --show-error --fail --max-time 20 "${ORANGEHRM_BASE_URL%/}/web/index.php/auth/login" > /dev/null; then
+              echo "OrangeHRM is reachable"
+              exit 0
+            fi
+            echo "Health check attempt $i/8 failed. Retrying..."
+            sleep 15
+          done
+          echo "OrangeHRM health check failed after 8 attempts"
+          exit 1
+
       - name: Run tests (development)
         run: npm run test:dev
         env:
           ENVIRONMENT: development
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Upload dev test results
         if: always()
@@ -59,11 +75,24 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Health check OrangeHRM (staging)
+        run: |
+          for i in {1..8}; do
+            if curl --silent --show-error --fail --max-time 20 "${ORANGEHRM_BASE_URL%/}/web/index.php/auth/login" > /dev/null; then
+              echo "OrangeHRM is reachable"
+              exit 0
+            fi
+            echo "Health check attempt $i/8 failed. Retrying..."
+            sleep 15
+          done
+          echo "OrangeHRM health check failed after 8 attempts"
+          exit 1
+
       - name: Run tests (staging)
         run: npm run test:staging
         env:
           ENVIRONMENT: staging
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Upload staging test results
         if: always()
@@ -92,11 +121,25 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Health check OrangeHRM (CI)
+        run: |
+          for i in {1..8}; do
+            if curl --silent --show-error --fail --max-time 20 "${ORANGEHRM_BASE_URL%/}/web/index.php/auth/login" > /dev/null; then
+              echo "OrangeHRM is reachable"
+              exit 0
+            fi
+            echo "Health check attempt $i/8 failed. Retrying..."
+            sleep 15
+          done
+          echo "OrangeHRM health check failed after 8 attempts"
+          exit 1
+
       - name: Run tests (CI)
         run: npm run test:ci
         env:
           ENVIRONMENT: ci
           CI: 'true'
+        continue-on-error: false
 
       - name: Upload CI test results
         if: always()
