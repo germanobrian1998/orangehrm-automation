@@ -15,6 +15,7 @@ permissions:
 jobs:
   test-and-report:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +36,22 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run tests
-        run: npm test
-        continue-on-error: true
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run tests with retry
         env:
           ALLURE_RESULTS_DIR: ./allure-results
+        run: |
+          for attempt in 1 2 3; do
+            npm test && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
+
+      - name: Validate Allure input
+        if: always()
+        run: test -d allure-results
 
       - name: Generate Allure Report
         if: always()
@@ -54,12 +66,12 @@ jobs:
           destination_dir: allure/${{ github.run_number }}
 
       - name: Add PR Comment with Report Link
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        if: always() && github.event_name == 'pull_request' && github.event.pull_request.number
+        uses: actions/github-script@v7
         with:
           script: |
             const reportUrl = `https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure/${{ github.run_number }}/`;
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -72,4 +84,5 @@ jobs:
         with:
           name: allure-results
           path: allure-results/
+          if-no-files-found: warn
           retention-days: 30

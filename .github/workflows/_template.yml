@@ -1,0 +1,90 @@
+name: _template (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      timeout-minutes:
+        description: Job timeout
+        required: false
+        type: number
+        default: 45
+      node-version:
+        description: Node version
+        required: false
+        type: string
+        default: '20'
+      install-browsers:
+        description: Playwright browsers to install
+        required: false
+        type: string
+        default: 'chromium firefox webkit'
+      run-health-check:
+        description: Run OrangeHRM health-check step
+        required: false
+        type: boolean
+        default: true
+      test-command:
+        description: Command to execute
+        required: true
+        type: string
+      artifact-name:
+        description: Artifact name
+        required: false
+        type: string
+        default: playwright-report
+      artifact-path:
+        description: Artifact path
+        required: false
+        type: string
+        default: playwright-report/
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Remove problematic APT repositories
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list \
+                     /etc/apt/sources.list.d/azure-cli.list || true
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ inputs.install-browsers }}
+
+      - name: Health check OrangeHRM
+        if: ${{ inputs.run-health-check }}
+        run: ./scripts/health-check.sh
+
+      - name: Run command with retry
+        run: |
+          attempts=3
+          for attempt in $(seq 1 "$attempts"); do
+            if ${{ inputs.test-command }}; then
+              exit 0
+            fi
+            if [ "$attempt" -lt "$attempts" ]; then
+              sleep $((attempt * 5))
+            fi
+          done
+          exit 1
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+          if-no-files-found: warn

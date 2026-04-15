@@ -17,6 +17,7 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read
       packages: write
@@ -54,4 +55,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=min
+
+      - name: Validate built image
+        run: |
+          primary_tag="$(echo '${{ steps.meta.outputs.tags }}' | head -n 1)"
+          [ -n "$primary_tag" ]
+          docker pull "$primary_tag"
+          docker run --rm "$primary_tag" node --version
+
+      - name: Health check script exists in image context
+        run: test -x ./scripts/health-check.sh

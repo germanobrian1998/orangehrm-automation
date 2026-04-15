@@ -12,7 +12,12 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
+
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+      fail-fast: false
 
     steps:
       - name: Check out code
@@ -39,23 +44,33 @@ jobs:
                      /etc/apt/sources.list.d/azure-cli.list || true
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
 
       - name: Run smoke tests
-        run: npm run test:smoke -- --project=chromium
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:smoke -- --project=${{ matrix.browser }} && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
 
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ci-playwright-report
+          name: ci-playwright-report-${{ matrix.browser }}
           path: playwright-report/
+          if-no-files-found: warn
           retention-days: 7
 
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: ci-failure-screenshots
+          name: ci-failure-screenshots-${{ matrix.browser }}
           path: test-results/
+          if-no-files-found: warn
           retention-days: 7

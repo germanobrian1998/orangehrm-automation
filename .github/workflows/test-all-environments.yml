@@ -10,6 +10,7 @@ jobs:
   test-dev:
     name: Tests – development
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read
     steps:
@@ -24,13 +25,20 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run tests (development)
-        run: npm run test:dev
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run tests (development) with retry
         env:
           ENVIRONMENT: development
-        continue-on-error: true
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:dev && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
 
       - name: Upload dev test results
         if: always()
@@ -38,11 +46,13 @@ jobs:
         with:
           name: dev-results
           path: test-results/development/
+          if-no-files-found: warn
           retention-days: 30
 
   test-staging:
     name: Tests – staging
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read
     steps:
@@ -57,13 +67,20 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run tests (staging)
-        run: npm run test:staging
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run tests (staging) with retry
         env:
           ENVIRONMENT: staging
-        continue-on-error: true
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:staging && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
 
       - name: Upload staging test results
         if: always()
@@ -71,11 +88,13 @@ jobs:
         with:
           name: staging-results
           path: test-results/staging/
+          if-no-files-found: warn
           retention-days: 30
 
   test-ci:
     name: Tests – CI
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     permissions:
       contents: read
     steps:
@@ -90,13 +109,21 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run tests (CI)
-        run: npm run test:ci
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run tests (CI) with retry
         env:
           ENVIRONMENT: ci
           CI: 'true'
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:ci && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
 
       - name: Upload CI test results
         if: always()
@@ -104,4 +131,5 @@ jobs:
         with:
           name: ci-results
           path: test-results/ci/
+          if-no-files-found: warn
           retention-days: 30
