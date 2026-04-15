@@ -20,7 +20,17 @@ export class BasePage {
   }
 
   async waitForNavigation() {
-    await this.page.waitForLoadState('networkidle');
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        await this.page.waitForLoadState('domcontentloaded', { timeout: 15000 });
+        return;
+      } catch (error) {
+        if (attempt === 3) {
+          throw error;
+        }
+        await this.page.waitForTimeout(1000 * attempt);
+      }
+    }
   }
 
   async getPageTitle() {

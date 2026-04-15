@@ -12,21 +12,19 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Allow the workflow to write to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Only one deployment at a time
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   run-and-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     environment:
       name: github-pages
@@ -56,9 +54,19 @@ jobs:
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: Run smoke tests
-        run: npm run test:smoke
-        continue-on-error: true   # still publish report even if tests fail
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run smoke tests with retry
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:smoke && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
+
+      - name: Validate report output
+        run: test -d playwright-report
 
       - name: Upload Playwright report as Pages artifact
         uses: actions/upload-pages-artifact@v3

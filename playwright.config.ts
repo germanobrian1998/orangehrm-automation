@@ -2,6 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 const environment = process.env.ENVIRONMENT || 'development';
 const testTimeout = process.env.TEST_TIMEOUT ? parseInt(process.env.TEST_TIMEOUT, 10) : 60000;
+const retries = process.env.PLAYWRIGHT_RETRIES
+  ? parseInt(process.env.PLAYWRIGHT_RETRIES, 10)
+  : process.env.CI
+    ? 2
+    : 0;
 const baseURL =
   process.env.ORANGEHRM_BASE_URL || 'https://opensource-demo.orangehrmlive.com';
 
@@ -10,7 +15,7 @@ export default defineConfig({
   outputDir: `./test-results/${environment}`,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries,
   workers: process.env.CI ? 2 : undefined,
   timeout: testTimeout,
   expect: {

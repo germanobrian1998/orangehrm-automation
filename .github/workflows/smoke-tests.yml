@@ -9,7 +9,7 @@ on:
 jobs:
   smoke-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
 
     steps:
       - name: Checkout code
@@ -32,8 +32,16 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run Smoke Tests
-        run: npm run test:smoke
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run Smoke Tests with retry
+        run: |
+          for attempt in 1 2 3; do
+            npm run test:smoke && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
 
       - name: Upload Test Report
         if: always()
@@ -41,6 +49,7 @@ jobs:
         with:
           name: smoke-report
           path: playwright-report/
+          if-no-files-found: warn
           retention-days: 7
 
       - name: Upload Screenshots on Failure
@@ -49,4 +58,5 @@ jobs:
         with:
           name: smoke-failure-screenshots
           path: test-results/
+          if-no-files-found: warn
           retention-days: 7

@@ -10,61 +10,75 @@ jobs:
   test:
     name: Run Tests on ${{ matrix.browser }}
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 60
+
     strategy:
       matrix:
         browser: [chromium, firefox, webkit]
       fail-fast: false
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps ${{ matrix.browser }}
-      
-      - name: Run tests - ${{ matrix.browser }}
-        run: npx playwright test --project=${{ matrix.browser }}
-        continue-on-error: true
-      
+
+      - name: Health check OrangeHRM
+        run: ./scripts/health-check.sh
+
+      - name: Run tests - ${{ matrix.browser }} with retry
+        run: |
+          for attempt in 1 2 3; do
+            npx playwright test --project=${{ matrix.browser }} && exit 0
+            [ "$attempt" -eq 3 ] && exit 1
+            sleep $((attempt * 5))
+          done
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.browser }}
           path: test-results/
+          if-no-files-found: warn
           retention-days: 30
-      
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
+          if-no-files-found: warn
           retention-days: 30
 
   publish-report:
     name: Publish Test Report
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     needs: test
     if: always()
-    
+
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-      
+
+      - name: Validate Playwright report path
+        run: |
+          test -d ./playwright-report-chromium || { echo "Missing playwright-report-chromium"; exit 1; }
+
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report-chromium
-        continue-on-error: true
